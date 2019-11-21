@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" elementFormDefault="qualified"
+    vc:minVersion="1.1">
+
+    <xs:complexType name="TParagraph">
+        <xs:sequence maxOccurs="1">
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="text" type="TText"> </xs:element>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="quote" type="TQuote"/>
+            <xs:element name="formula" type="TFormula" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="list" type="TList"/>
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:ID" use="required"/>
+    </xs:complexType>
+    <xs:complexType name="TFormula">
+        <xs:sequence>
+            <xs:element name="description" type="TCursive"/>
+            <xs:element name="content" type="TSymbol"/>
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:ID" use="required"/>
+    </xs:complexType>
+    <xs:complexType name="TText">
+        <xs:sequence>
+            <xs:element name="cursive" type="TCursive"/>
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:ID" use="required"/>
+    </xs:complexType>
+    <xs:complexType mixed="true" name="TCursive">
+        <xs:choice>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="bold" type="TCursive"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="italic" type="TCursive"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="underline" type="TCursive"/>
+        </xs:choice>
+    </xs:complexType>
+
+    <xs:complexType name="TList">
+        <xs:sequence>
+            <xs:element name="listItems">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="item" type="TListItem"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:ID" use="required"/>
+        <xs:attribute default="unordered" name="type" use="optional">
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="ordered"/>
+                    <xs:enumeration value="unordered"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="TListItem">
+        <xs:choice>
+            <xs:element name="text" type="TText"/>
+        </xs:choice>
+    </xs:complexType>
+    <xs:complexType name="TQuote">
+        <xs:sequence>
+            <xs:element name="cursive" type="TCursive"/>
+        </xs:sequence>
+        <xs:attribute name="ref" type="xs:IDREF" use="required"/>
+        <xs:attribute name="id" type="xs:ID" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="TSymbol" mixed="true">
+        <xs:choice>
+            <xs:element name="add" maxOccurs="unbounded" minOccurs="0" type="TSymbol"/>
+            <xs:element name="substract" maxOccurs="unbounded" minOccurs="0" type="TSymbol"/>
+            <xs:element name="devide" maxOccurs="unbounded" minOccurs="0" type="TSymbol"/>
+            <xs:element name="multiply" maxOccurs="unbounded" minOccurs="0" type="TSymbol"/>
+            <xs:element name="left_par" maxOccurs="unbounded" minOccurs="0" type="TSymbol"/>
+            <xs:element name="right_par" maxOccurs="unbounded" minOccurs="0" type="TSymbol"/>
+            <xs:element name="eq" maxOccurs="unbounded" minOccurs="0" type="TSymbol"/>
+        </xs:choice>
+    </xs:complexType>
+
+
+</xs:schema>

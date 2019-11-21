@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
+    targetNamespace="http://www.uns.ac.rs/Tim1" xmlns="http://www.uns.ac.rs/Tim1"
+    vc:minVersion="1.1" xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning">
+
+
+    <xs:include schemaLocation="paragraph.xsd"/>
+
+
+    <xs:element name="scientific_publication">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="front_page">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="caption">
+                                <xs:complexType>
+                                    <xs:simpleContent>
+                                        <xs:extension base="xs:string">
+                                            <xs:attribute default="24" form="unqualified"
+                                                name="font_size" use="optional">
+                                                <xs:simpleType>
+                                                  <xs:restriction base="xs:positiveInteger">
+                                                  <xs:maxInclusive value="100"/>
+                                                  <xs:minInclusive value="1"/>
+                                                  </xs:restriction>
+                                                </xs:simpleType>
+                                            </xs:attribute>
+                                            <xs:attribute name="id" type="xs:ID" use="required"/>
+                                        </xs:extension>
+                                    </xs:simpleContent>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="aurhors">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element maxOccurs="unbounded" name="author"
+                                            type="TAuthor"/>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element minOccurs="0" name="table_of_content">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element maxOccurs="unbounded" minOccurs="1" name="item">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="chapter_caption" type="xs:string"/>
+                                        <xs:element name="page_number" type="xs:positiveInteger"/>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                        <xs:attribute name="id" type="xs:ID" use="required"/>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="abstract" type="TAbstract"/>
+                <xs:element name="chapter" maxOccurs="unbounded" minOccurs="0" type="TChapter"/>
+                <xs:element name="references" minOccurs="0" maxOccurs="unbounded" type="TReference"/>
+                <xs:element name="comments" minOccurs="0" maxOccurs="unbounded" type="TComment"/>
+            </xs:sequence>
+            <xs:attribute name="numbered" type="xs:boolean"/>
+            <xs:attribute name="recived_at" type="xs:date"/>
+            <xs:attribute name="revisited_at" type="xs:date"/>
+            <xs:attribute name="accepted_at" type="xs:date"/>
+            <xs:attribute name="font_type" type="xs:string"/>
+            <xs:attribute name="id" type="xs:ID" use="required"/>
+            <xs:attribute default="forReview" name="state">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="forReview"/>
+                        <xs:enumeration value="reviewdAndScored"/>
+                        <xs:enumeration value="scoredAndAceppted"/>
+                        <xs:enumeration value="scoredAndRejected"/>
+                        <xs:enumeration value="scoredAndRevised"/>
+                        <xs:enumeration value="published"/>
+                        <xs:enumeration value="retracted"/>
+                        <xs:enumeration value="deleted"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:attribute>
+            <xs:attribute name="version" type="xs:positiveInteger" use="required"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:complexType name="TAuthor">
+        <xs:sequence>
+            <xs:element name="name" type="xs:string"/>
+            <xs:element name="surname" type="xs:string"/>
+            <xs:element name="university" type="TUniversity" minOccurs="0"/>
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:ID" use="required"/>
+    </xs:complexType>
+    <xs:complexType name="TUniversity">
+        <xs:sequence>
+            <xs:element name="name" type="xs:string"/>
+            <xs:element name="region" type="xs:string"/>
+            <xs:element name="country" type="xs:string"/>
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:ID" use="required"/>
+    </xs:complexType>
+    <xs:complexType name="TChapter">
+        <xs:choice>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="subchapter" type="TChapter"/>
+            <xs:element maxOccurs="unbounded" name="paragraph" type="TRichParagraph"/>
+        </xs:choice>
+        <xs:attribute name="title" type="xs:string" use="required"/>
+        <xs:attribute name="id" type="xs:ID" use="required"/>
+    </xs:complexType>
+    <xs:complexType name="TAbstract">
+        <xs:sequence>
+            <xs:element name="keywords">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element maxOccurs="unbounded" name="keyword" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element maxOccurs="unbounded" name="paragraph" type="TRichParagraph"/>
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:ID" use="required"/>
+    </xs:complexType>
+    <xs:complexType name="TTable">
+        <xs:sequence>
+            <xs:element maxOccurs="unbounded" name="table_row">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element maxOccurs="unbounded" name="table_cell">
+                            <xs:complexType mixed="true">
+                                <xs:choice>
+                                    <xs:element maxOccurs="unbounded" minOccurs="0" name="cursive"
+                                        type="TCursive"/>
+                                    <xs:element maxOccurs="unbounded" minOccurs="0" name="image"
+                                        type="TImage"/>
+                                </xs:choice>
+                            </xs:complexType>
+                        </xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+        <xs:attribute default="true" name="border" type="xs:boolean"/>
+        <xs:attribute name="border_size" default="1" type="xs:positiveInteger"/>
+        <xs:attribute name="border_color" default="balck" type="xs:string"/>
+        <xs:attribute name="color" default="white" type="xs:string"/>
+        <xs:attribute name="id" type="xs:ID" use="required"/>
+    </xs:complexType>
+    <xs:complexType name="TImage">
+        <xs:sequence>
+            <xs:element name="description" type="xs:string"/>
+            <xs:element name="source" type="xs:base64Binary"/>
+        </xs:sequence>
+        <xs:attribute name="height" type="xs:positiveInteger"/>
+        <xs:attribute name="width" type="xs:positiveInteger"/>
+        <xs:attribute name="id" type="xs:ID" use="required"/>
+    </xs:complexType>
+    <xs:complexType name="TReference">
+        <xs:choice>
+            <xs:element maxOccurs="unbounded" name="author" type="TAuthor"/>
+            <xs:element name="book">
+                <xs:complexType>
+                    <xs:attribute name="year" type="xs:positiveInteger"/>
+                    <xs:attribute name="name" type="xs:string"/>
+                </xs:complexType>
+            </xs:element>
+            <xs:element minOccurs="0" name="link" type="xs:string"/>
+            <xs:element minOccurs="0" name="page" type="xs:positiveInteger"/>
+        </xs:choice>
+        <xs:attribute name="id" type="xs:ID"/>
+    </xs:complexType>
+    <xs:complexType mixed="false" name="TComment">
+        <xs:choice>
+            <xs:element name="content" type="TParagraph"/>
+        </xs:choice>
+        <xs:attribute name="ref" type="xs:IDREF"/>
+        <xs:attribute name="id" type="xs:ID"/>
+    </xs:complexType>
+    <xs:complexType name="TRichParagraph">
+        <xs:complexContent mixed="false">
+            <xs:extension base="TParagraph">
+                <xs:sequence>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="image" type="TImage"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="table" type="TTable"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+</xs:schema>
