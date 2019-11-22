@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.uns.ac.rs/Tim1"
     xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning"
-    targetNamespace="http://www.uns.ac.rs/Tim1" elementFormDefault="qualified" vc:minVersion="1.0"
-    vc:maxVersion="1.1">
+    targetNamespace="http://www.uns.ac.rs/Tim1" elementFormDefault="qualified" vc:minVersion="1.1">
 
     <xs:include schemaLocation="paragraph.xsd"/>
 
@@ -11,13 +10,7 @@
             <xs:sequence>
                 <xs:element name="author" type="TPerson"/>
                 <xs:element name="date" type="xs:date"/>
-                <xs:element name="content">
-                    <xs:complexType>
-                        <xs:sequence>
-                            <xs:element maxOccurs="unbounded" name="paragraph" type="xs:string"/>
-                        </xs:sequence>
-                    </xs:complexType>
-                </xs:element>
+                <xs:element name="content" type="TParagraph" maxOccurs="unbounded"/>
                 <xs:element name="contactInformation">
                     <xs:complexType>
                         <xs:sequence>
