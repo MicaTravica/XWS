@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.uns.ac.rs/Tim1"
     xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning"
-    targetNamespace="http://www.uns.ac.rs/Tim1" elementFormDefault="qualified" vc:minVersion="1.0"
-    vc:maxVersion="1.1">
+    targetNamespace="http://www.uns.ac.rs/Tim1" elementFormDefault="qualified" vc:minVersion="1.1"
+    >
 
     <xs:include schemaLocation="paragraph.xsd"/>
+    <xs:include schemaLocation="person.xsd"/>
 
     <xs:element name="coverLetter">
         <xs:complexType>
@@ -31,49 +32,4 @@
             </xs:sequence>
         </xs:complexType>
     </xs:element>
-    <xs:complexType name="TAddress">
-        <xs:sequence>
-            <xs:element name="city" type="xs:string"/>
-            <xs:element minOccurs="0" name="streetNumber" type="xs:positiveInteger"/>
-            <xs:element minOccurs="0" name="floorNumber" type="xs:positiveInteger"/>
-            <xs:element name="street" type="xs:string"/>
-            <xs:element name="country" type="xs:string"/>
-        </xs:sequence>
-    </xs:complexType>
-    <xs:complexType name="TPerson">
-        <xs:sequence>
-            <xs:element name="name">
-                <xs:simpleType>
-                    <xs:restriction base="xs:string">
-                        <xs:minLength value="1"/>
-                    </xs:restriction>
-                </xs:simpleType>
-            </xs:element>
-            <xs:element name="surname">
-                <xs:simpleType>
-                    <xs:restriction base="xs:string">
-                        <xs:minLength value="1"/>
-                    </xs:restriction>
-                </xs:simpleType>
-            </xs:element>
-            <xs:element name="phone">
-                <xs:simpleType>
-                    <xs:restriction base="xs:string">
-                        <xs:pattern value="[0-9]{3}-[0-9]{7}"/>
-                    </xs:restriction>
-                </xs:simpleType>
-            </xs:element>
-            <xs:element minOccurs="0" name="title" type="xs:string"/>
-            <xs:element name="institution" type="xs:string"/>
-            <xs:element name="email">
-                <xs:simpleType>
-                    <xs:restriction base="xs:string">
-                        <xs:pattern
-                            value="([0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*@([0-9a-zA-Z][-\w]*[0-9a-zA-Z]\.)+[a-zA-Z]{2,9})"
-                        />
-                    </xs:restriction>
-                </xs:simpleType>
-            </xs:element>
-        </xs:sequence>
-    </xs:complexType>
 </xs:schema>

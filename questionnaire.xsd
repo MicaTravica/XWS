@@ -4,6 +4,7 @@
     targetNamespace="http://www.uns.ac.rs/Tim1" elementFormDefault="qualified" vc:minVersion="1.1">
 
     <xs:include schemaLocation="paragraph.xsd"/>
+    <xs:include schemaLocation="person.xsd"/>
 
     <xs:element name="questionnaire">
         <xs:complexType>
@@ -34,40 +35,6 @@
             <xs:element name="answer" type="TParagraph"/>
         </xs:sequence>
         <xs:attribute name="id" type="xs:ID" use="required"/>
-    </xs:complexType>
-    <xs:complexType name="TPerson">
-        <xs:sequence>
-            <xs:element name="name">
-                <xs:simpleType>
-                    <xs:restriction base="xs:string">
-                        <xs:minLength value="1"/>
-                    </xs:restriction>
-                </xs:simpleType>
-            </xs:element>
-            <xs:element name="surname">
-                <xs:simpleType>
-                    <xs:restriction base="xs:string">
-                        <xs:minLength value="1"/>
-                    </xs:restriction>
-                </xs:simpleType>
-            </xs:element>
-            <xs:element name="institution" type="TInstitution"/>
-            <xs:element name="email">
-                <xs:simpleType>
-                    <xs:restriction base="xs:string">
-                        <xs:pattern
-                            value="([0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*@([0-9a-zA-Z][-\w]*[0-9a-zA-Z]\.)+[a-zA-Z]{2,9})"
-                        />
-                    </xs:restriction>
-                </xs:simpleType>
-            </xs:element>
-        </xs:sequence>
-    </xs:complexType>
-    <xs:complexType name="TInstitution">
-        <xs:sequence>
-            <xs:element name="name"/>
-            <xs:element name="place"/>
-        </xs:sequence>
     </xs:complexType>
 
 </xs:schema>
