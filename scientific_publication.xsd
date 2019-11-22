@@ -77,16 +77,10 @@
             <xs:attribute name="accepted_at" type="xs:date"/>
             <xs:attribute name="font_type" type="xs:string"/>
             <xs:attribute name="id" type="xs:ID" use="required"/>
-            <xs:attribute default="forReview" name="state">
+            <xs:attribute default="available" name="state">
                 <xs:simpleType>
                     <xs:restriction base="xs:string">
-                        <xs:enumeration value="forReview"/>
-                        <xs:enumeration value="reviewdAndScored"/>
-                        <xs:enumeration value="scoredAndAceppted"/>
-                        <xs:enumeration value="scoredAndRejected"/>
-                        <xs:enumeration value="scoredAndRevised"/>
-                        <xs:enumeration value="published"/>
-                        <xs:enumeration value="retracted"/>
+                        <xs:enumeration value="available"/>
                         <xs:enumeration value="deleted"/>
                     </xs:restriction>
                 </xs:simpleType>

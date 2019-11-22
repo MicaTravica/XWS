@@ -37,6 +37,7 @@
                 </xs:simpleType>
             </xs:element>
             <xs:element name="institution" type="TInstitution"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="expertise" type="xs:string"/>
         </xs:sequence>
         <xs:attribute name="id" type="xs:ID"/>
     </xs:complexType>

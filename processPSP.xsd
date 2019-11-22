@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.uns.ac.rs/Tim1"
+    xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning"
+    targetNamespace="http://www.uns.ac.rs/Tim1" elementFormDefault="qualified" vc:minVersion="1.1">
+    <xs:include schemaLocation="reviewAssignment.xsd"/>
+    <xs:element name="processPSP">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="scientificPublication" type="xs:IDREF"/>
+                <xs:element minOccurs="0" name="coverLetter" type="xs:IDREF"/>
+                <xs:element name="idRedactor" type="xs:IDREF"/>
+                <xs:element name="reviewAssignment" type="TReviewAssignment"/>
+            </xs:sequence>
+            <xs:attribute default="forReview" name="state">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="forReview"/>
+                        <xs:enumeration value="reviewdAndScored"/>
+                        <xs:enumeration value="scoredAndAceppted"/>
+                        <xs:enumeration value="scoredAndRejected"/>
+                        <xs:enumeration value="scoredAndRevised"/>
+                        <xs:enumeration value="published"/>
+                        <xs:enumeration value="retracted"/>
+                        <xs:enumeration value="deleted"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:attribute>
+            <xs:attribute name="id" type="xs:ID" use="required"/>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

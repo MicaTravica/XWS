@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.uns.ac.rs/Tim1"
+    xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning"
+    targetNamespace="http://www.uns.ac.rs/Tim1" elementFormDefault="qualified" vc:minVersion="1.1">
+
+
+    <xs:complexType name="TReviewAssignment">
+        <xs:sequence>
+            <xs:element name="idScientificPublication" type="xs:IDREF"/>
+            <xs:element maxOccurs="unbounded" name="review" type="TReview"/>
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:ID" use="required"/>
+        <xs:attribute default="inProgress" name="state">
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="done"/>
+                    <xs:enumeration value="inProgress"/>
+                    <xs:enumeration value="canceled"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="TReview">
+        <xs:sequence>
+            <xs:element name="reviewer">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="idReviewer" type="xs:IDREF"/>
+                        <xs:element name="idQuestionnaire" type="xs:IDREF"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element default="inProgress" name="state">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="inProgress"/>
+                        <xs:enumeration value="accepted"/>
+                        <xs:enumeration value="rejected"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:ID" use="required"/>
+        <xs:attribute name="idScientificPublication" type="xs:IDREF"/>
+        <xs:attribute name="versionScientificPublication" type="xs:positiveInteger"/>
+    </xs:complexType>
+</xs:schema>
