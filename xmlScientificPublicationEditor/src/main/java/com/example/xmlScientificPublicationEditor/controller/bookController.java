@@ -1,7 +1,7 @@
 package com.example.xmlScientificPublicationEditor.controller;
 
 import com.example.xmlScientificPublicationEditor.api.RetrieveExample3;
-import com.example.xmlScientificPublicationEditor.api.StoreExample1;
+import com.example.xmlScientificPublicationEditor.util.StoreToDB;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,14 +18,14 @@ import org.springframework.web.bind.annotation.RestController;
 public class bookController {
 
     @Autowired
-    private StoreExample1 storeExample1;
+    private StoreToDB storeToDB;
 
 	@Autowired
 	private RetrieveExample3 retrieveExample3;
 
     @GetMapping(value = "/api/book/write", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> writeHall() throws Exception{
-        storeExample1.run();
+        storeToDB.store("/db/sample/library", "books.xml");
 		return new ResponseEntity<>("pisem", HttpStatus.OK);
 	}
 

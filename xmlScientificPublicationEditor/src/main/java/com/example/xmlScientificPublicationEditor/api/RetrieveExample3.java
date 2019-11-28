@@ -41,7 +41,7 @@ public class RetrieveExample3 {
         	System.out.println("[INFO] Using defaults.");
         	
         	collectionId = "/db/sample/library";
-        	documentId = "1.xml";
+        	documentId = "books.xml";
         }
 
         System.out.println("\t- collection ID: " + collectionId);

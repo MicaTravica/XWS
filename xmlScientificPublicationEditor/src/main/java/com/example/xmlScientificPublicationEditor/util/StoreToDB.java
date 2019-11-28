@@ -1,4 +1,4 @@
-package com.example.xmlScientificPublicationEditor.api;
+package com.example.xmlScientificPublicationEditor.util;
 
 import java.io.File;
 
@@ -15,63 +15,27 @@ import com.example.xmlScientificPublicationEditor.util.AuthenticationUtilities;
 import com.example.xmlScientificPublicationEditor.util.AuthenticationUtilities.ConnectionProperties;
 
 @Service
-public class StoreExample1 {
+public class StoreToDB {
     
 	private static ConnectionProperties conn;
     
-    // public static void main(String[] args) throws Exception {
-	// 	StoreExample1.run(conn = AuthenticationUtilities.loadProperties(), args);
-	// }
-    
-    /**
-     * conn XML DB connection properties
-     * args[0] Should be the collection ID to access
-     * args[1] Should be the document ID to store in the collection
-     * args[2] Should be the document file path  
-     */
-    public void run() throws Exception {
+    public void store(String collectionId, String fileName) throws Exception {
         
+        String documentId = "";
         conn = AuthenticationUtilities.loadProperties();
-
-    	// System.out.println("[INFO] " + StoreExample1.class.getSimpleName());
-    	
-    	// initialize collection and document identifiers
-        String collectionId = null;
-		String documentId = null; 
-		String filePath = null;
         
-        // if (args.length == 3) {
-        	
-        // 	System.out.println("[INFO] Passing the arguments... ");
-        	
-        // 	collectionId = args[0];
-        // 	documentId = args[1];
-        	
-        // 	filePath = args[2];
-        if(false){
-            System.out.println("ae proradi vise molim teeee");
+        if(collectionId.isEmpty() || fileName.isEmpty()){
+            System.out.println("missing collectionId or documentId or filePath");
         }
         else {
-        	
-        	System.out.println("[INFO] Using defaults.");
-        	
-        	collectionId = "/db/sample/library";
-        	documentId = "1.xml";
-        	
-            filePath = "../data/books.xml";
-            filePath = "/home/dusanb/Documents/Semestar7/XML_webServisi/projekat/XWS/xmlScientificPublicationEditor/src/main/java/com/example/xmlScientificPublicationEditor/data/books.xml";
-        	// src/main/java/com/example/xmlScientificPublicationEditor/data/books.xml
+            documentId = fileName;
+            String filePathBase = "src/main/java/com/example/xmlScientificPublicationEditor/data/";
+            fileName = filePathBase + fileName;
         }
-
-        System.out.println("\t- collection ID: " + collectionId);
-    	System.out.println("\t- document ID: " + documentId);
-    	System.out.println("\t- file path: " + filePath + "\n");
-        
         // initialize database driver
     	System.out.println("[INFO] Loading driver class: " + conn.driver);
     	Class<?> cl = Class.forName(conn.driver);
-        
-        
+                
         // encapsulation of the database driver functionality
     	Database database = (Database) cl.newInstance();
         database.setProperty("create-database", "true");
@@ -86,8 +50,7 @@ public class StoreExample1 {
         try { 
         	
         	System.out.println("[INFO] Retrieving the collection: " + collectionId);
-            col = getOrCreateCollection(collectionId);
-            
+            col = getOrCreateCollection(collectionId);    
             /*
              *  create new XMLResource with a given id
              *  an id is assigned to the new resource if left empty (null)
@@ -95,10 +58,10 @@ public class StoreExample1 {
             System.out.println("[INFO] Inserting the document: " + documentId);
             res = (XMLResource) col.createResource(documentId, XMLResource.RESOURCE_TYPE);
             
-            File f = new File(filePath);
+            File f = new File(fileName);
             
             if(!f.canRead()) {
-                System.out.println("[ERROR] Cannot read the file: " + filePath);
+                System.out.println("[ERROR] Cannot read the file: " + fileName);
                 return;
             }
             
@@ -106,8 +69,15 @@ public class StoreExample1 {
             System.out.println("[INFO] Storing the document: " + res.getId());
             
             col.storeResource(res);
-            System.out.println("[INFO] Done.");
-            
+
+            if(f.delete()) 
+            { 
+                System.out.println("[INFO] Done.");
+            } 
+            else
+            { 
+                System.out.println("Failed to delete the temporary file"); 
+            }
         } finally {
             
         	//don't forget to cleanup
