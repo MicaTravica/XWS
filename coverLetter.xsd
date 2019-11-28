@@ -10,7 +10,6 @@
         <xs:complexType>
             <xs:sequence>
                 <xs:element name="author" type="TPerson"/>
-                <xs:element name="date" type="xs:date"/>
                 <xs:element name="content" type="TParagraph" maxOccurs="unbounded"/>
                 <xs:element name="contactInformation">
                     <xs:complexType>
@@ -23,6 +22,8 @@
                 </xs:element>
                 <xs:element name="authorSignature" type="xs:base64Binary"/>
             </xs:sequence>
+            <xs:attribute name="id" type="xs:ID" use="required"/>
+            <xs:attribute name="date" type="xs:date" use="required"/>
         </xs:complexType>
     </xs:element>
 </xs:schema>

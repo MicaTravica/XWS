@@ -32,7 +32,7 @@
             <xs:element name="phone">
                 <xs:simpleType>
                     <xs:restriction base="xs:string">
-                        <xs:pattern value="[0-9]{3}-[0-9]{7}"/>
+                        <xs:pattern value="[0-9]{3}-[0-9]{6,7}"/>
                     </xs:restriction>
                 </xs:simpleType>
             </xs:element>
@@ -78,18 +78,54 @@
     </xs:simpleType>
     <xs:complexType name="TInstitution">
         <xs:sequence>
-            <xs:element name="name" type="xs:string"/>
+            <xs:element name="name">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:minLength value="1"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
             <xs:element name="address" type="TAddress"/>
         </xs:sequence>
         <xs:attribute name="id" type="xs:ID" use="required"/>
     </xs:complexType>
     <xs:complexType name="TAddress">
         <xs:sequence>
-            <xs:element name="city" type="xs:string"/>
-            <xs:element minOccurs="0" name="streetNumber" type="xs:string"/>
-            <xs:element minOccurs="0" name="floorNumber" type="xs:integer"/>
-            <xs:element name="street" type="xs:string"/>
-            <xs:element name="country" type="xs:string"/>
+            <xs:element name="city">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:minLength value="1"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element minOccurs="0" name="streetNumber">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:minLength value="1"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element minOccurs="0" name="floorNumber">
+                <xs:simpleType>
+                    <xs:restriction base="xs:integer">
+                        <xs:pattern value="[/+-]?[0-9]+"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="street">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:minLength value="1"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="country">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:minLength value="1"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
         </xs:sequence>
         <xs:attribute name="id" type="xs:ID"/>
     </xs:complexType>

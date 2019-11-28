@@ -16,17 +16,12 @@
                         </xs:sequence>
                     </xs:complexType>
                 </xs:element>
-                <xs:element name="date" type="xs:date"/>
                 <xs:element name="mark" type="xs:positiveInteger"/>
-                <xs:element name="authors">
-                    <xs:complexType>
-                        <xs:sequence>
-                            <xs:element maxOccurs="unbounded" name="Author" type="TPerson"/>
-                        </xs:sequence>
-                    </xs:complexType>
-                </xs:element>
                 <xs:element name="reviewer" type="TPerson"/>
             </xs:sequence>
+            <xs:attribute name="id" type="xs:ID" use="required"/>
+            <xs:attribute name="date" type="xs:date" use="required"/>
+            <xs:attribute name="spId" type="xs:IDREF" use="required"/>
         </xs:complexType>
     </xs:element>
     <xs:complexType name="TQuestion">
