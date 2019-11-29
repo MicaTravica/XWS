@@ -3,7 +3,6 @@ package com.example.xmlScientificPublicationEditor.util;
 import java.io.File;
 
 import org.exist.xmldb.EXistResource;
-import org.springframework.stereotype.Service;
 import org.xmldb.api.DatabaseManager;
 import org.xmldb.api.base.Collection;
 import org.xmldb.api.base.Database;
@@ -14,12 +13,11 @@ import org.xmldb.api.modules.XMLResource;
 import com.example.xmlScientificPublicationEditor.util.AuthenticationUtilities;
 import com.example.xmlScientificPublicationEditor.util.AuthenticationUtilities.ConnectionProperties;
 
-@Service
 public class StoreToDB {
     
 	private static ConnectionProperties conn;
     
-    public void store(String collectionId, String fileName) throws Exception {
+    public static void store(String collectionId, String fileName) throws Exception {
         
         String documentId = "";
         conn = AuthenticationUtilities.loadProperties();

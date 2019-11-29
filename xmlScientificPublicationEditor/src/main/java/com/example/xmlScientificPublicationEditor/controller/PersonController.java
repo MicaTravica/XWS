@@ -17,15 +17,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api")
-public class PersonController {
+public class PersonController extends BaseController {
 
 	@Autowired
 	private PersonService personService;
 
 	@GetMapping(value = "/person/{email}", produces = MediaType.APPLICATION_XML_VALUE)
-	public ResponseEntity<String> getPersonById(@PathVariable("email") String email ) throws Exception {
-		personService.findOne(email);
-        return new ResponseEntity<>("caoo", HttpStatus.OK);
+	public ResponseEntity<TPerson> getPersonById(@PathVariable("email") String email ) throws Exception {
+		TPerson person = personService.findOne(email);
+        return new ResponseEntity<>(person, HttpStatus.OK);
 	}
 	@PostMapping(value="/registration", 
 				consumes = MediaType.APPLICATION_XML_VALUE,

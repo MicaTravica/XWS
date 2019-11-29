@@ -7,8 +7,6 @@
 
 package com.example.xmlScientificPublicationEditor.model.person;
 
-import javax.xml.bind.JAXBElement;
-import javax.xml.bind.annotation.XmlElementDecl;
 import javax.xml.bind.annotation.XmlRegistry;
 import javax.xml.namespace.QName;
 
@@ -83,9 +81,9 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link TPerson }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://www.uns.ac.rs/Tim1", name = "person")
-    public JAXBElement<TPerson> createPerson(TPerson value) {
-        return new JAXBElement<TPerson>(_Person_QNAME, TPerson.class, null, value);
-    }
+    // @XmlElementDecl(namespace = "http://www.uns.ac.rs/Tim1", name = "person")
+    // public JAXBElement<TPerson> createPerson(TPerson value) {
+    //     return new JAXBElement<TPerson>(_Person_QNAME, TPerson.class, null, value);
+    // }
 
 }

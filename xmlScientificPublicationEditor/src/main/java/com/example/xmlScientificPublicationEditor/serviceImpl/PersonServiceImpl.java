@@ -2,6 +2,8 @@ package com.example.xmlScientificPublicationEditor.serviceImpl;
 
 import java.util.Collection;
 
+import com.example.xmlScientificPublicationEditor.exception.ResourceExistsException;
+import com.example.xmlScientificPublicationEditor.exception.UserNotFoundByEmailException;
 import com.example.xmlScientificPublicationEditor.model.person.TPerson;
 import com.example.xmlScientificPublicationEditor.repository.person.PersonRepository;
 import com.example.xmlScientificPublicationEditor.service.PersonService;
@@ -17,13 +19,22 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public TPerson registration(TPerson person) throws Exception {
+        TPerson foundPerson = personRepository.findOne(person.getEmail());
+        if(foundPerson != null){
+            throw new ResourceExistsException(
+                String.format("Person with email: %s", person.getEmail())
+            );
+        }
         return personRepository.save(person);
     }
 
     @Override
     public TPerson findOne(String email) throws Exception {
-        // TODO Auto-generated method stub
-        return null;
+        TPerson person = personRepository.findOne(email);
+        if(person == null){
+            throw new UserNotFoundByEmailException(email);
+        }
+        return person;
     }
 
 

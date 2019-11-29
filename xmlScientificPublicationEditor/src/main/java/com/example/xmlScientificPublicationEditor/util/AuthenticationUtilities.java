@@ -4,12 +4,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-import org.springframework.stereotype.Service;
-
 /**
  * Utilities to support and simplify examples.
  */
-@Service
 public class AuthenticationUtilities {
 	
 	private static String connectionUri = "xmldb:exist://%1$s:%2$s/exist/xmlrpc";
