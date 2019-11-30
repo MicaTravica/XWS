@@ -1,7 +1,8 @@
 package com.example.xmlScientificPublicationEditor.repository.person;
 
+import com.example.xmlScientificPublicationEditor.exception.MarshallerException;
 import com.example.xmlScientificPublicationEditor.exception.ResourceNotDeleted;
-import com.example.xmlScientificPublicationEditor.exception.ResourceNotUpdated;
+import com.example.xmlScientificPublicationEditor.exception.ResourceNotFoundException;
 import com.example.xmlScientificPublicationEditor.model.person.TPerson;
 import com.example.xmlScientificPublicationEditor.util.RetriveFromDB;
 import com.example.xmlScientificPublicationEditor.util.StoreToDB;
@@ -14,8 +15,9 @@ import org.xmldb.api.base.XMLDBException;
 import org.xmldb.api.modules.XMLResource;
 import org.exist.xmldb.EXistResource;
 
+import java.util.Calendar;
+
 import static com.example.xmlScientificPublicationEditor.util.template.XUpdateTemplate.TARGET_NAMESPACE;
-import static com.example.xmlScientificPublicationEditor.util.template.XUpdateTemplate.UPDATE;
 
 @Service
 public class PersonRepository {
@@ -23,25 +25,29 @@ public class PersonRepository {
     public static String personCollectionId = "/db/sample/person";
     
     public TPerson save(TPerson person) throws Exception{
+        String personId = person.getName() + person.getSurname() + Calendar.getInstance().getTimeInMillis();
+        person.setId(personId);
         String xmlPerson = PersonMarshalling.marshalPerson(person);
-        if(xmlPerson != null)
+        if(xmlPerson == null)
         {
-            
-            String documentId = "";
-            StoreToDB.store(personCollectionId, documentId, xmlPerson);
+                throw new MarshallerException("Person");
         }
+        StoreToDB.store(personCollectionId, personId, xmlPerson);
         return person;
     }
 
-    public TPerson findOne(String email) throws Exception
+    public TPerson findOne(String personId) throws Exception
     {
         TPerson retVal = null;
 
-        String xpathExp = "//person[email=\"" + email + "\"]";
+        String xpathExp = "//person[@id=\"" + personId + "\"]";
         ResourceSet resultSet =
             RetriveFromDB.executeXPathExpression(personCollectionId, xpathExp, TARGET_NAMESPACE);
-        
-        // treba isprolaziti kroz 
+        // treba isprolaziti kroz
+        if(resultSet == null)
+        {
+            return retVal;
+        } 
         ResourceIterator i = resultSet.getIterator();
         XMLResource res = null;
         while(i.hasMoreResources()) {
@@ -64,26 +70,29 @@ public class PersonRepository {
 
     public TPerson update(TPerson person) throws Exception
     {
-        String xmlPerson = PersonMarshalling.marshalPerson(person);
-        if(xmlPerson != null)
+        String personId = person.getId();
+        TPerson oldPersonData = this.findOne(personId);
+        if(oldPersonData == null)
         {
-            String xpathExp = "//person[email=\"" + person.getEmail() + "\"]";
-            long mods = UpdateDB.update(personCollectionId, xpathExp, xmlPerson, UPDATE);   
-            if(mods == 0)
-            {
-                throw new ResourceNotUpdated(String.format( "person with email %s", person.getEmail()));
-            }
+            throw new ResourceNotFoundException("Person with id: " + personId);
         }
+        this.deletePerson(personId);
+        String xmlPerson = PersonMarshalling.marshalPerson(person);
+        if(xmlPerson == null)
+        {
+            throw new MarshallerException("Person");
+        }
+        StoreToDB.store(personCollectionId, personId, xmlPerson);
         return person;
     }
 
-    public void deletePerson(String email) throws Exception
+    public void deletePerson(String documentId) throws Exception
     {
-        String xpathExp = "//person[email=\"" + email + "\"]";
-        long mods = UpdateDB.delete(personCollectionId, xpathExp);   
+        String xpathExp = "/person";
+        long mods = UpdateDB.delete(personCollectionId,documentId, xpathExp);   
         if(mods == 0)
         {
-            throw new ResourceNotDeleted(String.format("person with email %s",email));
+            throw new ResourceNotDeleted(String.format("person with documentId %s",documentId));
         }
     }
 

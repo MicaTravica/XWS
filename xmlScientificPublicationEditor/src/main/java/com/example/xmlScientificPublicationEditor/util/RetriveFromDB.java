@@ -1,5 +1,6 @@
 package com.example.xmlScientificPublicationEditor.util;
 
+import com.example.xmlScientificPublicationEditor.exception.ResourceNotFoundException;
 import com.example.xmlScientificPublicationEditor.util.AuthenticationUtilities.ConnectionProperties;
 
 import org.xmldb.api.DatabaseManager;
@@ -35,7 +36,11 @@ public class RetriveFromDB {
         	// get the collection
         	System.out.println("[INFO] Retrieving the collection: " + collectionId);
             col = DatabaseManager.getCollection(conn.uri + collectionId);
-        	
+            
+            if(col == null)
+            {
+                return null;
+            }
             // get an instance of xpath query service
             XPathQueryService xpathService = (XPathQueryService) col.getService("XPathQueryService", "1.0");
             xpathService.setProperty("indent", "yes");

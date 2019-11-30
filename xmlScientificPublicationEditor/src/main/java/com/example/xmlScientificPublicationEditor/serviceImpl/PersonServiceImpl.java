@@ -3,7 +3,7 @@ package com.example.xmlScientificPublicationEditor.serviceImpl;
 import java.util.Collection;
 
 import com.example.xmlScientificPublicationEditor.exception.ResourceExistsException;
-import com.example.xmlScientificPublicationEditor.exception.UserNotFoundByEmailException;
+import com.example.xmlScientificPublicationEditor.exception.ResourceNotFoundException;
 import com.example.xmlScientificPublicationEditor.model.person.TPerson;
 import com.example.xmlScientificPublicationEditor.repository.person.PersonRepository;
 import com.example.xmlScientificPublicationEditor.service.PersonService;
@@ -29,17 +29,17 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public TPerson findOne(String email) throws Exception {
-        TPerson person = personRepository.findOne(email);
+    public TPerson findOne(String id) throws Exception {
+        TPerson person = personRepository.findOne(id);
         if(person == null){
-            throw new UserNotFoundByEmailException(email);
+            throw new ResourceNotFoundException(String.format("Person with id %s", id));
         }
         return person;
     }
 
     @Override
-    public void delete(String email) throws Exception {
-        personRepository.deletePerson(email);
+    public void delete(String personId) throws Exception {
+        personRepository.deletePerson(personId);
     }
     
     @Override
@@ -50,8 +50,7 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public TPerson update(TPerson person) throws Exception {
-        return personRepository.update(person);
+        return this.personRepository.update(person);
     }
-
     
 }

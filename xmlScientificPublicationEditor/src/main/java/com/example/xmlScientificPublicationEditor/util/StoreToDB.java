@@ -83,7 +83,6 @@ public class StoreToDB {
         
         // create the collection if it does not exist
         if(col == null) {
-        
          	if(collectionUri.startsWith("/")) {
                 collectionUri = collectionUri.substring(1);
             }

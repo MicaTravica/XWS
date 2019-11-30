@@ -3,6 +3,7 @@ package com.example.xmlScientificPublicationEditor.util;
 import static com.example.xmlScientificPublicationEditor.util.template.XUpdateTemplate.REMOVE;
 
 import org.xmldb.api.base.Collection;
+import org.xmldb.api.base.Resource;
 import org.xmldb.api.base.XMLDBException;
 import org.xmldb.api.modules.XUpdateQueryService;
 
@@ -10,14 +11,19 @@ import com.example.xmlScientificPublicationEditor.util.AuthenticationUtilities;
 
 public class UpdateDB {
     
-    public static long update(String collectionId, String contextXPath, String xmlFragment, String updateTemplate ) throws Exception
+    public static long update(String collectionId, String documentId, String contextXPath, String xmlFragment, String updateTemplate ) throws Exception
     {
         long mods = 0;
         Collection col = AuthenticationUtilities.initDBCollection(collectionId);
         try{
             XUpdateQueryService xupdateService = (XUpdateQueryService) col.getService("XUpdateQueryService", "1.0");
             xupdateService.setProperty("indent", "yes");
-            mods = xupdateService.update(String.format(updateTemplate, contextXPath, xmlFragment));
+
+            String command = String.format(updateTemplate, contextXPath, xmlFragment);
+
+            System.out.println(command);
+
+            mods = xupdateService.updateResource(documentId, command);
             System.out.println("[INFO] " + mods + " modifications processed.");
         // long mods = xupdateService.updateResource(,String.format(INSERT_AFTER, contextXPath, xmlFragment));
             return mods;    
@@ -33,15 +39,13 @@ public class UpdateDB {
         }
     }
 
-    public static long delete(String collectionId, String contextXPath) throws Exception{
+    public static long delete(String collectionId,String documentId, String contextXPath) throws Exception{
         long mods = 0;
         Collection col = AuthenticationUtilities.initDBCollection(collectionId);
         try{
-            XUpdateQueryService xupdateService = (XUpdateQueryService) col.getService("XUpdateQueryService", "1.0");
-            xupdateService.setProperty("indent", "yes");
-            mods = xupdateService.update(String.format( REMOVE, contextXPath));
-            System.out.println("[INFO] " + mods + " modifications processed.");
-            return mods;
+            Resource res = col.getResource(documentId);
+            col.removeResource(res);
+            mods = 1;
         }
         finally {
             if(col != null) {
@@ -51,6 +55,7 @@ public class UpdateDB {
                 	xe.printStackTrace();
                 }
             }
+            return mods;
         }
     } 
 }
