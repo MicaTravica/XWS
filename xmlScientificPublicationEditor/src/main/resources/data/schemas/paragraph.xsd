@@ -36,13 +36,7 @@
 
     <xs:complexType name="TList">
         <xs:sequence>
-            <xs:element name="listItems">
-                <xs:complexType>
-                    <xs:sequence>
-                        <xs:element name="item" type="TListItem"/>
-                    </xs:sequence>
-                </xs:complexType>
-            </xs:element>
+            <xs:element name="listItem" maxOccurs="unbounded" type="TListItem"> </xs:element>
         </xs:sequence>
         <xs:attribute name="id" type="xs:ID" use="required"/>
         <xs:attribute default="unordered" name="type" use="optional">
