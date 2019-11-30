@@ -8,9 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,6 +35,18 @@ public class PersonController extends BaseController {
 	public ResponseEntity<String>registration(@RequestBody TPerson person) throws Exception {
 		personService.registration(person);
 		return new ResponseEntity<>("You are registred, now you need to verify your email", HttpStatus.OK);
+	}
+
+	@PutMapping(value="/person", consumes = MediaType.APPLICATION_XML_VALUE,produces = MediaType.APPLICATION_XML_VALUE)
+	public ResponseEntity<TPerson> updatePerson(@RequestBody TPerson person) throws Exception {
+		TPerson p = personService.update(person);
+		return new ResponseEntity<>(p, HttpStatus.OK);
+	}
+
+	@DeleteMapping(value="/person/{email}", produces = MediaType.APPLICATION_XML_VALUE)
+	public ResponseEntity<String> delete(@PathVariable("email")String email) throws Exception{
+		personService.delete(email);
+		return new ResponseEntity<>(HttpStatus.ACCEPTED);
 	}
 
 }

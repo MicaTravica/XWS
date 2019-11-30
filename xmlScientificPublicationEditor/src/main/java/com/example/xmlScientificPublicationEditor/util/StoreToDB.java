@@ -17,18 +17,11 @@ public class StoreToDB {
     
 	private static ConnectionProperties conn;
     
-    public static void store(String collectionId, String fileName) throws Exception {
-        
-        String documentId = "";
+    public static void store(String collectionId,String documentId, String xmlEntity) throws Exception {
         conn = AuthenticationUtilities.loadProperties();
         
-        if(collectionId.isEmpty() || fileName.isEmpty()){
-            System.out.println("missing collectionId or documentId or filePath");
-        }
-        else {
-            documentId = fileName;
-            String filePathBase = "src/main/java/com/example/xmlScientificPublicationEditor/data/";
-            fileName = filePathBase + fileName;
+        if(collectionId.isEmpty() || xmlEntity.isEmpty()){
+            System.out.println("missing collectionId or documentId or xmlEntity");
         }
         // initialize database driver
     	System.out.println("[INFO] Loading driver class: " + conn.driver);
@@ -40,7 +33,6 @@ public class StoreToDB {
         
         // entry point for the API which enables you to get the Collection reference
         DatabaseManager.registerDatabase(database);
-        
         // a collection of Resources stored within an XML database
         Collection col = null;
         XMLResource res = null;
@@ -56,26 +48,10 @@ public class StoreToDB {
             System.out.println("[INFO] Inserting the document: " + documentId);
             res = (XMLResource) col.createResource(documentId, XMLResource.RESOURCE_TYPE);
             
-            File f = new File(fileName);
-            
-            if(!f.canRead()) {
-                System.out.println("[ERROR] Cannot read the file: " + fileName);
-                return;
-            }
-            
-            res.setContent(f);
+            res.setContent(xmlEntity);
             System.out.println("[INFO] Storing the document: " + res.getId());
-            
             col.storeResource(res);
 
-            if(f.delete()) 
-            { 
-                System.out.println("[INFO] Done.");
-            } 
-            else
-            { 
-                System.out.println("Failed to delete the temporary file"); 
-            }
         } finally {
             
         	//don't forget to cleanup

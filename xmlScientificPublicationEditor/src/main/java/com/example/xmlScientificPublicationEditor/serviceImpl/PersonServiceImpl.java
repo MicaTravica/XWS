@@ -37,7 +37,11 @@ public class PersonServiceImpl implements PersonService {
         return person;
     }
 
-
+    @Override
+    public void delete(String email) throws Exception {
+        personRepository.deletePerson(email);
+    }
+    
     @Override
     public Collection<TPerson> findAll() {
         // TODO Auto-generated method stub
@@ -46,8 +50,7 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public TPerson update(TPerson person) throws Exception {
-        // TODO Auto-generated method stub
-        return null;
+        return personRepository.update(person);
     }
 
     

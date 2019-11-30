@@ -1,4 +1,4 @@
-package com.example.xmlScientificPublicationEditor.api.template;
+package com.example.xmlScientificPublicationEditor.util.template;
 
 import org.exist.xupdate.XUpdateProcessor;
 
@@ -8,7 +8,7 @@ import org.exist.xupdate.XUpdateProcessor;
  */
 public class XUpdateTemplate {
 
-	public static final String TARGET_NAMESPACE = "http://www.ftn.uns.ac.rs/examples/xmldb/bookstore";
+	public static final String TARGET_NAMESPACE = "http://www.uns.ac.rs/Tim1";
 	
 	/*
 	 * There are two instructions in XUpdate that support insertion of nodes:

@@ -4,6 +4,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+import org.xmldb.api.DatabaseManager;
+import org.xmldb.api.base.Collection;
+import org.xmldb.api.base.Database;
+
 /**
  * Utilities to support and simplify examples.
  */
@@ -63,6 +67,7 @@ public class AuthenticationUtilities {
 		props.load(propsStream);
 
 		return new ConnectionProperties(props);
+		// vrati novu konekciju koja je klasa...
 	}
 
 	/**
@@ -76,5 +81,17 @@ public class AuthenticationUtilities {
 	public static InputStream openStream(String fileName) throws IOException {
 		return AuthenticationUtilities.class.getClassLoader().getResourceAsStream(fileName);
 	}
-	
+
+	public static Collection initDBCollection(String collectionId) throws Exception
+    {
+		ConnectionProperties conn = AuthenticationUtilities.loadProperties();
+        Collection col = null;
+        Class<?> cl = Class.forName(conn.driver); 
+        Database database = (Database) cl.newInstance();
+        database.setProperty("create-database", "true");
+        DatabaseManager.registerDatabase(database);
+        col = DatabaseManager.getCollection(conn.uri + collectionId, conn.user, conn.password);
+        col.setProperty("indent", "yes");
+        return col;
+    }	
 }

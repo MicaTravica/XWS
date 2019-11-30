@@ -14,6 +14,8 @@ public interface PersonService {
 
 	TPerson update(TPerson person) throws Exception;
 
+	void delete(String email) throws Exception;
+
 	// void changeUserPassword(PasswordChangeDTO pcDto, String username) throws Exception;
 
 	// Person findOneByUsername(String name) throws Exception;
