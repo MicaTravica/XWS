@@ -12,9 +12,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.xmldb.api.modules.XMLResource;
 
-import com.example.xmlScientificPublicationEditor.exception.ResourceNotFoundException;
 import com.example.xmlScientificPublicationEditor.service.CoverLetterService;
 
 @RestController
@@ -25,8 +23,8 @@ public class CoverLetterController extends BaseController {
 	private CoverLetterService coverLetterService;
 	
 	@GetMapping(value="/coverLetter/{id}", produces = MediaType.APPLICATION_XML_VALUE)
-	public ResponseEntity<XMLResource> getCoverLetterById(@PathVariable("id") String id) throws ResourceNotFoundException{
-		XMLResource coverLetter = coverLetterService.findOne(id);
+	public ResponseEntity<String> getCoverLetterById(@PathVariable("id") String id) throws Exception{
+		String coverLetter = coverLetterService.findOne(id);
 		return new ResponseEntity<>(coverLetter, HttpStatus.OK);
 	}
 	
@@ -34,13 +32,13 @@ public class CoverLetterController extends BaseController {
 			consumes = MediaType.APPLICATION_XML_VALUE,
 			produces = MediaType.APPLICATION_XML_VALUE)
 	public ResponseEntity<String> addCoverLetter(@RequestBody String cl) throws Exception {
-		coverLetterService.save(cl);
-		return new ResponseEntity<>("You succesfully add cover letter", HttpStatus.OK);
+		String id = coverLetterService.save(cl);
+		return new ResponseEntity<>(String.format("You succesfully add cover letter with id %s", id), HttpStatus.OK);
 	}
 	
 	@PutMapping(value="/coverLetter", consumes = MediaType.APPLICATION_XML_VALUE,produces = MediaType.APPLICATION_XML_VALUE)
-	public ResponseEntity<XMLResource> updatePerson(@RequestBody XMLResource coverLetter) throws Exception {
-		XMLResource cl = coverLetterService.update(coverLetter);
+	public ResponseEntity<String> updatePerson(@RequestBody String coverLetter) throws Exception {
+		String cl = coverLetterService.update(coverLetter);
 		return new ResponseEntity<>(cl, HttpStatus.OK);
 	}
 	

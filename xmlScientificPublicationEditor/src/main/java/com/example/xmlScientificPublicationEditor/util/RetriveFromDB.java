@@ -1,14 +1,13 @@
 package com.example.xmlScientificPublicationEditor.util;
 
-import com.example.xmlScientificPublicationEditor.exception.ResourceNotFoundException;
-import com.example.xmlScientificPublicationEditor.util.AuthenticationUtilities.ConnectionProperties;
-
 import org.xmldb.api.DatabaseManager;
 import org.xmldb.api.base.Collection;
 import org.xmldb.api.base.Database;
 import org.xmldb.api.base.ResourceSet;
 import org.xmldb.api.base.XMLDBException;
 import org.xmldb.api.modules.XPathQueryService;
+
+import com.example.xmlScientificPublicationEditor.util.AuthenticationUtilities.ConnectionProperties;
 
 public class RetriveFromDB {
 

@@ -1,17 +1,13 @@
 package com.example.xmlScientificPublicationEditor.service;
 
-import org.xmldb.api.modules.XMLResource;
-
-import com.example.xmlScientificPublicationEditor.exception.ResourceNotFoundException;
-
 public interface CoverLetterService {
 
-	XMLResource findOne(String id) throws ResourceNotFoundException;
+	String findOne(String id) throws Exception;
 
-	XMLResource save(String cl) throws Exception;
+	String save(String cl) throws Exception;
 
-	XMLResource update(XMLResource coverLetter);
+	String update(String coverLetter) throws Exception;
 
-	void delete(String id);
+	void delete(String id) throws Exception;
 
 }

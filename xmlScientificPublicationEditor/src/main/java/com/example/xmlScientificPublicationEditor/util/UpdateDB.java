@@ -1,13 +1,9 @@
 package com.example.xmlScientificPublicationEditor.util;
 
-import static com.example.xmlScientificPublicationEditor.util.template.XUpdateTemplate.REMOVE;
-
 import org.xmldb.api.base.Collection;
 import org.xmldb.api.base.Resource;
 import org.xmldb.api.base.XMLDBException;
 import org.xmldb.api.modules.XUpdateQueryService;
-
-import com.example.xmlScientificPublicationEditor.util.AuthenticationUtilities;
 
 public class UpdateDB {
     
@@ -46,6 +42,7 @@ public class UpdateDB {
             Resource res = col.getResource(documentId);
             col.removeResource(res);
             mods = 1;
+            return mods;
         }
         finally {
             if(col != null) {
@@ -55,7 +52,6 @@ public class UpdateDB {
                 	xe.printStackTrace();
                 }
             }
-            return mods;
         }
     } 
 }

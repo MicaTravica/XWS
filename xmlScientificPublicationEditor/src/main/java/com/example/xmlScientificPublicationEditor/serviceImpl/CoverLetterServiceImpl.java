@@ -2,9 +2,7 @@ package com.example.xmlScientificPublicationEditor.serviceImpl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.xmldb.api.modules.XMLResource;
 
-import com.example.xmlScientificPublicationEditor.exception.ResourceExistsException;
 import com.example.xmlScientificPublicationEditor.exception.ResourceNotFoundException;
 import com.example.xmlScientificPublicationEditor.repository.coverLetter.CoverLetterRepository;
 import com.example.xmlScientificPublicationEditor.service.CoverLetterService;
@@ -16,8 +14,8 @@ public class CoverLetterServiceImpl implements CoverLetterService {
 	private CoverLetterRepository coverLetterRepository;
 	
 	@Override
-	public XMLResource findOne(String id) throws ResourceNotFoundException {
-		XMLResource cl = coverLetterRepository.findOne(id);
+	public String findOne(String id) throws Exception {
+		String cl = coverLetterRepository.findOne(id);
 		if(cl == null) {
 			throw new ResourceNotFoundException(String.format("Cover letter with id %s", id));
 		}
@@ -25,7 +23,7 @@ public class CoverLetterServiceImpl implements CoverLetterService {
 	}
 
 	@Override
-	public XMLResource save(String cl) throws Exception {
+	public String save(String cl) throws Exception {
 //		XMLResource coverLetter = coverLetterRepository.findOne(cl.getId());
 //		if(coverLetter != null) {
 //			throw new ResourceExistsException(String.format("Cover letter with id: %s", cl.getId()));
@@ -35,12 +33,12 @@ public class CoverLetterServiceImpl implements CoverLetterService {
 	}
 
 	@Override
-	public XMLResource update(XMLResource coverLetter) {
+	public String update(String coverLetter) throws Exception {
 		return coverLetterRepository.update(coverLetter);
 	}
 
 	@Override
-	public void delete(String id) {
+	public void delete(String id) throws Exception {
 		coverLetterRepository.delete(id);
 	}
 
