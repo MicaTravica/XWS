@@ -1,7 +1,5 @@
 package com.example.xmlScientificPublicationEditor.util;
 
-import static com.example.xmlScientificPublicationEditor.util.template.XUpdateTemplate.REMOVE;
-
 import org.xmldb.api.base.Collection;
 import org.xmldb.api.base.Resource;
 import org.xmldb.api.base.XMLDBException;

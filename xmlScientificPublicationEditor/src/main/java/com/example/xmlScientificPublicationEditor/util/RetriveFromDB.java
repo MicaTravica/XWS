@@ -1,6 +1,5 @@
 package com.example.xmlScientificPublicationEditor.util;
 
-import com.example.xmlScientificPublicationEditor.exception.ResourceNotFoundException;
 import com.example.xmlScientificPublicationEditor.util.AuthenticationUtilities.ConnectionProperties;
 
 import org.xmldb.api.DatabaseManager;

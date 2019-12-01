@@ -1,6 +1,5 @@
 package com.example.xmlScientificPublicationEditor.util;
 
-import java.io.File;
 
 import org.exist.xmldb.EXistResource;
 import org.xmldb.api.DatabaseManager;
