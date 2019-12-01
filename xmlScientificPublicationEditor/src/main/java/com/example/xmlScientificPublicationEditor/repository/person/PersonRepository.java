@@ -36,11 +36,9 @@ public class PersonRepository {
         return person;
     }
 
-    public TPerson findOne(String personId) throws Exception
+    public TPerson findOne(String xpathExp) throws Exception
     {
         TPerson retVal = null;
-
-        String xpathExp = "//person[@id=\"" + personId + "\"]";
         ResourceSet resultSet =
             RetriveFromDB.executeXPathExpression(personCollectionId, xpathExp, TARGET_NAMESPACE);
         // treba isprolaziti kroz
@@ -71,7 +69,8 @@ public class PersonRepository {
     public TPerson update(TPerson person) throws Exception
     {
         String personId = person.getId();
-        TPerson oldPersonData = this.findOne(personId);
+        TPerson oldPersonData =
+            this.findOne(PersonRepository.makeXpathQueryById(personId));
         if(oldPersonData == null)
         {
             throw new ResourceNotFoundException("Person with id: " + personId);
@@ -94,6 +93,17 @@ public class PersonRepository {
         {
             throw new ResourceNotDeleted(String.format("person with documentId %s",documentId));
         }
+    }
+
+
+    public static String makeXpathQueryByEmail(String parameter)
+    {
+        return String.format("//person[email=\"%s\"]", parameter);
+    }
+
+    public static String makeXpathQueryById(String parameter)
+    {
+        return String.format("//person[@id=\"%s\"]", parameter);
     }
 
 }

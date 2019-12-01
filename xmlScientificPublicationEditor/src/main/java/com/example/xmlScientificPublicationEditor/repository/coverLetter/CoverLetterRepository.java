@@ -12,14 +12,19 @@ import org.xmldb.api.modules.XMLResource;
 
 import com.example.xmlScientificPublicationEditor.exception.ResourceNotDeleted;
 import com.example.xmlScientificPublicationEditor.exception.ResourceNotFoundException;
+import com.example.xmlScientificPublicationEditor.util.DOMParser.DOMParser;
 import com.example.xmlScientificPublicationEditor.util.RetriveFromDB;
 import com.example.xmlScientificPublicationEditor.util.StoreToDB;
 import com.example.xmlScientificPublicationEditor.util.UpdateDB;
 
+
+
 @Repository
 public class CoverLetterRepository {
 
-	public static String coverLetterCollectionId = "/db/sample/coverLetter";
+    public static String coverLetterCollectionId = "/db/sample/coverLetter";
+    public static String coverLetterSchemaPath = "src/main/resources/data/schemas/coverLetter.xsd";
+
 	
 	public String findOne(String id) throws Exception {
 		String retVal =  null;
@@ -48,19 +53,20 @@ public class CoverLetterRepository {
         return null;
 	}
 
+    // TODO: kako ce front znati koji id je slobodan za coverLetter????
 	public String save(String cl) throws Exception {
-		Document document = DOMParser.buildDocument(cl);
+		Document document = DOMParser.buildDocument(cl,coverLetterSchemaPath);
 		String id = document.getDocumentElement().getAttribute("id");
-		StoreToDB.store(coverLetterCollectionId, id, cl.toString());
+		StoreToDB.store(coverLetterCollectionId, id, cl);
 		return id;
 	}
 
 	public String update(String coverLetter) throws Exception {
-		Document document = DOMParser.buildDocument(coverLetter);
+		Document document = DOMParser.buildDocument(coverLetter, coverLetterSchemaPath);
 		String id = document.getDocumentElement().getAttribute("id");
 		
-        String oldPersonData = this.findOne(id);
-        if(oldPersonData == null)
+        String oldCoverLetterData = this.findOne(id);
+        if(oldCoverLetterData == null)
         {
             throw new ResourceNotFoundException("Cover letter with id: " + id);
         }

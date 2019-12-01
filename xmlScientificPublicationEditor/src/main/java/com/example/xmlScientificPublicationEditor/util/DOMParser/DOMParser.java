@@ -1,4 +1,4 @@
-package com.example.xmlScientificPublicationEditor.repository.coverLetter;
+package com.example.xmlScientificPublicationEditor.util.DOMParser;
 
 import java.io.File;
 import java.io.IOException;
@@ -41,7 +41,7 @@ public class DOMParser {
 	 * @throws ParserConfigurationException 
 	 * @throws IOException 
 	 */
-	public static Document buildDocument(String xmlString) throws SAXException, ParserConfigurationException, IOException {
+	public static Document buildDocument(String xmlString, String schemaPath) throws SAXException, ParserConfigurationException, IOException {
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		Document document;
 		factory.setValidating(false);
@@ -49,7 +49,7 @@ public class DOMParser {
 		factory.setNamespaceAware(true);
 		factory.setIgnoringComments(true);
 		factory.setIgnoringElementContentWhitespace(true);
-		File file = new File("src/main/resources/data/schemas/coverLetter.xsd");
+		File file = new File(schemaPath);
 
         // create schema
         String constant = XMLConstants.W3C_XML_SCHEMA_NS_URI;

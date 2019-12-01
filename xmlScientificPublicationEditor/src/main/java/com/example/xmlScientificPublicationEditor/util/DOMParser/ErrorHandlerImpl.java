@@ -1,4 +1,4 @@
-package com.example.xmlScientificPublicationEditor.repository.coverLetter;
+package com.example.xmlScientificPublicationEditor.util.DOMParser;
 
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;

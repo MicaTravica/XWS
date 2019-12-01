@@ -37,7 +37,7 @@ public class CoverLetterController extends BaseController {
 	}
 	
 	@PutMapping(value="/coverLetter", consumes = MediaType.APPLICATION_XML_VALUE,produces = MediaType.APPLICATION_XML_VALUE)
-	public ResponseEntity<String> updatePerson(@RequestBody String coverLetter) throws Exception {
+	public ResponseEntity<String> updateCoverLetter(@RequestBody String coverLetter) throws Exception {
 		String cl = coverLetterService.update(coverLetter);
 		return new ResponseEntity<>(cl, HttpStatus.OK);
 	}

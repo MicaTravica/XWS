@@ -19,7 +19,10 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public TPerson registration(TPerson person) throws Exception {
-        TPerson foundPerson = personRepository.findOne(person.getEmail());
+        TPerson foundPerson =
+            personRepository.findOne(
+                PersonRepository.makeXpathQueryByEmail(person.getEmail())
+            );
         if(foundPerson != null){
             throw new ResourceExistsException(
                 String.format("Person with email: %s", person.getEmail())
@@ -30,7 +33,8 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public TPerson findOne(String id) throws Exception {
-        TPerson person = personRepository.findOne(id);
+        TPerson person =
+            personRepository.findOne(PersonRepository.makeXpathQueryById(id));
         if(person == null){
             throw new ResourceNotFoundException(String.format("Person with id %s", id));
         }
