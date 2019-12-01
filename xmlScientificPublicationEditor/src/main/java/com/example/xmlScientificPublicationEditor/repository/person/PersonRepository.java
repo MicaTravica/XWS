@@ -1,5 +1,16 @@
 package com.example.xmlScientificPublicationEditor.repository.person;
 
+import static com.example.xmlScientificPublicationEditor.util.template.XUpdateTemplate.TARGET_NAMESPACE;
+
+import java.util.Calendar;
+
+import org.exist.xmldb.EXistResource;
+import org.springframework.stereotype.Repository;
+import org.xmldb.api.base.ResourceIterator;
+import org.xmldb.api.base.ResourceSet;
+import org.xmldb.api.base.XMLDBException;
+import org.xmldb.api.modules.XMLResource;
+
 import com.example.xmlScientificPublicationEditor.exception.MarshallerException;
 import com.example.xmlScientificPublicationEditor.exception.ResourceNotDeleted;
 import com.example.xmlScientificPublicationEditor.exception.ResourceNotFoundException;
@@ -8,18 +19,7 @@ import com.example.xmlScientificPublicationEditor.util.RetriveFromDB;
 import com.example.xmlScientificPublicationEditor.util.StoreToDB;
 import com.example.xmlScientificPublicationEditor.util.UpdateDB;
 
-import org.springframework.stereotype.Service;
-import org.xmldb.api.base.ResourceIterator;
-import org.xmldb.api.base.ResourceSet;
-import org.xmldb.api.base.XMLDBException;
-import org.xmldb.api.modules.XMLResource;
-import org.exist.xmldb.EXistResource;
-
-import java.util.Calendar;
-
-import static com.example.xmlScientificPublicationEditor.util.template.XUpdateTemplate.TARGET_NAMESPACE;
-
-@Service
+@Repository
 public class PersonRepository {
 
     public static String personCollectionId = "/db/sample/person";
