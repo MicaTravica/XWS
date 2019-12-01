@@ -1,5 +1,16 @@
 package com.example.xmlScientificPublicationEditor.repository.person;
 
+import static com.example.xmlScientificPublicationEditor.util.template.XUpdateTemplate.TARGET_NAMESPACE;
+
+import java.util.Calendar;
+
+import org.exist.xmldb.EXistResource;
+import org.springframework.stereotype.Repository;
+import org.xmldb.api.base.ResourceIterator;
+import org.xmldb.api.base.ResourceSet;
+import org.xmldb.api.base.XMLDBException;
+import org.xmldb.api.modules.XMLResource;
+
 import com.example.xmlScientificPublicationEditor.exception.MarshallerException;
 import com.example.xmlScientificPublicationEditor.exception.ResourceNotDeleted;
 import com.example.xmlScientificPublicationEditor.exception.ResourceNotFoundException;
@@ -8,18 +19,7 @@ import com.example.xmlScientificPublicationEditor.util.RetriveFromDB;
 import com.example.xmlScientificPublicationEditor.util.StoreToDB;
 import com.example.xmlScientificPublicationEditor.util.UpdateDB;
 
-import org.springframework.stereotype.Service;
-import org.xmldb.api.base.ResourceIterator;
-import org.xmldb.api.base.ResourceSet;
-import org.xmldb.api.base.XMLDBException;
-import org.xmldb.api.modules.XMLResource;
-import org.exist.xmldb.EXistResource;
-
-import java.util.Calendar;
-
-import static com.example.xmlScientificPublicationEditor.util.template.XUpdateTemplate.TARGET_NAMESPACE;
-
-@Service
+@Repository
 public class PersonRepository {
 
     public static String personCollectionId = "/db/sample/person";
@@ -36,11 +36,9 @@ public class PersonRepository {
         return person;
     }
 
-    public TPerson findOne(String personId) throws Exception
+    public TPerson findOne(String xpathExp) throws Exception
     {
         TPerson retVal = null;
-
-        String xpathExp = "//person[@id=\"" + personId + "\"]";
         ResourceSet resultSet =
             RetriveFromDB.executeXPathExpression(personCollectionId, xpathExp, TARGET_NAMESPACE);
         // treba isprolaziti kroz
@@ -71,7 +69,8 @@ public class PersonRepository {
     public TPerson update(TPerson person) throws Exception
     {
         String personId = person.getId();
-        TPerson oldPersonData = this.findOne(personId);
+        TPerson oldPersonData =
+            this.findOne(PersonRepository.makeXpathQueryById(personId));
         if(oldPersonData == null)
         {
             throw new ResourceNotFoundException("Person with id: " + personId);
@@ -94,6 +93,17 @@ public class PersonRepository {
         {
             throw new ResourceNotDeleted(String.format("person with documentId %s",documentId));
         }
+    }
+
+
+    public static String makeXpathQueryByEmail(String parameter)
+    {
+        return String.format("//person[email=\"%s\"]", parameter);
+    }
+
+    public static String makeXpathQueryById(String parameter)
+    {
+        return String.format("//person[@id=\"%s\"]", parameter);
     }
 
 }
