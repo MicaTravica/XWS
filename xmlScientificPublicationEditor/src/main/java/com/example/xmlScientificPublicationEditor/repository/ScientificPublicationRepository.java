@@ -1,4 +1,4 @@
-package com.example.xmlScientificPublicationEditor.repository.coverLetter;
+package com.example.xmlScientificPublicationEditor.repository;
 
 import static com.example.xmlScientificPublicationEditor.util.template.XUpdateTemplate.TARGET_NAMESPACE;
 
@@ -12,24 +12,21 @@ import org.xmldb.api.modules.XMLResource;
 
 import com.example.xmlScientificPublicationEditor.exception.ResourceNotDeleted;
 import com.example.xmlScientificPublicationEditor.exception.ResourceNotFoundException;
-import com.example.xmlScientificPublicationEditor.util.DOMParser.DOMParser;
 import com.example.xmlScientificPublicationEditor.util.RetriveFromDB;
 import com.example.xmlScientificPublicationEditor.util.StoreToDB;
 import com.example.xmlScientificPublicationEditor.util.UpdateDB;
-
-
+import com.example.xmlScientificPublicationEditor.util.DOMParser.DOMParser;
 
 @Repository
-public class CoverLetterRepository {
+public class ScientificPublicationRepository {
 
-    public static String coverLetterCollectionId = "/db/sample/coverLetter";
-    public static String coverLetterSchemaPath = "src/main/resources/data/schemas/coverLetter.xsd";
+	public static String scientificPublicationCollectionId = "/db/sample/scientific_publication";
+    public static String scientificPublicationSchemaPath = "src/main/resources/data/schemas/scientific_publication.xsd";
 
-	
-	public String findOne(String id) throws Exception {
+    public String findOne(String id) throws Exception {
 		String retVal =  null;
-		String xpathExp = "//coverLetter[@id=\"" + id + "\"]";
-		ResourceSet resultSet = RetriveFromDB.executeXPathExpression(coverLetterCollectionId, xpathExp, TARGET_NAMESPACE);
+		String xpathExp = "//scientific_publication[@id=\"" + id + "\"]";
+		ResourceSet resultSet = RetriveFromDB.executeXPathExpression(scientificPublicationCollectionId, xpathExp, TARGET_NAMESPACE);
 		if(resultSet == null)
         {
             return retVal;
@@ -54,33 +51,32 @@ public class CoverLetterRepository {
 	}
 
     // TODO: kako ce front znati koji id je slobodan za coverLetter????
-	public String save(String cl) throws Exception {
-		Document document = DOMParser.buildDocument(cl,coverLetterSchemaPath);
+	public String save(String scientificPublication) throws Exception {
+		Document document = DOMParser.buildDocument(scientificPublication, scientificPublicationSchemaPath);
 		String id = document.getDocumentElement().getAttribute("id");
-		StoreToDB.store(coverLetterCollectionId, id, cl);
+		StoreToDB.store(scientificPublicationCollectionId, id, scientificPublication);
 		return id;
 	}
 
-	public String update(String coverLetter) throws Exception {
-		Document document = DOMParser.buildDocument(coverLetter, coverLetterSchemaPath);
+	public String update(String scientificPublication) throws Exception {
+		Document document = DOMParser.buildDocument(scientificPublication, scientificPublicationSchemaPath);
 		String id = document.getDocumentElement().getAttribute("id");
-		
         String oldCoverLetterData = this.findOne(id);
         if(oldCoverLetterData == null)
         {
-            throw new ResourceNotFoundException("Cover letter with id: " + id);
+            throw new ResourceNotFoundException("Scientific publication with id: " + id);
         }
         this.delete(id);
-        StoreToDB.store(coverLetterCollectionId, id, coverLetter);
+        StoreToDB.store(scientificPublicationCollectionId, id, scientificPublication);
         return id;
 	}
 
 	public void delete(String id) throws Exception {
-		String xpathExp = "/coverLetter";
-        long mods = UpdateDB.delete(coverLetterCollectionId, id, xpathExp);   
+		String xpathExp = "/scientificPublication";
+        long mods = UpdateDB.delete(scientificPublicationCollectionId, id, xpathExp);   
         if(mods == 0)
         {
-            throw new ResourceNotDeleted(String.format("Cover letter with documentId %s", id));
+            throw new ResourceNotDeleted(String.format("Scientific publication with id %s", id));
         }
 	}
 

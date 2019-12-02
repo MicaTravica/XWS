@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.xmlScientificPublicationEditor.exception.ResourceNotFoundException;
-import com.example.xmlScientificPublicationEditor.repository.coverLetter.CoverLetterRepository;
+import com.example.xmlScientificPublicationEditor.repository.CoverLetterRepository;
 import com.example.xmlScientificPublicationEditor.service.CoverLetterService;
 
 @Service
@@ -24,11 +24,6 @@ public class CoverLetterServiceImpl implements CoverLetterService {
 
 	@Override
 	public String save(String cl) throws Exception {
-//		XMLResource coverLetter = coverLetterRepository.findOne(cl.getId());
-//		if(coverLetter != null) {
-//			throw new ResourceExistsException(String.format("Cover letter with id: %s", cl.getId()));
-//			
-//		}
 		return coverLetterRepository.save(cl);
 	}
 
