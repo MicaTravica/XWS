@@ -3,12 +3,30 @@
     xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning"
     targetNamespace="http://www.uns.ac.rs/Tim1" elementFormDefault="qualified" vc:minVersion="1.1">
     <xs:include schemaLocation="paragraph.xsd"/>
+    <xs:element name="notification" type="TNotification"/>
     <xs:complexType name="TNotification">
         <xs:sequence>
-            <xs:element name="email" type="xs:string" maxOccurs="unbounded"/>
+            <xs:element name="email" maxOccurs="1">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:pattern
+                            value="([0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*@([0-9a-zA-Z][-\w]*[0-9a-zA-Z]\.)+[a-zA-Z]{2,9})"
+                        />
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="personId" type="xs:string"/>
             <xs:element name="content" type="TParagraph"/>
             <xs:element name="date" type="xs:date"/>
         </xs:sequence>
+        <xs:attribute default="unseen" name="state">
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="seen"/>
+                    <xs:enumeration value="unseen"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
         <xs:attribute default="other" name="type">
             <xs:simpleType>
                 <xs:restriction base="xs:string">
