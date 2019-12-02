@@ -61,9 +61,9 @@
             </xs:element>
             <xs:element name="roles">
                 <xs:complexType>
-                    <xs:all>
+                    <xs:sequence>
                         <xs:element maxOccurs="3" name="role" type="TRole"/>
-                    </xs:all>
+                    </xs:sequence>
                 </xs:complexType>
             </xs:element>
         </xs:sequence>

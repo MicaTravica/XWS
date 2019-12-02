@@ -23,13 +23,13 @@ public class QuestionnaireController extends BaseController {
 	@Autowired
 	private QuestionnaireService questionnaireService;
 	
-	@GetMapping(value="/coverLetter/{id}", produces = MediaType.APPLICATION_XML_VALUE)
+	@GetMapping(value="/questionnaire/{id}", produces = MediaType.APPLICATION_XML_VALUE)
 	public ResponseEntity<String> getQuestionnaireById(@PathVariable("id") String id) throws Exception{
 		String questionnaire = questionnaireService.findOne(id);
 		return new ResponseEntity<>(questionnaire, HttpStatus.OK);
 	}
 	
-	@PostMapping(value="/coverLetter", 
+	@PostMapping(value="/questionnaire", 
 			consumes = MediaType.APPLICATION_XML_VALUE,
 			produces = MediaType.APPLICATION_XML_VALUE)
 	public ResponseEntity<String> addQuestionnaire(@RequestBody String q) throws Exception {
@@ -37,13 +37,13 @@ public class QuestionnaireController extends BaseController {
 		return new ResponseEntity<>(String.format("You succesfully add Questionnaire with id %s", id), HttpStatus.OK);
 	}
 	
-	@PutMapping(value="/coverLetter", consumes = MediaType.APPLICATION_XML_VALUE,produces = MediaType.APPLICATION_XML_VALUE)
+	@PutMapping(value="/questionnaire", consumes = MediaType.APPLICATION_XML_VALUE,produces = MediaType.APPLICATION_XML_VALUE)
 	public ResponseEntity<String> updateQuestionnaire(@RequestBody String questionnaire) throws Exception {
 		String q = questionnaireService.update(questionnaire);
 		return new ResponseEntity<>(q, HttpStatus.OK);
 	}
 	
-	@DeleteMapping(value="/coverLetter/{id}", produces = MediaType.APPLICATION_XML_VALUE)
+	@DeleteMapping(value="/questionnaire/{id}", produces = MediaType.APPLICATION_XML_VALUE)
 	public ResponseEntity<String> delete(@PathVariable("id")String id) throws Exception{
 		questionnaireService.delete(id);
 		return new ResponseEntity<>(HttpStatus.ACCEPTED);

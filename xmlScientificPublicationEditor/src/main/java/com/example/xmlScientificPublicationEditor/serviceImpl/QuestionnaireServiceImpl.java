@@ -18,21 +18,21 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
 	
 	@Override
 	public String findOne(String id) throws Exception {
-		String cl = questionnaireRepository.findOne(id);
-		if(cl == null) {
+		String questionnaire = questionnaireRepository.findOne(id);
+		if(questionnaire == null) {
 			throw new ResourceNotFoundException(String.format("Questionnaire with id %s", id));
 		}
-		return cl;
+		return questionnaire;
 	}
 
 	@Override
-	public String save(String cl) throws Exception {
-		return questionnaireRepository.save(cl);
+	public String save(String questionnaire) throws Exception {
+		return questionnaireRepository.save(questionnaire);
 	}
 
 	@Override
-	public String update(String coverLetter) throws Exception {
-		return questionnaireRepository.update(coverLetter);
+	public String update(String questionnaire) throws Exception {
+		return questionnaireRepository.update(questionnaire);
 	}
 
 	@Override

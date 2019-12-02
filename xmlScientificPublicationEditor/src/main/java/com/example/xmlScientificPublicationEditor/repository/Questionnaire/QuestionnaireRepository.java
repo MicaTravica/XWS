@@ -21,13 +21,13 @@ import com.example.xmlScientificPublicationEditor.util.UpdateDB;
 @Repository
 public class QuestionnaireRepository {
 
-    public static String coverLetterCollectionId = "/db/sample/questionnaire";
-    public static String coverLetterSchemaPath = "src/main/resources/data/schemas/questionnaire.xsd";
+    public static String QuestionnaireCollectionId = "/db/sample/questionnaire";
+    public static String QuestionnaireSchemaPath = "src/main/resources/data/schemas/questionnaire.xsd";
 
 	public String findOne(String id) throws Exception {
 		String retVal =  null;
 		String xpathExp = "//questionnaire[@id=\"" + id + "\"]";
-		ResourceSet resultSet = RetriveFromDB.executeXPathExpression(coverLetterCollectionId, xpathExp, TARGET_NAMESPACE);
+		ResourceSet resultSet = RetriveFromDB.executeXPathExpression(QuestionnaireCollectionId, xpathExp, TARGET_NAMESPACE);
 		if(resultSet == null)
         {
             return retVal;
@@ -52,30 +52,30 @@ public class QuestionnaireRepository {
 	}
 
     // TODO: kako ce front znati koji id je slobodan za Questionnaire????
-	public String save(String cl) throws Exception {
-		Document document = DOMParser.buildDocument(cl,coverLetterSchemaPath);
+	public String save(String q) throws Exception {
+		Document document = DOMParser.buildDocument(q,QuestionnaireSchemaPath);
 		String id = document.getDocumentElement().getAttribute("id");
-		StoreToDB.store(coverLetterCollectionId, id, cl);
+		StoreToDB.store(QuestionnaireCollectionId, id, q);
 		return id;
 	}
 
-	public String update(String coverLetter) throws Exception {
-		Document document = DOMParser.buildDocument(coverLetter, coverLetterSchemaPath);
+	public String update(String questionnaire) throws Exception {
+		Document document = DOMParser.buildDocument(questionnaire, QuestionnaireSchemaPath);
 		String id = document.getDocumentElement().getAttribute("id");
 		
-        String oldCoverLetterData = this.findOne(id);
-        if(oldCoverLetterData == null)
+        String oldQuestionnaireData = this.findOne(id);
+        if(oldQuestionnaireData == null)
         {
             throw new ResourceNotFoundException("Questionnaire with id: " + id);
         }
         this.delete(id);
-        StoreToDB.store(coverLetterCollectionId, id, coverLetter);
+        StoreToDB.store(QuestionnaireCollectionId, id, questionnaire);
         return id;
 	}
 
 	public void delete(String id) throws Exception {
 		String xpathExp = "/questionnaire";
-        long mods = UpdateDB.delete(coverLetterCollectionId, id, xpathExp);   
+        long mods = UpdateDB.delete(QuestionnaireCollectionId, id, xpathExp);   
         if(mods == 0)
         {
             throw new ResourceNotDeleted(String.format("Questionnaire with documentId %s", id));
