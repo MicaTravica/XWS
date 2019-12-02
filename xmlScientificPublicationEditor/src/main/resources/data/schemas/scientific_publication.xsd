@@ -93,10 +93,10 @@
         </xs:complexType>
     </xs:element>
     <xs:complexType name="TChapter">
-        <xs:choice>
-            <xs:element maxOccurs="unbounded" minOccurs="0" name="subchapter" type="TChapter"/>
+        <xs:sequence maxOccurs="1">
             <xs:element maxOccurs="unbounded" name="paragraph" type="TRichParagraph"/>
-        </xs:choice>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="subchapter" type="TChapter"/>
+        </xs:sequence>
         <xs:attribute name="title" type="xs:string" use="required"/>
         <xs:attribute name="id" type="xs:ID" use="required"/>
     </xs:complexType>

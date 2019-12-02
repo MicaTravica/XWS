@@ -43,7 +43,7 @@ public class CoverLetterController extends BaseController {
 	}
 	
 	@DeleteMapping(value="/coverLetter/{id}", produces = MediaType.APPLICATION_XML_VALUE)
-	public ResponseEntity<String> delete(@PathVariable("id")String id) throws Exception{
+	public ResponseEntity<String> deleteCoverLetter(@PathVariable("id")String id) throws Exception{
 		coverLetterService.delete(id);
 		return new ResponseEntity<>(HttpStatus.ACCEPTED);
 	}
