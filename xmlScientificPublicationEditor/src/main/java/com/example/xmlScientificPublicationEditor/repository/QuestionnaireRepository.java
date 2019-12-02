@@ -1,4 +1,4 @@
-package com.example.xmlScientificPublicationEditor.repository.Questionnaire;
+package com.example.xmlScientificPublicationEditor.repository;
 
 import static com.example.xmlScientificPublicationEditor.util.template.XUpdateTemplate.TARGET_NAMESPACE;
 

@@ -1,7 +1,7 @@
 package com.example.xmlScientificPublicationEditor.serviceImpl;
 
 import com.example.xmlScientificPublicationEditor.exception.ResourceNotFoundException;
-import com.example.xmlScientificPublicationEditor.repository.Questionnaire.QuestionnaireRepository;
+import com.example.xmlScientificPublicationEditor.repository.QuestionnaireRepository;
 import com.example.xmlScientificPublicationEditor.service.QuestionnaireService;
 
 import org.springframework.beans.factory.annotation.Autowired;
