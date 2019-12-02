@@ -5,8 +5,6 @@ import org.xmldb.api.base.Resource;
 import org.xmldb.api.base.XMLDBException;
 import org.xmldb.api.modules.XUpdateQueryService;
 
-import com.example.xmlScientificPublicationEditor.util.AuthenticationUtilities;
-
 public class UpdateDB {
     
     public static long update(String collectionId, String documentId, String contextXPath, String xmlFragment, String updateTemplate ) throws Exception
@@ -44,6 +42,7 @@ public class UpdateDB {
             Resource res = col.getResource(documentId);
             col.removeResource(res);
             mods = 1;
+            return mods;
         }
         finally {
             if(col != null) {
@@ -53,7 +52,6 @@ public class UpdateDB {
                 	xe.printStackTrace();
                 }
             }
-            return mods;
         }
     } 
 }

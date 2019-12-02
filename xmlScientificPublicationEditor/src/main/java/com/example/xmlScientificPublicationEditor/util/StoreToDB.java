@@ -1,6 +1,5 @@
 package com.example.xmlScientificPublicationEditor.util;
 
-
 import org.exist.xmldb.EXistResource;
 import org.xmldb.api.DatabaseManager;
 import org.xmldb.api.base.Collection;
@@ -9,7 +8,6 @@ import org.xmldb.api.base.XMLDBException;
 import org.xmldb.api.modules.CollectionManagementService;
 import org.xmldb.api.modules.XMLResource;
 
-import com.example.xmlScientificPublicationEditor.util.AuthenticationUtilities;
 import com.example.xmlScientificPublicationEditor.util.AuthenticationUtilities.ConnectionProperties;
 
 public class StoreToDB {
