@@ -52,11 +52,11 @@ public class NotificationRepository {
 	}
 
     // TODO: kako ce front znati koji id je slobodan za Notification????
-	public String save(String notification) throws Exception {
+	public Document save(String notification) throws Exception {
 		Document document = DOMParser.buildDocument(notification, NotificationSchemaPath);
 		String id = document.getDocumentElement().getAttribute("id");
 		StoreToDB.store(NotificationCollectionId, id, notification);
-		return id;
+		return document;
 	}
 
 	public String update(String notification) throws Exception {

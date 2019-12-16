@@ -1,18 +1,20 @@
 package com.example.xmlScientificPublicationEditor.service;
 
+import org.w3c.dom.Document;
+
 /**
  * notificationService
  */
 public interface NotificationService {
 
-    public String makeNotification(String notification) throws Exception;
+	String makeNotification(String notification) throws Exception;
 
-    public String findOne(String notifcationId) throws Exception;
+	String findOne(String notifcationId) throws Exception;
 
-    public String update(String notification) throws Exception;
+	String update(String notification) throws Exception;
 
-    public void delete(String notification) throws Exception;
+	void delete(String notification) throws Exception;
 
-    public void sendEmailNotification(String notification) throws Exception;
+	void sendEmailNotification(Document notification) throws Exception;
 
 }
