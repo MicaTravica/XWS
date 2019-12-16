@@ -1,0 +1,8 @@
+# Retrieves persons and their hobbies, professions and locations.
+
+SELECT * FROM <%s>
+WHERE { 
+	?person <http://www.ftn.uns.ac.rs/rdf/examples/predicate/hobby> ?hobby .
+	?person <http://www.ftn.uns.ac.rs/rdf/examples/predicate/profession> ?profession .
+  	?person <http://www.ftn.uns.ac.rs/rdf/examples/predicate/livesIn> ?location .
+}

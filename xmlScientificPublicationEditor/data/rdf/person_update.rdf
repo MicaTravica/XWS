@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns:pred="http://www.ftn.uns.ac.rs/rdf/examples/predicate/">
+
+  <rdf:Description rdf:about="http://www.ftn.uns.ac.rs/rdf/examples/person/Nikola_Nikolic">
+    <pred:livesIn>Beograd</pred:livesIn>
+    <pred:profession>system administrator</pred:profession>
+    <pred:hobby>snorkeling</pred:hobby>
+  </rdf:Description>
+
+</rdf:RDF>
