@@ -4,6 +4,6 @@ import javax.mail.MessagingException;
 
 public interface MailService {
 
-	void sendEmail(String email) throws MessagingException;
+	void sendEmail(String email, String message) throws MessagingException;
 
 }

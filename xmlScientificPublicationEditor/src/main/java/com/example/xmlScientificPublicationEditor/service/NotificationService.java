@@ -15,6 +15,6 @@ public interface NotificationService {
 
 	void delete(String notification) throws Exception;
 
-	void sendEmailNotification(Document notification) throws Exception;
+	void sendEmailNotification(Document document, String notification) throws Exception;
 
 }
