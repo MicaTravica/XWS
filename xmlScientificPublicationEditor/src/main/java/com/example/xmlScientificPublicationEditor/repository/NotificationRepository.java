@@ -23,6 +23,7 @@ public class NotificationRepository {
 
     public static String NotificationCollectionId = "/db/sample/notification";
     public static String NotificationSchemaPath = "src/main/resources/data/schemas/notification.xsd";
+    public static String NotificationXSLPath = "src/main/resources/data/xslt/notification.xsl";
 
 	public String findOne(String id) throws Exception {
 		String retVal =  null;
