@@ -3,6 +3,7 @@
     xmlns:b="http://www.ftn.uns.ac.rs/xpath/examples" 
     xmlns:fo="http://www.w3.org/1999/XSL/Format" version="2.0">
     
+
     <xsl:template match="/">
         <fo:root>
             <fo:layout-master-set>

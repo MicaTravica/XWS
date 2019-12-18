@@ -3,13 +3,19 @@ package com.example.xmlScientificPublicationEditor.serviceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.ByteArrayOutputStream;
+
 import com.example.xmlScientificPublicationEditor.exception.ResourceNotFoundException;
 import com.example.xmlScientificPublicationEditor.repository.CoverLetterRepository;
 import com.example.xmlScientificPublicationEditor.service.CoverLetterService;
+import com.example.xmlScientificPublicationEditor.util.XSLFOTransformer.XSLFOTransformer;
 
 @Service
 public class CoverLetterServiceImpl implements CoverLetterService {
 
+	@Autowired
+	private XSLFOTransformer xslFoTransformer;
+	
 	@Autowired
 	private CoverLetterRepository coverLetterRepository;
 	
@@ -20,6 +26,16 @@ public class CoverLetterServiceImpl implements CoverLetterService {
 			throw new ResourceNotFoundException(String.format("Cover letter with id %s", id));
 		}
 		return cl;
+	}
+
+	@Override
+	public String findOneHTML(String id) throws Exception {
+		String cl = coverLetterRepository.findOne(id);
+		if(cl == null) {
+			throw new ResourceNotFoundException(String.format("Cover letter with id %s", id));
+		}
+		String clHTML = xslFoTransformer.generateHTML(cl, CoverLetterRepository.CoverLetterXSLPath);
+		return clHTML;
 	}
 
 	@Override
@@ -35,6 +51,17 @@ public class CoverLetterServiceImpl implements CoverLetterService {
 	@Override
 	public void delete(String id) throws Exception {
 		coverLetterRepository.delete(id);
+	}
+
+	@Override
+	public ByteArrayOutputStream findOnePDF(String id) throws Exception {
+		String cl = coverLetterRepository.findOne(id);
+		if(cl == null) {
+			throw new ResourceNotFoundException(String.format("Cover letter with id %s", id));
+		}
+		ByteArrayOutputStream clPDF = xslFoTransformer.generatePDF(cl, CoverLetterRepository.CoverLetterXSL_FO_PATH);
+		return clPDF;
+		
 	}
 
 }
