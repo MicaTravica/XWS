@@ -2,71 +2,58 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:n="http://www.uns.ac.rs/Tim1" version="2.0">
 
+    <xsl:template name="TPerson">
+        <xsl:param name = "person"/>
+        <div>
+            <xsl:value-of select="$person/n:name"/><br/>
+            <xsl:value-of select="$person/n:surname"/><br/>
+            <xsl:value-of select="$person/n:email"/>
+        </div>
+    </xsl:template>
 
-<xsl:template name="TPerson">
-    <xsl:param name = "person"/>
-    <table>
-        <tr>
-            <td colspan="2">
-                <strong>Name </strong>
-                <xsl:value-of select="$person/n:name"/>
-                <br/>
-                <strong>Surname </strong>
-                <xsl:value-of select="$person/n:surname"/>
-                <br/>
-                <strong>Email </strong>
-                <xsl:value-of select="$person/n:email"/>
-                <br/>
-            </td>
-        </tr>
-    </table>
-</xsl:template>
-
-<xsl:template name="TChapter">
+    <xsl:template name="TChapter">
         <xsl:param name = "paragraph" />
         <xsl:for-each select="$paragraph/*">
-                    <xsl:if test="name(.) = 'text'">   
-                        <p>
-                            <xsl:apply-templates></xsl:apply-templates>
-                        </p>
-                    </xsl:if>
-                    <!--quote in notification-->
-                    <xsl:if test="name(.) ='quote'">
-                        <q>
-                            <xsl:apply-templates></xsl:apply-templates>
-                        </q>
-                    </xsl:if>
-                    <xsl:if test="name(.) ='formula'">
-                        <div>
-                            <p> Description:
-                                <br/>
-                                <xsl:apply-templates select="./n:description"></xsl:apply-templates>
-                            </p>
-                            <br/>
-                            <p>
-                                Formula:
-                                <xsl:apply-templates select="./n:content"></xsl:apply-templates>
-                            </p>
-                        </div>
-                    </xsl:if>
-                    <!--make oredered and unordered list-->
-                    <xsl:if test="name(.) ='list'">
-                        <xsl:if test="@type='ordered'">
-                            <ol>
-                                <xsl:for-each select="./*">
-                                    <xsl:apply-templates select="."></xsl:apply-templates>
-                                </xsl:for-each>
-                            </ol>
-                        </xsl:if>
-                        <xsl:if test="@type='unordered'">
-                            <ul>
-                                <xsl:for-each select="./*">
-                                    <xsl:apply-templates select="."></xsl:apply-templates>
-                                </xsl:for-each>
-                            </ul>
-                        </xsl:if>
-                    </xsl:if>
-                </xsl:for-each>
+            <xsl:if test="name(.) = 'text'">   
+                <p>
+                    <xsl:apply-templates></xsl:apply-templates>
+                </p>
+            </xsl:if>
+            <!--quote in notification-->
+            <xsl:if test="name(.) ='quote'">
+                <q>
+                    <xsl:apply-templates></xsl:apply-templates>
+                </q>
+            </xsl:if>
+            <xsl:if test="name(.) ='formula'">
+                <div>
+                   <p> Description:<br/>
+                       <xsl:apply-templates select="./n:description"></xsl:apply-templates><br/>
+                       Formula:<br/>
+                       <xsl:apply-templates select="./n:content"></xsl:apply-templates>
+                   </p>
+                </div>
+            </xsl:if>
+            <!--make oredered and unordered list-->
+            <xsl:if test="name(.) ='list'">
+                <xsl:choose>
+                    <xsl:when test="@type='ordered'">
+                        <ol>
+                            <xsl:for-each select="./*">
+                                <xsl:apply-templates select="."></xsl:apply-templates>
+                            </xsl:for-each>
+                        </ol>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <ul>
+                            <xsl:for-each select="./*">
+                                <xsl:apply-templates select="."></xsl:apply-templates>
+                            </xsl:for-each>
+                        </ul>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:if>
+        </xsl:for-each>
     </xsl:template>
 
     <xsl:template match="n:listItem/n:text" name="TListItem">
@@ -89,7 +76,7 @@
     <xsl:template match="n:bold">
         <b>
             <xsl:for-each select="./* | text()">    
-                    <xsl:apply-templates select="."></xsl:apply-templates>
+                <xsl:apply-templates select="."></xsl:apply-templates>
             </xsl:for-each>
         </b>
     </xsl:template>
@@ -97,7 +84,7 @@
     <xsl:template match="n:italic">
         <i>
             <xsl:for-each select="./* | text()">    
-                    <xsl:apply-templates select="."></xsl:apply-templates>
+                <xsl:apply-templates select="."></xsl:apply-templates>
             </xsl:for-each>
         </i>
     </xsl:template>
@@ -105,7 +92,7 @@
     <xsl:template match="n:underline">
         <u>
             <xsl:for-each select="./* | text()">    
-                    <xsl:apply-templates select="."></xsl:apply-templates>
+                <xsl:apply-templates select="."></xsl:apply-templates>
             </xsl:for-each>
         </u>
     </xsl:template>
@@ -133,4 +120,16 @@
         <xsl:copy-of select="." />
     </xsl:template>
 
+    <xsl:template match="n:address | n:organisationAddress" name="TAddress">
+        <xsl:param name = "address"/>
+        <div>
+            <xsl:value-of select="$address/n:city"/>, 
+            <xsl:value-of select="$address/n:country"/>
+            <br/>
+            <xsl:value-of select="$address/n:street"/> 
+            <xsl:value-of select="$address/n:streetNumber"/> 
+            <xsl:value-of select="$address/n:floorNumber"/>
+            <br/>
+        </div>
+    </xsl:template>
 </xsl:stylesheet>
