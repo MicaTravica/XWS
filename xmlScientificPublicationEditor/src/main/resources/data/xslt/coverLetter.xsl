@@ -33,8 +33,9 @@
 				<p align="right">
                     <xsl:value-of select="n:coverLetter/@date"/>
                 </p>
-            	<h1 align="center">Cover letter for <xsl:value-of select="n:coverLetter/@scientificPublication"/></h1>
-				
+            	<h1 align="center">
+            		Cover letter for <xsl:value-of select="n:coverLetter/@scientificPublication"/>
+            	</h1>
 				<div class="row">
 					<div class="column" align="center">
 						Authors:<br/>
