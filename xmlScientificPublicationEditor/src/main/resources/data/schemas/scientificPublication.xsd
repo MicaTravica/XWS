@@ -9,7 +9,7 @@
     <xs:include schemaLocation="person.xsd"/>
 
 
-    <xs:element name="scientific_publication">
+    <xs:element name="scientificPublication">
         <xs:complexType>
             <xs:sequence>
                 <xs:element name="caption" maxOccurs="1" minOccurs="1">

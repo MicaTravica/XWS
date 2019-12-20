@@ -1,5 +1,7 @@
 package com.example.xmlScientificPublicationEditor.controller;
 
+import java.io.ByteArrayOutputStream;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -24,10 +26,22 @@ public class ScientificPublicationController extends BaseController {
 	
 	@GetMapping(value="/scientificPublication/{id}", produces = MediaType.APPLICATION_XML_VALUE)
 	public ResponseEntity<String> getScientificPublicationById(@PathVariable("id") String id) throws Exception{
-		String coverLetter = scientificPublicationService.findOne(id);
-		return new ResponseEntity<>(coverLetter, HttpStatus.OK);
+		String sp = scientificPublicationService.findOne(id);
+		return new ResponseEntity<>(sp, HttpStatus.OK);
 	}
 	
+	@GetMapping(value="/scientificPublication/html/{id}", produces = MediaType.TEXT_HTML_VALUE)
+	public ResponseEntity<String> getScientificPublicationByIdHTML(@PathVariable("id") String id) throws Exception{
+		String sp = scientificPublicationService.findOneHTML(id);
+		return new ResponseEntity<>(sp, HttpStatus.OK);
+	}
+
+	@GetMapping(value="/scientificPublication/pdf/{id}", produces = MediaType.APPLICATION_PDF_VALUE)
+	public ResponseEntity<byte[]> getScientificPublicationByIdPDF(@PathVariable("id") String id) throws Exception{
+		ByteArrayOutputStream sp = scientificPublicationService.findOnePDF(id);
+		return new ResponseEntity<>(sp.toByteArray(), HttpStatus.OK);
+	}
+
 	@PostMapping(value="/scientificPublication", 
 			consumes = MediaType.APPLICATION_XML_VALUE,
 			produces = MediaType.APPLICATION_XML_VALUE)

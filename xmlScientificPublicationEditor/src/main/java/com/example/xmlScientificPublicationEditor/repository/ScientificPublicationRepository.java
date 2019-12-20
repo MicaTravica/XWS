@@ -20,37 +20,39 @@ import com.example.xmlScientificPublicationEditor.util.DOMParser.DOMParser;
 @Repository
 public class ScientificPublicationRepository {
 
-	public static String scientificPublicationCollectionId = "/db/sample/scientific_publication";
-    public static String scientificPublicationSchemaPath = "src/main/resources/data/schemas/scientific_publication.xsd";
+	public static String scientificPublicationCollectionId = "/db/sample/scientificPublication";
+	public static String scientificPublicationSchemaPath = "src/main/resources/data/schemas/scientificPublication.xsd";
+	public static String ScientificPublicationXSLPath = "src/main/resources/data/xslt/scientificPublication.xsl";
+	public static String ScientificPublicationXSL_FO_PATH = "src/main/resources/data/xsl-fo/scientificPublication_fo.xsl";
 
-    public String findOne(String id) throws Exception {
-		String retVal =  null;
-		String xpathExp = "//scientific_publication[@id=\"" + id + "\"]";
-		ResourceSet resultSet = RetriveFromDB.executeXPathExpression(scientificPublicationCollectionId, xpathExp, TARGET_NAMESPACE);
-		if(resultSet == null)
-        {
-            return retVal;
-        } 
-        ResourceIterator i = resultSet.getIterator();
-        XMLResource res = null;
-        while(i.hasMoreResources()) {
-        	try {
-                res = (XMLResource)i.nextResource();
-                retVal =  res.getContent().toString();
-                return retVal;
-            } finally {
-            	// don't forget to cleanup resources
-                try { 
-                	((EXistResource)res).freeResources(); 
-                } catch (XMLDBException xe) {
-                	xe.printStackTrace();
-                }
-            }
-        }
-        return null;
+	public String findOne(String id) throws Exception {
+		String retVal = null;
+		String xpathExp = "//scientificPublication[@id=\"" + id + "\"]";
+		ResourceSet resultSet = RetriveFromDB.executeXPathExpression(scientificPublicationCollectionId, xpathExp,
+				TARGET_NAMESPACE);
+		if (resultSet == null) {
+			return retVal;
+		}
+		ResourceIterator i = resultSet.getIterator();
+		XMLResource res = null;
+		while (i.hasMoreResources()) {
+			try {
+				res = (XMLResource) i.nextResource();
+				retVal = res.getContent().toString();
+				return retVal;
+			} finally {
+				// don't forget to cleanup resources
+				try {
+					((EXistResource) res).freeResources();
+				} catch (XMLDBException xe) {
+					xe.printStackTrace();
+				}
+			}
+		}
+		return null;
 	}
 
-    // TODO: kako ce front znati koji id je slobodan za coverLetter????
+	// TODO: kako ce front znati koji id je slobodan za coverLetter????
 	public String save(String scientificPublication) throws Exception {
 		Document document = DOMParser.buildDocument(scientificPublication, scientificPublicationSchemaPath);
 		String id = document.getDocumentElement().getAttribute("id");
@@ -61,23 +63,21 @@ public class ScientificPublicationRepository {
 	public String update(String scientificPublication) throws Exception {
 		Document document = DOMParser.buildDocument(scientificPublication, scientificPublicationSchemaPath);
 		String id = document.getDocumentElement().getAttribute("id");
-        String oldCoverLetterData = this.findOne(id);
-        if(oldCoverLetterData == null)
-        {
-            throw new ResourceNotFoundException("Scientific publication with id: " + id);
-        }
-        this.delete(id);
-        StoreToDB.store(scientificPublicationCollectionId, id, scientificPublication);
-        return id;
+		String oldCoverLetterData = this.findOne(id);
+		if (oldCoverLetterData == null) {
+			throw new ResourceNotFoundException("Scientific publication with id: " + id);
+		}
+		this.delete(id);
+		StoreToDB.store(scientificPublicationCollectionId, id, scientificPublication);
+		return id;
 	}
 
 	public void delete(String id) throws Exception {
 		String xpathExp = "/scientificPublication";
-        long mods = UpdateDB.delete(scientificPublicationCollectionId, id, xpathExp);   
-        if(mods == 0)
-        {
-            throw new ResourceNotDeleted(String.format("Scientific publication with id %s", id));
-        }
+		long mods = UpdateDB.delete(scientificPublicationCollectionId, id, xpathExp);
+		if (mods == 0) {
+			throw new ResourceNotDeleted(String.format("Scientific publication with id %s", id));
+		}
 	}
 
 }
