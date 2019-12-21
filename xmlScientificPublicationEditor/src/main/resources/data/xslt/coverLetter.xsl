@@ -38,11 +38,11 @@
             	</h1>
 				<div class="row">
 					<div class="column" align="center">
-						Authors:<br/>
+						Authors of scientific publication:<br/>
 						<xsl:value-of select="n:coverLetter/@authors"/>
 					</div>
 					<div class="column" align="center">
-						Reviewer:
+						Author:
 						<xsl:call-template name="TPerson">
 							<xsl:with-param name="person" select = "n:coverLetter/n:author" />
 						</xsl:call-template>
