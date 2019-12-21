@@ -1,4 +1,4 @@
-package com.example.xmlScientificPublicationEditor.util;
+package com.example.xmlScientificPublicationEditor.util.existAPI;
 
 import org.xmldb.api.DatabaseManager;
 import org.xmldb.api.base.Collection;
@@ -7,6 +7,7 @@ import org.xmldb.api.base.ResourceSet;
 import org.xmldb.api.base.XMLDBException;
 import org.xmldb.api.modules.XPathQueryService;
 
+import com.example.xmlScientificPublicationEditor.util.AuthenticationUtilities;
 import com.example.xmlScientificPublicationEditor.util.AuthenticationUtilities.ConnectionProperties;
 
 public class RetriveFromDB {

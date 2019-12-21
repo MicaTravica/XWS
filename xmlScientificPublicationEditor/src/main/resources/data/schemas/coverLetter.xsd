@@ -1,15 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.uns.ac.rs/Tim1"
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns="http://www.uns.ac.rs/Tim1"
     xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning"
-    targetNamespace="http://www.uns.ac.rs/Tim1" elementFormDefault="qualified" vc:minVersion="1.1">
+    targetNamespace="http://www.uns.ac.rs/Tim1"
+    elementFormDefault="qualified" vc:minVersion="1.1"
+    xmlns:rdfa="http://www.w3.org/ns/rdfa">
 
     <xs:include schemaLocation="paragraph.xsd"/>
     <xs:include schemaLocation="person.xsd"/>
+    <xs:include schemaLocation="predicate.xsd"></xs:include>
 
     <xs:element name="coverLetter">
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="author" type="TPerson"/>
+                <xs:element name="author">
+                    <xs:complexType>
+                        <xs:complexContent>
+                            <xs:extension base="TPerson">
+                                <xs:attribute name="property" type="xs:string" use="required"/>
+                            </xs:extension>
+                        </xs:complexContent>
+                    </xs:complexType>
+                </xs:element>
                 <xs:element name="content" type="TParagraph" maxOccurs="unbounded"/>
                 <xs:element name="contactInformation">
                     <xs:complexType>
@@ -20,12 +32,10 @@
                         </xs:sequence>
                     </xs:complexType>
                 </xs:element>
-                <xs:element name="authorSignature" type="xs:string"/>
+                <xs:element name="authorSignature" type="xs:base64Binary"/>
             </xs:sequence>
             <xs:attribute name="id" type="xs:ID" use="required"/>
             <xs:attribute name="date" type="xs:date" use="required"/>
-            <xs:attribute name="scientificPublication" type="xs:string"/>
-            <xs:attribute name="authors" type="xs:string"/>
         </xs:complexType>
     </xs:element>
 </xs:schema>

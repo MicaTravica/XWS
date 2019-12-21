@@ -1,6 +1,7 @@
 package com.example.xmlScientificPublicationEditor.service;
 
 import java.io.ByteArrayOutputStream;
+import java.io.StringWriter;
 
 public interface CoverLetterService {
 
@@ -15,5 +16,7 @@ public interface CoverLetterService {
 	String update(String coverLetter) throws Exception;
 
 	void delete(String id) throws Exception;
+
+	StringWriter extractMetadata(String cl) throws Exception;
 
 }

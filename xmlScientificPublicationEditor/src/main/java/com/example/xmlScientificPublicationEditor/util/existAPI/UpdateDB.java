@@ -1,4 +1,6 @@
-package com.example.xmlScientificPublicationEditor.util;
+package com.example.xmlScientificPublicationEditor.util.existAPI;
+
+import com.example.xmlScientificPublicationEditor.util.AuthenticationUtilities;
 
 import org.xmldb.api.base.Collection;
 import org.xmldb.api.base.Resource;

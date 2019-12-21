@@ -1,0 +1,19 @@
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:h="http://www.w3.org/1999/xhtml">
+  <rdf:Description rdf:about="">
+    <author xmlns="http://www.uns.ac.rs/Tim1" rdf:datatype="http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral">
+        <name xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Duuuuusan</name>
+        <surname xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Bucan</surname>
+        <email xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">dusanbzr@gmail.com</email>
+        <phone xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">066-6324197</phone>
+        <institution xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <name>FTN</name>
+            <address>
+                <city>Novi Sad</city>
+                <street>Dunavska</street>
+                <country>Srbija</country>
+            </address>
+        </institution>
+        <expertise xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+    </author>
+  </rdf:Description>
+</rdf:RDF>
