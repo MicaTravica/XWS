@@ -29,7 +29,7 @@
                                 <fo:table-row>
                                     <fo:table-cell padding="2px" text-align-last="center">
                                         <fo:block>
-                                            Authors:
+                                            Authors of scientific publication:
                                         </fo:block>
                                         <fo:block>
                                             <xsl:value-of select="n:coverLetter/@authors"/>
@@ -37,7 +37,7 @@
                                     </fo:table-cell>
                                     <fo:table-cell padding="2px" text-align-last="center">
                                         <fo:block>
-                                            Reviewer:
+                                            Author:
                                             <xsl:call-template name="TPerson">
                                                 <xsl:with-param name="person" select = "n:coverLetter/n:author" />
                                             </xsl:call-template>
