@@ -12,8 +12,8 @@
 						text-align: justify;
 					}
 					.column {
-						float: center;
-						width: auto;
+						float: left;
+						width: 50%;
 					}
 					.row:after {
 						content: "";
@@ -33,16 +33,36 @@
             	<h1 align="center">
             		<xsl:value-of select="n:scientificPublication/n:caption"/>
             	</h1>
-				<div class="row">
-					<xsl:for-each select="n:scientificPublication/n:authors/n:author">
-						<div class="column" align="center">
-							<xsl:call-template name="TPerson">
-								<xsl:with-param name="person" select = "." />
-							</xsl:call-template>
-						</div>
-					</xsl:for-each>
-				</div>
-				
+            	<table style="width:100%">
+            		<tr>
+            			<xsl:for-each select="n:scientificPublication/n:authors/n:author">
+            				<td>
+            					<div align="center">
+            						<xsl:call-template name="TAuthor">
+            							<xsl:with-param name="author" select = "." />
+            						</xsl:call-template>
+            					</div>
+            				</td>
+            			</xsl:for-each>
+            		</tr>
+            	</table>
+            	<p>
+            		<b><i>
+            			Abstract<br/>
+            			<xsl:for-each select="n:scientificPublication/n:abstract/n:paragraph">
+            				<xsl:call-template name="TParagraph"/>
+            			</xsl:for-each>
+            			Keywords - 
+            			<xsl:for-each select="n:scientificPublication/n:abstract/n:keywords/n:keyword">
+            				<xsl:value-of select="."/>;
+            			</xsl:for-each>
+            		</i></b>
+            	</p>
+            	<xsl:for-each select="n:scientificPublication/n:chapter">
+            		<xsl:call-template name="TChapter">
+            			<xsl:with-param name="chapter" select = "." />
+            		</xsl:call-template>
+            	</xsl:for-each>
             </body>
         </html>
     </xsl:template>

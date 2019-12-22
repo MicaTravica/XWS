@@ -5,12 +5,12 @@
     xmlns="http://www.uns.ac.rs/Tim1">
 
     <xs:complexType name="TParagraph">
-        <xs:sequence maxOccurs="1">
+        <xs:choice maxOccurs="unbounded">
             <xs:element maxOccurs="unbounded" minOccurs="0" name="text" type="TText"> </xs:element>
             <xs:element maxOccurs="unbounded" minOccurs="0" name="quote" type="TQuote"/>
             <xs:element name="formula" type="TFormula" maxOccurs="unbounded" minOccurs="0"/>
             <xs:element maxOccurs="unbounded" minOccurs="0" name="list" type="TList"/>
-        </xs:sequence>
+        </xs:choice>
         <xs:attribute name="id" type="xs:ID" use="required"/>
     </xs:complexType>
     <xs:complexType name="TFormula">

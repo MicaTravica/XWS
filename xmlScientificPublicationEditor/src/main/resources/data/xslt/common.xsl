@@ -10,10 +10,40 @@
             <xsl:value-of select="$person/n:email"/>
         </div>
     </xsl:template>
+    
+    <xsl:template name="TAuthor">
+        <xsl:param name="author"/>
+        <div>
+            <xsl:value-of select="$author/n:name"/>&#160;<xsl:value-of select="$author/n:surname"/><br/>
+            <xsl:value-of select="$author/n:institution/n:name"/><br/>
+            <xsl:value-of select="$author/n:institution/n:address/n:city"/>, <xsl:value-of select="$author/n:institution/n:address/n:country"/><br/>
+            <xsl:value-of select="$author/n:email"/>&#160;<xsl:value-of select="$author/n:phone"/>
+        </div>
+    </xsl:template>
 
-    <xsl:template name="TChapter">
-        <xsl:param name = "paragraph" />
-        <xsl:for-each select="$paragraph/*">
+    <xsl:template match="n:chapter" name="TChapter">
+        <xsl:param name="chapter"/>
+        <h2 style="margin:10px">
+            <xsl:value-of select="$chapter/@title"/>
+        </h2>
+        <xsl:for-each select=".">
+            <xsl:apply-templates></xsl:apply-templates>
+        </xsl:for-each>
+    </xsl:template>
+    
+    <xsl:template match="n:subchapter" name="TSubchapter">
+        <div style="margin: auto auto auto 10px">
+            <h3 style="margin:10px">
+                <xsl:value-of select="./@title"/>
+            </h3>
+            <xsl:for-each select=".">
+                <xsl:apply-templates></xsl:apply-templates>
+            </xsl:for-each>
+        </div>
+    </xsl:template>
+    
+    <xsl:template match="n:paragraph" name="TParagraph">
+        <xsl:for-each select="./*">
             <xsl:if test="name(.) = 'text'">   
                 <p>
                     <xsl:apply-templates></xsl:apply-templates>
@@ -27,11 +57,11 @@
             </xsl:if>
             <xsl:if test="name(.) ='formula'">
                 <div>
-                   <p> Description:<br/>
-                       <xsl:apply-templates select="./n:description"></xsl:apply-templates><br/>
-                       Formula:<br/>
-                       <xsl:apply-templates select="./n:content"></xsl:apply-templates>
-                   </p>
+                    <p> Description:<br/>
+                        <xsl:apply-templates select="./n:description"></xsl:apply-templates><br/>
+                        Formula:<br/>
+                        <xsl:apply-templates select="./n:content"></xsl:apply-templates>
+                    </p>
                 </div>
             </xsl:if>
             <!--make oredered and unordered list-->
@@ -52,6 +82,42 @@
                         </ul>
                     </xsl:otherwise>
                 </xsl:choose>
+            </xsl:if>
+            <xsl:if test="name(.) ='image'">
+                <div>
+                   <img>
+                        <xsl:attribute name="src">
+                            <xsl:value-of select="./n:source"/>
+                        </xsl:attribute>
+                       <xsl:attribute name="alt">
+                           Image not found
+                       </xsl:attribute>
+                       <xsl:attribute name="width">
+                           <xsl:value-of select="./@width"/>
+                       </xsl:attribute>
+                       <xsl:attribute name="height">
+                           <xsl:value-of select="./@height"/>
+                       </xsl:attribute>
+                   </img>
+                   <p>
+                       <small>
+                           <xsl:value-of select="./n:description"/>
+                       </small>
+                   </p>
+                </div>
+            </xsl:if>
+            <xsl:if test="name(.) ='table'">
+                <table border="1">
+                    <xsl:for-each select="./n:table_row">
+                        <tr>
+                            <xsl:for-each select="./n:table_cell">
+                                <td>
+                                    <xsl:apply-templates></xsl:apply-templates>
+                                </td>
+                            </xsl:for-each>
+                        </tr>
+                    </xsl:for-each>
+                </table>
             </xsl:if>
         </xsl:for-each>
     </xsl:template>

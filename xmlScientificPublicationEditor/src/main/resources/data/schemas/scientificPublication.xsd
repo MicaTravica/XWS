@@ -94,7 +94,7 @@
     </xs:element>
     <xs:complexType name="TChapter">
         <xs:sequence maxOccurs="1">
-            <xs:element maxOccurs="unbounded" name="paragraph" type="TRichParagraph"/>
+            <xs:element maxOccurs="unbounded" name="paragraph"/>
             <xs:element maxOccurs="unbounded" minOccurs="0" name="subchapter" type="TChapter"/>
         </xs:sequence>
         <xs:attribute name="title" type="xs:string" use="required"/>
@@ -153,16 +153,10 @@
                     </xs:restriction>
                 </xs:simpleType>
             </xs:element>
-            <xs:element name="source">
-                <xs:simpleType>
-                    <xs:restriction base="xs:base64Binary">
-                        <xs:minLength value="1"/>
-                    </xs:restriction>
-                </xs:simpleType>
-            </xs:element>
+            <xs:element name="source" type="xs:string"> </xs:element>
         </xs:sequence>
-        <xs:attribute name="height" type="xs:positiveInteger"/>
-        <xs:attribute name="width" type="xs:positiveInteger"/>
+        <xs:attribute name="height" type="xs:positiveInteger" default="100"/>
+        <xs:attribute name="width" type="xs:positiveInteger" default="100"/>
         <xs:attribute name="id" type="xs:ID" use="required"/>
     </xs:complexType>
     <xs:complexType name="TReference">
@@ -189,10 +183,10 @@
     <xs:complexType name="TRichParagraph">
         <xs:complexContent mixed="false">
             <xs:extension base="TParagraph">
-                <xs:sequence>
+                <xs:choice maxOccurs="unbounded">
                     <xs:element maxOccurs="unbounded" minOccurs="0" name="image" type="TImage"/>
                     <xs:element maxOccurs="unbounded" minOccurs="0" name="table" type="TTable"/>
-                </xs:sequence>
+                </xs:choice>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>

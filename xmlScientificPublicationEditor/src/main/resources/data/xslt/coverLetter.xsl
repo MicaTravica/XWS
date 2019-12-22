@@ -48,11 +48,9 @@
 						</xsl:call-template>
 					</div>
 				</div>
-				<xsl:for-each select="n:coverLetter/n:content">
-						<xsl:call-template name="TChapter">
-							<xsl:with-param name="paragraph" select = "." />
-						</xsl:call-template>
-				</xsl:for-each>
+            	<xsl:for-each select="n:coverLetter/n:content">
+            		<xsl:call-template name="TParagraph"/>
+            	</xsl:for-each>
 				<p>
 					Signature:<br/>
 					<i><xsl:value-of select="n:coverLetter/n:authorSignature"/></i>
