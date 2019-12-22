@@ -37,27 +37,6 @@
                         </xs:sequence>
                     </xs:complexType>
                 </xs:element>
-                <xs:element minOccurs="0" name="table_of_content">
-                    <xs:complexType>
-                        <xs:sequence>
-                            <xs:element maxOccurs="unbounded" minOccurs="1" name="item">
-                                <xs:complexType>
-                                    <xs:sequence>
-                                        <xs:element name="chapter_caption">
-                                            <xs:simpleType>
-                                                <xs:restriction base="xs:string">
-                                                  <xs:minLength value="1"/>
-                                                </xs:restriction>
-                                            </xs:simpleType>
-                                        </xs:element>
-                                        <xs:element name="page_number" type="xs:positiveInteger"/>
-                                    </xs:sequence>
-                                </xs:complexType>
-                            </xs:element>
-                        </xs:sequence>
-                        <xs:attribute name="id" type="xs:ID" use="required"/>
-                    </xs:complexType>
-                </xs:element>
                 <xs:element name="abstract" type="TAbstract"/>
                 <xs:element name="chapter" maxOccurs="unbounded" minOccurs="0" type="TChapter"/>
                 <xs:element name="references" minOccurs="0" maxOccurs="1">
@@ -90,6 +69,7 @@
                 </xs:simpleType>
             </xs:attribute>
             <xs:attribute name="version" type="xs:positiveInteger" use="required"/>
+            <xs:attribute default="true" name="tableOfContent" type="xs:boolean"/>
         </xs:complexType>
     </xs:element>
     <xs:complexType name="TChapter">

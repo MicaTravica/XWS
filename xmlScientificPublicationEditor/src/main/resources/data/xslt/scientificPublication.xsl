@@ -46,7 +46,7 @@
             			</xsl:for-each>
             		</tr>
             	</table>
-            	<p>
+            	<p id="abstract">
             		<b><i>
             			Abstract<br/>
             			<xsl:for-each select="n:scientificPublication/n:abstract/n:paragraph">
@@ -63,6 +63,15 @@
             			<xsl:with-param name="chapter" select = "." />
             		</xsl:call-template>
             	</xsl:for-each>
+            	<div>
+            		<h2>Table of content:</h2>
+            		<a href="#abstract" style="font-size:20px;">Abstract</a><br/>
+            		<xsl:for-each select="n:scientificPublication/n:chapter">
+            			<xsl:call-template name="TChapterContent">
+            				<xsl:with-param name="chapter" select = "." />
+            			</xsl:call-template>
+            		</xsl:for-each>
+            	</div>
             </body>
         </html>
     </xsl:template>

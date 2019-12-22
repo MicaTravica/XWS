@@ -24,6 +24,9 @@
     <xsl:template match="n:chapter" name="TChapter">
         <xsl:param name="chapter"/>
         <h2 style="margin:10px">
+            <xsl:attribute name="id">
+                <xsl:value-of select="$chapter/@id"/>
+            </xsl:attribute>
             <xsl:value-of select="$chapter/@title"/>
         </h2>
         <xsl:for-each select=".">
@@ -34,6 +37,9 @@
     <xsl:template match="n:subchapter" name="TSubchapter">
         <div style="margin: auto auto auto 10px">
             <h3 style="margin:10px">
+                <xsl:attribute name="id">
+                    <xsl:value-of select="./@id"/>
+                </xsl:attribute>
                 <xsl:value-of select="./@title"/>
             </h3>
             <xsl:for-each select=".">
@@ -196,6 +202,34 @@
             <xsl:value-of select="$address/n:streetNumber"/> 
             <xsl:value-of select="$address/n:floorNumber"/>
             <br/>
+        </div>
+    </xsl:template>
+    
+    <xsl:template name="TChapterContent">
+        <xsl:param name="chapter"/>
+        <xsl:variable name="link" select="$chapter/@id"/>
+        <a href="#{$link}" style="font-size:20px;">
+            <xsl:value-of select="$chapter/@title"/>
+        </a><br/>
+        <xsl:for-each select="$chapter/n:subchapter">
+            <xsl:call-template name="TSubchapterContent">
+                <xsl:with-param name="subchapter" select="."></xsl:with-param>
+            </xsl:call-template>
+        </xsl:for-each>
+    </xsl:template>
+    
+    <xsl:template name="TSubchapterContent">
+        <xsl:param name="subchapter"/>
+        <div style="margin: auto auto auto 10px">
+            <xsl:variable name="link" select="$subchapter/@id"/>
+            <a href="#{$link}" style="font-size:16px;">
+                <xsl:value-of select="$subchapter/@title"/>
+            </a><br/>
+            <xsl:for-each select="$subchapter/n:subchapter">
+                <xsl:call-template name="TSubchapterContent">
+                    <xsl:with-param name="subchapter" select="."></xsl:with-param>
+                </xsl:call-template>
+            </xsl:for-each>    
         </div>
     </xsl:template>
 </xsl:stylesheet>
