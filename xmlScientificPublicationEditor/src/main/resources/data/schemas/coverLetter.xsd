@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
-    xmlns="http://www.uns.ac.rs/Tim1"
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.uns.ac.rs/Tim1"
     xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning"
-    targetNamespace="http://www.uns.ac.rs/Tim1"
-    elementFormDefault="qualified" vc:minVersion="1.1"
+    targetNamespace="http://www.uns.ac.rs/Tim1" elementFormDefault="qualified" vc:minVersion="1.1"
     xmlns:rdfa="http://www.w3.org/ns/rdfa">
 
     <xs:include schemaLocation="paragraph.xsd"/>
     <xs:include schemaLocation="person.xsd"/>
-    <xs:include schemaLocation="predicate.xsd"></xs:include>
+    <xs:include schemaLocation="predicate.xsd"/>
 
     <xs:element name="coverLetter">
         <xs:complexType>
@@ -17,7 +15,11 @@
                     <xs:complexType>
                         <xs:complexContent>
                             <xs:extension base="TPerson">
-                                <xs:attribute name="property" type="xs:string" use="required"/>
+                                <xs:attribute name="rel" type="xs:string" use="required"/>
+                                <xs:attribute name="vocab" type="xs:string"/>
+                                <xs:attribute name="href" type="xs:string"/>
+                                <xs:attribute name="about" type="xs:string"/>
+                                <xs:attribute name="typeof" type="xs:string"/>
                             </xs:extension>
                         </xs:complexContent>
                     </xs:complexType>
