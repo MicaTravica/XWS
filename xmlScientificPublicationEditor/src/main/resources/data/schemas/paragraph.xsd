@@ -27,7 +27,7 @@
         <xs:attribute name="id" type="xs:ID" use="required"/>
     </xs:complexType>
     <xs:complexType mixed="true" name="TCursive">
-        <xs:choice>
+        <xs:choice maxOccurs="unbounded">
             <xs:element maxOccurs="unbounded" minOccurs="0" name="bold" type="TCursive"/>
             <xs:element maxOccurs="unbounded" minOccurs="0" name="italic" type="TCursive"/>
             <xs:element maxOccurs="unbounded" minOccurs="0" name="underline" type="TCursive"/>

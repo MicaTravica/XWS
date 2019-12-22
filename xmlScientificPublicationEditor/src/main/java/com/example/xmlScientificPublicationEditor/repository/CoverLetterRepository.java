@@ -24,8 +24,9 @@ public class CoverLetterRepository {
 
     public static String coverLetterCollectionId = "/db/sample/coverLetter";
     public static String coverLetterSchemaPath = "src/main/resources/data/schemas/coverLetter.xsd";
-
-	
+    public static String CoverLetterXSLPath = "src/main/resources/data/xslt/coverLetter.xsl";
+    public static String CoverLetterXSL_FO_PATH = "src/main/resources/data/xsl-fo/coverLetter_fo.xsl";
+    
 	public String findOne(String id) throws Exception {
 		String retVal =  null;
 		String xpathExp = "//coverLetter[@id=\"" + id + "\"]";

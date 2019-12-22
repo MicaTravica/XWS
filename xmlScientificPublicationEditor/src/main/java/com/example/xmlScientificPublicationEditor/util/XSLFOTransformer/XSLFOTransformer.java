@@ -33,18 +33,14 @@ public class XSLFOTransformer {
 	
 	private TransformerFactory transformerFactory;
 	
-	public static final String INPUT_FILE = "data/xsl-fo/bookstore.xml";
-	
-	public static final String XSL_FILE = "data/xsl-fo/bookstore_fo.xsl";
-	
-	public static final String OUTPUT_FILE = "gen/fo/bookstore.pdf";
+	public static final String OUTPUT_FILE = "src/gen/fo/bookstore.pdf";
 	
 	public static final String FOP_XCONF = "src/main/java/com/example/xmlScientificPublicationEditor/util/XSLFOTransformer/fop.xconf";
 	
 
 
-	public static final String INPUT_FILE2 = "src/main/resources/data/xslt/bookstore.xml";
-	public static final String XSL_FILE2 = "src/main/resources/data/xslt/bookstore.xsl";
+	public static final String INPUT_FILE2 = "src/main/resources/data/xsl-fo/bookstore.xml";
+	public static final String XSL_FILE2 = "src/main/resources/data/xsl-fo/bookstore_fo.xsl";
 	
 
 	public XSLFOTransformer() throws SAXException, IOException {
@@ -73,18 +69,20 @@ public class XSLFOTransformer {
 	}
 
 
-	private void generatePDF() throws Exception {
+	public ByteArrayOutputStream generatePDF(String sourceStr, String xslt_fo_TemplatePath) throws Exception {
 
-		System.out.println("[INFO] " + XSLFOTransformer.class.getSimpleName());
+		// xslt_fo_TemplatePath = XSL_FILE2;
+		// File ssourceStr = new File(INPUT_FILE2);
 		
 		// Point to the XSL-FO file
-		File xslFile = new File(XSL_FILE);
+		File xslFile = new File(xslt_fo_TemplatePath);
 
 		// Create transformation source
 		StreamSource transformSource = new StreamSource(xslFile);
 		
 		// Initialize the transformation subject
-		StreamSource source = new StreamSource(new File(INPUT_FILE));
+		StreamSource source = new StreamSource(new StringReader(sourceStr));
+		// StreamSource source = new StreamSource(ssourceStr);
 
 		// Initialize user agent needed for the transformation
 		FOUserAgent userAgent = fopFactory.newFOUserAgent();
@@ -104,25 +102,7 @@ public class XSLFOTransformer {
 		// Start XSLT transformation and FOP processing
 		xslFoTransformer.transform(source, res);
 
-		// Generate PDF file
-		File pdfFile = new File(OUTPUT_FILE);
-		if (!pdfFile.getParentFile().exists()) {
-			System.out.println("[INFO] A new directory is created: " + pdfFile.getParentFile().getAbsolutePath() + ".");
-			pdfFile.getParentFile().mkdir();
-		}
-		
-		OutputStream out = new BufferedOutputStream(new FileOutputStream(pdfFile));
-		out.write(outStream.toByteArray());
-
-		System.out.println("[INFO] File \"" + pdfFile.getCanonicalPath() + "\" generated successfully.");
-		out.close();
-		
-		System.out.println("[INFO] End.");
-
-	}
-	
-	public static void main(String[] args) throws Exception {
-		new XSLFOTransformer().generateHTML(INPUT_FILE2, XSL_FILE2);
+		return outStream;
 	}
 
 }
