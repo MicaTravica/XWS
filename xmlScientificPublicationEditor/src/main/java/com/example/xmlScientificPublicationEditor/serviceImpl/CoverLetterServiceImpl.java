@@ -57,13 +57,16 @@ public class CoverLetterServiceImpl implements CoverLetterService {
 
 	@Override
 	public String save(String cl) throws Exception {
-		coverLetterRepository.saveMetadata(this.extractMetadata(cl));
-		return coverLetterRepository.save(cl);
+		String cvId = coverLetterRepository.save(cl);
+		coverLetterRepository.saveMetadata(this.extractMetadata(cl), cvId);
+		return cvId;
 	}
 
 	@Override
 	public String update(String coverLetter) throws Exception {
-		return coverLetterRepository.update(coverLetter);
+		String cvId = coverLetterRepository.update(coverLetter);
+		coverLetterRepository.updateMetadata(this.extractMetadata(coverLetter), cvId);
+		return cvId;
 	}
 
 	@Override
