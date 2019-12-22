@@ -2,6 +2,8 @@ package com.example.xmlScientificPublicationEditor.repository;
 
 import static com.example.xmlScientificPublicationEditor.util.template.XUpdateTemplate.TARGET_NAMESPACE;
 
+import java.io.StringWriter;
+
 import org.exist.xmldb.EXistResource;
 import org.springframework.stereotype.Repository;
 import org.w3c.dom.Document;
@@ -13,9 +15,10 @@ import org.xmldb.api.modules.XMLResource;
 import com.example.xmlScientificPublicationEditor.exception.ResourceNotDeleted;
 import com.example.xmlScientificPublicationEditor.exception.ResourceNotFoundException;
 import com.example.xmlScientificPublicationEditor.util.DOMParser.DOMParser;
-import com.example.xmlScientificPublicationEditor.util.RetriveFromDB;
-import com.example.xmlScientificPublicationEditor.util.StoreToDB;
-import com.example.xmlScientificPublicationEditor.util.UpdateDB;
+import com.example.xmlScientificPublicationEditor.util.RDF.StoreToRDF;
+import com.example.xmlScientificPublicationEditor.util.existAPI.RetriveFromDB;
+import com.example.xmlScientificPublicationEditor.util.existAPI.StoreToDB;
+import com.example.xmlScientificPublicationEditor.util.existAPI.UpdateDB;
 
 
 
@@ -58,7 +61,7 @@ public class CoverLetterRepository {
 	public String save(String cl) throws Exception {
 		Document document = DOMParser.buildDocument(cl,coverLetterSchemaPath);
 		String id = document.getDocumentElement().getAttribute("id");
-		StoreToDB.store(coverLetterCollectionId, id, cl);
+        StoreToDB.store(coverLetterCollectionId, id, cl);
 		return id;
 	}
 
@@ -83,6 +86,13 @@ public class CoverLetterRepository {
         {
             throw new ResourceNotDeleted(String.format("Cover letter with documentId %s", id));
         }
+	}
+
+
+	public void saveMetadata(StringWriter metadata) throws Exception{
+        System.out.println(metadata.toString());
+        String SPARQL_NAMED_GRAPH_URI = "/example/sparql/metadata";
+        StoreToRDF.store(metadata, SPARQL_NAMED_GRAPH_URI);
 	}
 
 }
