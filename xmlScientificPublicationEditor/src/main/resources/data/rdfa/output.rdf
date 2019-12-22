@@ -1,0 +1,5 @@
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:h="http://www.w3.org/1999/xhtml">
+  <rdf:Description rdf:about="localhostt:8081/api/person/dusanbzr@gmail.com">
+    <author xmlns="http://www.uns.ac.rs/Tim1" rdf:resource="localhostt:8081/api/coverLetter/cv1"/>
+  </rdf:Description>
+</rdf:RDF>

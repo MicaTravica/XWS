@@ -15,9 +15,9 @@ import com.example.xmlScientificPublicationEditor.exception.MarshallerException;
 import com.example.xmlScientificPublicationEditor.exception.ResourceNotDeleted;
 import com.example.xmlScientificPublicationEditor.exception.ResourceNotFoundException;
 import com.example.xmlScientificPublicationEditor.model.person.TPerson;
-import com.example.xmlScientificPublicationEditor.util.RetriveFromDB;
-import com.example.xmlScientificPublicationEditor.util.StoreToDB;
-import com.example.xmlScientificPublicationEditor.util.UpdateDB;
+import com.example.xmlScientificPublicationEditor.util.existAPI.RetriveFromDB;
+import com.example.xmlScientificPublicationEditor.util.existAPI.StoreToDB;
+import com.example.xmlScientificPublicationEditor.util.existAPI.UpdateDB;
 
 @Repository
 public class PersonRepository {
