@@ -272,11 +272,16 @@
     <xsl:template name="TChapterContent">
         <xsl:param name="chapter"/>
         <xsl:variable name="link" select="$chapter/@id"/>
-        <fo:basic-link internal-destination="{$link}" font-size="15px">
-            <xsl:value-of select="$chapter/@title"/>
-            <!--<fo:leader leader-pattern="dots"/>
-                <fo:page-number-citation ref-id="{$link}"/>-->
-        </fo:basic-link>
+        <fo:block text-align="justify">
+            <fo:basic-link internal-destination="{$link}" font-size="15px">
+                <xsl:value-of select="$chapter/@title"/>
+            </fo:basic-link>
+            <xsl:text> </xsl:text>
+            <fo:leader leader-length.minimum="75%" leader-length.optimum="100%"
+                leader-length.maximum="100%" leader-pattern="dots"/>
+            <xsl:text> </xsl:text>
+            <fo:page-number-citation ref-id="{$link}"/>
+        </fo:block>
         <xsl:for-each select="$chapter/n:subchapter">
             <xsl:call-template name="TSubchapterContent">
                 <xsl:with-param name="subchapter" select="."></xsl:with-param>
@@ -288,11 +293,16 @@
         <xsl:param name="subchapter"/>
         <fo:block margin-left="10px">
             <xsl:variable name="link" select="./@id"/>
-            <fo:basic-link internal-destination="{$link}" font-size="12px">
-                <xsl:value-of select="./@title"/>
-                <!--<fo:leader leader-pattern="dots"/>
-                <fo:page-number-citation ref-id="{$link}"/>-->
-            </fo:basic-link>
+            <fo:block text-align="justify">
+                <fo:basic-link internal-destination="{$link}" font-size="12px">
+                    <xsl:value-of select="./@title"/>
+                </fo:basic-link>
+                <xsl:text> </xsl:text>
+                <fo:leader leader-length.minimum="75%" leader-length.optimum="100%"
+                    leader-length.maximum="100%" leader-pattern="dots"/>
+                <xsl:text> </xsl:text>
+                <fo:page-number-citation ref-id="{$link}"/>
+            </fo:block>
             <xsl:for-each select="./n:subchapter">
                 <xsl:call-template name="TSubchapterContent">
                     <xsl:with-param name="subchapter" select="."></xsl:with-param>

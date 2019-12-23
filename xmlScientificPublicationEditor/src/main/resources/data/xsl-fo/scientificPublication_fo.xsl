@@ -47,12 +47,15 @@
                     </xsl:for-each>
                     <fo:block break-before='page' width="100%">
                         <fo:block font-size="18px">Table of content:</fo:block>
-                        <fo:block>
+                        <fo:block text-align="justify">
                             <fo:basic-link internal-destination="abstract" font-size="15px">
                                 <xsl:text>Abstract</xsl:text>
-                                <!--<fo:leader leader-pattern="dots" />
-                                <fo:page-number-citation ref-id="abstract" />-->
                             </fo:basic-link>
+                            <xsl:text> </xsl:text>
+                            <fo:leader leader-length.minimum="75%" leader-length.optimum="100%"
+                                leader-length.maximum="100%" leader-pattern="dots"/>
+                            <xsl:text> </xsl:text>
+                            <fo:page-number-citation ref-id="abstract"/>
                         </fo:block>
                         <xsl:for-each select="n:scientificPublication/n:chapter">
                             <xsl:call-template name="TChapterContent">
