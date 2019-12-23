@@ -1,5 +1,7 @@
 package com.example.xmlScientificPublicationEditor.serviceImpl;
 
+import java.io.ByteArrayOutputStream;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,11 +26,11 @@ public class CoverLetterServiceImpl implements CoverLetterService {
 	
 	@Autowired
 	private CoverLetterRepository coverLetterRepository;
-	
+
 	@Override
 	public String findOne(String id) throws Exception {
 		String cl = coverLetterRepository.findOne(id);
-		if(cl == null) {
+		if (cl == null) {
 			throw new ResourceNotFoundException(String.format("Cover letter with id %s", id));
 		}
 		return cl;
@@ -37,7 +39,7 @@ public class CoverLetterServiceImpl implements CoverLetterService {
 	@Override
 	public String findOneHTML(String id) throws Exception {
 		String cl = coverLetterRepository.findOne(id);
-		if(cl == null) {
+		if (cl == null) {
 			throw new ResourceNotFoundException(String.format("Cover letter with id %s", id));
 		}
 		String clHTML = xslFoTransformer.generateHTML(cl, CoverLetterRepository.CoverLetterXSLPath);
@@ -47,12 +49,11 @@ public class CoverLetterServiceImpl implements CoverLetterService {
 	@Override
 	public ByteArrayOutputStream findOnePDF(String id) throws Exception {
 		String cl = coverLetterRepository.findOne(id);
-		if(cl == null) {
+		if (cl == null) {
 			throw new ResourceNotFoundException(String.format("Cover letter with id %s", id));
 		}
 		ByteArrayOutputStream clPDF = xslFoTransformer.generatePDF(cl, CoverLetterRepository.CoverLetterXSL_FO_PATH);
 		return clPDF;
-		
 	}
 
 	@Override

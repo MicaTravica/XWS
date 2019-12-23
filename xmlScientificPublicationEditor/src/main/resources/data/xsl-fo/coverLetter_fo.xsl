@@ -49,9 +49,7 @@
                     </fo:block>
                     <xsl:for-each select="n:coverLetter/n:content">
                         <fo:block>
-                            <xsl:call-template name="TChapter">
-                                <xsl:with-param name="paragraph" select = "." />
-                            </xsl:call-template>
+                            <xsl:call-template name="TParagraph"/>
                         </fo:block>
                     </xsl:for-each>
                     <fo:block>
