@@ -16,9 +16,10 @@
                         <fo:leader leader-pattern="space" />
                         <xsl:value-of select="n:questionnaire/n:date"/>
                     </fo:block>
+                    <xsl:variable name="sp" select="document(concat('http://', n:questionnaire/@href))"/>
                     <fo:block text-align-last="center">
                         <fo:inline font-size="24">
-                            Questionnaire for <xsl:value-of select="n:questionnaire/@scientificPublication"/>
+                            Questionnaire for <xsl:value-of select="$sp/n:scientificPublication/n:caption"/>
                         </fo:inline>
                     </fo:block>
                     <fo:block>
@@ -30,6 +31,11 @@
                                     <fo:table-cell padding="2px" text-align-last="center">
                                         <fo:block>
                                             Authors:
+                                            <xsl:for-each select="$sp/n:scientificPublication/n:authors/n:author">
+                                                <fo:block>
+                                                    <xsl:value-of select="./n:name"/>&#160;<xsl:value-of select="./n:surname"/><br/>
+                                                </fo:block>
+                                            </xsl:for-each>
                                         </fo:block>
                                         <fo:block>
                                             <xsl:value-of select="n:questionnaire/@authors"/>

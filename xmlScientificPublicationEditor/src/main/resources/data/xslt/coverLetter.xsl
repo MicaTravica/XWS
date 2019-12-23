@@ -39,7 +39,7 @@
                     <xsl:value-of select="n:coverLetter/n:date"/>
                 </p>
             	<h1 align="center">
-            		Cover letter for <xsl:value-of select="n:coverLetter/@scientificPublication"/>
+            		Cover letter for <xsl:value-of select="document(concat('http://', n:coverLetter/@href))/n:scientificPublication/n:caption"/>
             	</h1>
 				<div align="left">
 					<xsl:call-template name="TAuthor">

@@ -18,7 +18,7 @@
                     </fo:block>
                     <fo:block text-align-last="center">
                         <fo:inline font-size="24">
-                            Cover letter for <xsl:value-of select="n:coverLetter/@scientificPublication"/>
+                            Cover letter for <xsl:value-of select="document(concat('http://', n:coverLetter/@href))/n:scientificPublication/n:caption"/>
                         </fo:inline>
                     </fo:block>
                     <fo:block margin-top="10px" margin-bottom="10px">

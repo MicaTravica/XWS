@@ -32,16 +32,19 @@
                 <title>Questionnaire</title>
             </head>
             <body>
-				<p align="right">
-                    <xsl:value-of select="n:questionnaire/n:date"/>
+            	<xsl:variable name="sp" select="document(concat('http://', n:questionnaire/@href))"/>
+            	<p align="right">
+            		<xsl:value-of select="n:questionnaire/n:date"/>
                 </p>
             	<h1 align="center">
-            		Questionnaire for <xsl:value-of select="n:questionnaire/@scientificPublication"/>
+            		Questionnaire for <xsl:value-of select="$sp/n:scientificPublication/n:caption"/>
             	</h1>
 				<div class="row">
 					<div class="column" align="center">
 						Authors:<br/>
-						<xsl:value-of select="n:questionnaire/@authors"/>
+						<xsl:for-each select="$sp/n:scientificPublication/n:authors/n:author">
+							<xsl:value-of select="./n:name"/>&#160;<xsl:value-of select="./n:surname"/><br/>
+						</xsl:for-each>
 					</div>
 					<div class="column" align="center">
 						Reviewer:

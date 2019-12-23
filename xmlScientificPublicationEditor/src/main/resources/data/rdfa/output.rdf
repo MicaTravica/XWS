@@ -1,10 +1,11 @@
 <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:h="http://www.w3.org/1999/xhtml">
-  <!--Could not produce the triple for: localhost:8081/api/questionnaire/q1 - pred:rewieved - localhost:8081/api/scientificPublication/1-->
-  <!--Could not produce the triple for: localhost:8081/api/questionnaire/q1 - pred:writtenAt - 
-        2019-12-13
-    -->
-  <!--Could not produce the triple for: localhost:8081/api/questionnaire/q1 - pred:reviewer - localhost:8081/api/person/dusanbzr@gmail.com-->
-  <!--Could not produce the triple for: localhost:8081/api/questionnaire/q1 - pred:question - localhost:8081/api/questionnaire/q1/qe1-->
-  <!--Could not produce the triple for: localhost:8081/api/questionnaire/q1 - pred:question - localhost:8081/api/questionnaire/q1/qe2-->
-  <!--Could not produce the triple for: localhost:8081/api/questionnaire/q1 - pred:question - localhost:8081/api/questionnaire/q1/qe3-->
+  <rdf:Description rdf:about="localhost:8081/api/coverLetter/cv1">
+    <pred:writenFor xmlns:pred="http://www.uns.ac.rs/Tim1/predicate/" rdf:resource="localhost:8081/api/scientificPublication/sp1"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="localhost:8081/api/coverLetter/cv1">
+    <nesto xmlns="http://www.uns.ac.rs/Tim1" rdf:resource="aaaa"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="localhost:8081/api/coverLetter/cv1">
+    <aa xmlns="http://www.uns.ac.rs/Tim1" rdf:resource="cao"/>
+  </rdf:Description>
 </rdf:RDF>
