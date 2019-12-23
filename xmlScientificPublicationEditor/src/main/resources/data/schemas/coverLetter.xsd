@@ -51,7 +51,7 @@
                         </xs:sequence>
                     </xs:complexType>
                 </xs:element>
-                <xs:element name="authorSignature" type="xs:base64Binary"/>
+                <xs:element name="authorSignature" type="xs:string"/>
             </xs:sequence>
             <xs:attribute name="about" type="xs:string" use="required"/>
             <xs:attribute name="href" type="xs:string" use="required"/>

@@ -30,20 +30,12 @@ public class XSLFOTransformer {
 	
 	private TransformerFactory transformerFactory;
 	
-	public static final String OUTPUT_FILE = "src/gen/fo/bookstore.pdf";
-	
 	public static final String FOP_XCONF = "src/main/java/com/example/xmlScientificPublicationEditor/util/XSLFOTransformer/fop.xconf";
-	
-
-
-	public static final String INPUT_FILE2 = "src/main/resources/data/xsl-fo/bookstore.xml";
-	public static final String XSL_FILE2 = "src/main/resources/data/xsl-fo/bookstore_fo.xsl";
 	
 
 	public XSLFOTransformer() throws SAXException, IOException {
 		
 		// Initialize FOP factory object
-		System.out.println(new File("src/main/java/com/example/xmlScientificPublicationEditor/fop.xconf").getAbsolutePath());
 		fopFactory = FopFactory.newInstance(new File(FOP_XCONF));
 		
 		// Setup the XSLT transformer factory
