@@ -60,7 +60,7 @@ public class QuestionnaireRepository {
     // TODO: kako ce front znati koji id je slobodan za Questionnaire????
 	public String save(String q) throws Exception {
 		Document document = DOMParser.buildDocument(q,QuestionnaireSchemaPath);
-		String id = document.getDocumentElement().getAttribute("id");
+        String id = document.getDocumentElement().getAttribute("id");
 		StoreToDB.store(QuestionnaireCollectionId, id, q);
 		return id;
 	}

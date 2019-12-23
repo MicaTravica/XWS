@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.xmlScientificPublicationEditor.exception.ResourceNotFoundException;
 import com.example.xmlScientificPublicationEditor.repository.ScientificPublicationRepository;
+import com.example.xmlScientificPublicationEditor.service.ProcessPSPService;
 import com.example.xmlScientificPublicationEditor.service.ScientificPublicationService;
 
 @Service
@@ -13,6 +14,9 @@ public class ScientificPublicationServiceImpl implements ScientificPublicationSe
 	@Autowired
 	private ScientificPublicationRepository scientificPublicationRepository; 
 	
+	@Autowired
+	private ProcessPSPService processPSPService;
+
 	@Override
 	public String findOne(String id) throws Exception {
 		String sp = scientificPublicationRepository.findOne(id);
@@ -24,7 +28,9 @@ public class ScientificPublicationServiceImpl implements ScientificPublicationSe
 
 	@Override
 	public String save(String scientificPublication) throws Exception {
-		return scientificPublicationRepository.save(scientificPublication);
+		String scID = scientificPublicationRepository.save(scientificPublication);
+		processPSPService.create(scID);
+		return scID;
 	}
 
 	@Override
