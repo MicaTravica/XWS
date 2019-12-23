@@ -2,6 +2,8 @@ package com.example.xmlScientificPublicationEditor.repository;
 
 import static com.example.xmlScientificPublicationEditor.util.template.XUpdateTemplate.TARGET_NAMESPACE;
 
+import java.io.StringWriter;
+
 import org.exist.xmldb.EXistResource;
 import org.springframework.stereotype.Repository;
 import org.w3c.dom.Document;
@@ -13,6 +15,8 @@ import org.xmldb.api.modules.XMLResource;
 import com.example.xmlScientificPublicationEditor.exception.ResourceNotDeleted;
 import com.example.xmlScientificPublicationEditor.exception.ResourceNotFoundException;
 import com.example.xmlScientificPublicationEditor.util.DOMParser.DOMParser;
+import com.example.xmlScientificPublicationEditor.util.RDF.StoreToRDF;
+import com.example.xmlScientificPublicationEditor.util.RDF.UpdateRDF;
 import com.example.xmlScientificPublicationEditor.util.existAPI.RetriveFromDB;
 import com.example.xmlScientificPublicationEditor.util.existAPI.StoreToDB;
 import com.example.xmlScientificPublicationEditor.util.existAPI.UpdateDB;
@@ -23,6 +27,8 @@ public class QuestionnaireRepository {
 
     public static String QuestionnaireCollectionId = "/db/sample/questionnaire";
     public static String QuestionnaireSchemaPath = "src/main/resources/data/schemas/questionnaire.xsd";
+    public static String QUESTIONNAIRE_NAMED_GRAPH_URI_PREFIX = "/example/questionnaire/";
+
 
 	public String findOne(String id) throws Exception {
 		String retVal =  null;
@@ -80,6 +86,26 @@ public class QuestionnaireRepository {
         {
             throw new ResourceNotDeleted(String.format("Questionnaire with documentId %s", id));
         }
-	}
+        deleteMetadata(id);
+    }
+    
+
+    public void saveMetadata(StringWriter metadata, String cvId) throws Exception
+    {
+        StoreToRDF.store(metadata, QUESTIONNAIRE_NAMED_GRAPH_URI_PREFIX + cvId);
+    }
+    
+    public void deleteMetadata(String cvId) throws Exception
+    {
+        UpdateRDF.delete(QUESTIONNAIRE_NAMED_GRAPH_URI_PREFIX + cvId);
+    }
+
+    public void updateMetadata(StringWriter metadata, String cvId) throws Exception
+    {
+        String url = QUESTIONNAIRE_NAMED_GRAPH_URI_PREFIX + cvId;
+        deleteMetadata(cvId);
+        StoreToRDF.store(metadata, url);
+    }
+
 
 }
