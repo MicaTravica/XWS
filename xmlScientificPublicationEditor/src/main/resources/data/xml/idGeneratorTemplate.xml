@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<idGenerator
+    xmlns="http://www.uns.ac.rs/Tim1"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   >
+    <scientificPublication>1</scientificPublication>
+    <coverLetter>1</coverLetter>
+    <questionnaire>1</questionnaire>
+    <notification>1</notification>
+    <person>1</person>
+    <process>1</process>
+</idGenerator>
