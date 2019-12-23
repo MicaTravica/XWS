@@ -11,21 +11,6 @@
 						padding: 2px;
 						text-align: justify;
 					}
-					.column {
-						float: left;
-						width: 50%;
-					}
-					.row:after {
-						content: "";
-						display: table;
-						clear: both;
-					}
-					.small {
-						margin: auto;
-						text-align: center;
-						width: 50%;
-						font-size: 11px; 
-					}
                 </style>
             	<title>Scientific publication</title>
             </head>

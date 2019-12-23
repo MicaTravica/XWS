@@ -1,14 +1,11 @@
 <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:h="http://www.w3.org/1999/xhtml">
-  <rdf:Description rdf:about="nesto">
-    <jos xmlns="http://www.uns.ac.rs/Tim1" rdf:resource="opetNesto"/>
+  <rdf:Description rdf:about="localhost:8081/api/coverLetter/cv1">
+    <pred:writenFor xmlns:pred="http://www.uns.ac.rs/Tim1/predicate/" rdf:resource="localhost:8081/api/scientificPublication/sp1"/>
   </rdf:Description>
-  <rdf:Description rdf:about="nesto">
-    <nesto xmlns="http://www.uns.ac.rs/Tim1" rdf:resource="opetNesto"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="nesto">
+  <rdf:Description rdf:about="localhost:8081/api/coverLetter/cv1">
     <nesto xmlns="http://www.uns.ac.rs/Tim1" rdf:resource="aaaa"/>
   </rdf:Description>
-  <rdf:Description rdf:about="nesto">
+  <rdf:Description rdf:about="localhost:8081/api/coverLetter/cv1">
     <aa xmlns="http://www.uns.ac.rs/Tim1" rdf:resource="cao"/>
   </rdf:Description>
 </rdf:RDF>

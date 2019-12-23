@@ -26,27 +26,25 @@
 						width: 50%;
 						font-size: 11px; 
 					}
+					.footer {
+						position: auto;
+						bottom: 5px;
+						width: 100%;
+					}
                 </style>
                 <title>Cover letter</title>
             </head>
             <body>
 				<p align="right">
-                    <xsl:value-of select="n:coverLetter/@date"/>
+                    <xsl:value-of select="n:coverLetter/n:date"/>
                 </p>
             	<h1 align="center">
-            		Cover letter for <xsl:value-of select="n:coverLetter/@scientificPublication"/>
+            		Cover letter for <xsl:value-of select="document(concat('http://', n:coverLetter/@href))/n:scientificPublication/n:caption"/>
             	</h1>
-				<div class="row">
-					<div class="column" align="center">
-						Authors of scientific publication:<br/>
-						<xsl:value-of select="n:coverLetter/@authors"/>
-					</div>
-					<div class="column" align="center">
-						Author:
-						<xsl:call-template name="TPerson">
-							<xsl:with-param name="person" select = "n:coverLetter/n:author" />
-						</xsl:call-template>
-					</div>
+				<div align="left">
+					<xsl:call-template name="TAuthor">
+						<xsl:with-param name="author" select = "n:coverLetter/n:author" />
+					</xsl:call-template>
 				</div>
             	<xsl:for-each select="n:coverLetter/n:content">
             		<xsl:call-template name="TParagraph"/>
@@ -55,19 +53,21 @@
 					Signature:<br/>
 					<i><xsl:value-of select="n:coverLetter/n:authorSignature"/></i>
                 </p>
-            	<div class="row small">
-            		<div class="column" align="center">
-            			Organization:<br/>
-            			<xsl:value-of select="n:coverLetter/n:contactInformation/n:organisationName"/>
-            			<xsl:call-template name="TAddress">
-            				<xsl:with-param name="address" select = "n:coverLetter/n:contactInformation/n:organisationAddress" />
-            			</xsl:call-template>
-            		</div>
-            		<div class="column" align="center">
-            			Contact person:
-            			<xsl:call-template name="TPerson">
-            				<xsl:with-param name="person" select = "n:coverLetter/n:contactInformation/n:contactPerson" />
-            			</xsl:call-template>
+            	<div class="footer">
+            		<div class="row small">
+            			<div class="column" align="center">
+            				Organization:<br/>
+            				<xsl:value-of select="n:coverLetter/n:contactInformation/n:organisationName"/>
+            				<xsl:call-template name="TAddress">
+            					<xsl:with-param name="address" select = "n:coverLetter/n:contactInformation/n:organisationAddress" />
+            				</xsl:call-template>
+            			</div>
+            			<div class="column" align="center">
+            				Contact person:
+            				<xsl:call-template name="TPerson">
+            					<xsl:with-param name="person" select = "n:coverLetter/n:contactInformation/n:contactPerson" />
+            				</xsl:call-template>
+            			</div>
             		</div>
             	</div>
             </body>

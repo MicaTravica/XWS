@@ -20,7 +20,7 @@
                             <fo:table-body>
                                 <xsl:for-each select="n:scientificPublication/n:authors/n:author">
                                    <fo:table-row>
-                                           <fo:table-cell padding="2px" text-align-last="center">
+                                           <fo:table-cell padding="2px" text-align-last="center" margin="5px">
                                                <xsl:call-template name="TAuthor">
                                                    <xsl:with-param name="author" select = "." />
                                                </xsl:call-template>
@@ -29,6 +29,9 @@
                                 </xsl:for-each>
                             </fo:table-body>
                         </fo:table>
+                    </fo:block>
+                    <fo:block break-before='page' text-align-last="center" font-size="24" margin="5px">
+                        <xsl:value-of select="n:scientificPublication/n:caption"/>
                     </fo:block>
                     <fo:block font-style="italic" font-weight="bold" id="abstract">
                         Abstract<br/>
