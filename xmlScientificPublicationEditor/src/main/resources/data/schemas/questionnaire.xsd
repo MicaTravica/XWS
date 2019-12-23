@@ -1,14 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.uns.ac.rs/Tim1"
     xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning"
-    targetNamespace="http://www.uns.ac.rs/Tim1" elementFormDefault="qualified" vc:minVersion="1.1">
+    targetNamespace="http://www.uns.ac.rs/Tim1"
+    xmlns:rdfa="http://www.w3.org/ns/rdfa"
+    elementFormDefault="qualified" vc:minVersion="1.1">
 
     <xs:include schemaLocation="paragraph.xsd"/>
     <xs:include schemaLocation="person.xsd"/>
+    <xs:include schemaLocation="predicate.xsd"/>
 
     <xs:element name="questionnaire">
         <xs:complexType>
             <xs:sequence>
+                <xs:element name="date">
+                    <xs:complexType>
+                        <xs:simpleContent>
+                            <xs:extension base="xs:date">
+                                <xs:attribute name="property" type="xs:string" use="required"/>
+                            </xs:extension>
+                        </xs:simpleContent>
+                    </xs:complexType>
+                </xs:element>
                 <xs:element name="questions">
                     <xs:complexType>
                         <xs:sequence>
@@ -17,11 +29,21 @@
                     </xs:complexType>
                 </xs:element>
                 <xs:element name="mark" type="xs:positiveInteger"/>
-                <xs:element name="reviewer" type="TPerson"/>
+                <xs:element name="reviewer">
+                    <xs:complexType>
+                        <xs:complexContent>
+                            <xs:extension base="TPerson">
+                                <xs:attribute name="rel" type="xs:string" use="required"/>
+                                <xs:attribute name="href" type="xs:string" use="required"/>
+                            </xs:extension>
+                        </xs:complexContent>
+                    </xs:complexType>
+                </xs:element>
             </xs:sequence>
             <xs:attribute name="id" type="xs:ID" use="required"/>
-            <xs:attribute name="date" type="xs:date" use="required"/>
-            <xs:attribute name="spId" type="xs:string" use="required"/>
+            <xs:attribute name="about" type="xs:string" use="required"/>
+            <xs:attribute name="href" type="xs:string" use="required"/>
+            <xs:attribute name="rel" type="xs:string" use="required"/>
         </xs:complexType>
     </xs:element>
     <xs:complexType name="TQuestion">
@@ -29,6 +51,8 @@
             <xs:element name="questionText" type="xs:string"/>
             <xs:element name="answer" type="TParagraph"/>
         </xs:sequence>
+        <xs:attribute name="rel" type="xs:string" use="required"/>
+        <xs:attribute name="href" type="xs:string" use="required"/>
         <xs:attribute name="id" type="xs:ID" use="required"/>
     </xs:complexType>
 
