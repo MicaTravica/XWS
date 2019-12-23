@@ -1,9 +1,7 @@
 package com.example.xmlScientificPublicationEditor.util.RDF;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
@@ -38,16 +36,10 @@ public  class StoreToRDF {
         
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		model.write(out, SparqlUtil.NTRIPLES);
-		
-		System.out.println("[INFO] Extracted metadata as RDF/XML...");
-		model.write(System.out, SparqlUtil.RDF_XML);
-
-		
+				
 		// Writing the named graph
-		System.out.println("[INFO] Populating named graph \"" + SPARQL_NAMED_GRAPH_URI + "\" with extracted metadata.");
 		String sparqlUpdate = SparqlUtil.insertData(conn.dataEndpoint + SPARQL_NAMED_GRAPH_URI, new String(out.toByteArray()));
-		System.out.println(sparqlUpdate);
-		
+
 		// UpdateRequest represents a unit of execution
 		UpdateRequest update = UpdateFactory.create(sparqlUpdate);
 

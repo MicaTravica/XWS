@@ -1,5 +1,7 @@
 package com.example.xmlScientificPublicationEditor.service;
 
+import java.io.StringWriter;
+
 /**
  * QuestionnaireService
  */
@@ -12,4 +14,6 @@ public interface QuestionnaireService {
 	String update(String questionnaire) throws Exception;
 
 	void delete(String id) throws Exception;
+
+	public StringWriter extractMetadata(String questionnaire) throws Exception;
 }

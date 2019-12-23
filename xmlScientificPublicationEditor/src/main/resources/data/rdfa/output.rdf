@@ -1,5 +1,19 @@
 <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:h="http://www.w3.org/1999/xhtml">
-  <rdf:Description rdf:about="localhostt:8081/api/person/dusanbzr@gmail.com">
-    <author xmlns="http://www.uns.ac.rs/Tim1" rdf:resource="localhostt:8081/api/coverLetter/cv1"/>
+  <rdf:Description rdf:about="localhost:8081/api/questionnaire/q1">
+    <pred:rewieved xmlns:pred="http://www.uns.ac.rs/Tim1/examples/predicate/" rdf:resource="localhost:8081/api/scientificPublication/1"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="localhost:8081/api/questionnaire/q1">
+    <pred:writtenAt xmlns:pred="http://www.uns.ac.rs/Tim1/examples/predicate/" rdf:datatype="http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral">
+        2019-12-14
+    </pred:writtenAt>
+  </rdf:Description>
+  <rdf:Description rdf:about="localhost:8081/api/questionnaire/q1">
+    <pred:question xmlns:pred="http://www.uns.ac.rs/Tim1/examples/predicate/" rdf:resource="localhost:8081/api/questionnaire/q1/qe1"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="localhost:8081/api/questionnaire/q1">
+    <pred:question xmlns:pred="http://www.uns.ac.rs/Tim1/examples/predicate/" rdf:resource="localhost:8081/api/questionnaire/q1/qe2"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="localhost:8081/api/questionnaire/q1">
+    <pred:reviewer xmlns:pred="http://www.uns.ac.rs/Tim1/examples/predicate/" rdf:resource="localhost:8081/api/person/DjoleeKaranovicc1575133794684"/>
   </rdf:Description>
 </rdf:RDF>

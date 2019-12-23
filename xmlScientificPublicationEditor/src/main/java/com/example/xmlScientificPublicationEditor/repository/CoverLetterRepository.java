@@ -16,6 +16,7 @@ import com.example.xmlScientificPublicationEditor.exception.ResourceNotDeleted;
 import com.example.xmlScientificPublicationEditor.exception.ResourceNotFoundException;
 import com.example.xmlScientificPublicationEditor.util.DOMParser.DOMParser;
 import com.example.xmlScientificPublicationEditor.util.RDF.StoreToRDF;
+import com.example.xmlScientificPublicationEditor.util.RDF.UpdateRDF;
 import com.example.xmlScientificPublicationEditor.util.existAPI.RetriveFromDB;
 import com.example.xmlScientificPublicationEditor.util.existAPI.StoreToDB;
 import com.example.xmlScientificPublicationEditor.util.existAPI.UpdateDB;
@@ -29,7 +30,9 @@ public class CoverLetterRepository {
     public static String coverLetterSchemaPath = "src/main/resources/data/schemas/coverLetter.xsd";
     public static String CoverLetterXSLPath = "src/main/resources/data/xslt/coverLetter.xsl";
     public static String CoverLetterXSL_FO_PATH = "src/main/resources/data/xsl-fo/coverLetter_fo.xsl";
-    
+    public static String CV_NAMED_GRAPH_URI_PREFIX = "/example/coverLetter/";
+
+
 	public String findOne(String id) throws Exception {
 		String retVal =  null;
 		String xpathExp = "//coverLetter[@id=\"" + id + "\"]";
@@ -86,13 +89,25 @@ public class CoverLetterRepository {
         {
             throw new ResourceNotDeleted(String.format("Cover letter with documentId %s", id));
         }
+        deleteMetadata(id);
 	}
 
 
-	public void saveMetadata(StringWriter metadata) throws Exception{
-        System.out.println(metadata.toString());
-        String SPARQL_NAMED_GRAPH_URI = "/example/sparql/metadata";
-        StoreToRDF.store(metadata, SPARQL_NAMED_GRAPH_URI);
-	}
+    public void saveMetadata(StringWriter metadata, String cvId) throws Exception
+    {
+        StoreToRDF.store(metadata, CV_NAMED_GRAPH_URI_PREFIX + cvId);
+    }
+    
+    public void deleteMetadata(String cvId) throws Exception
+    {
+        UpdateRDF.delete(CV_NAMED_GRAPH_URI_PREFIX + cvId);
+    }
+
+    public void updateMetadata(StringWriter metadata, String cvId) throws Exception
+    {
+        String url = CV_NAMED_GRAPH_URI_PREFIX + cvId;
+        deleteMetadata(cvId);
+        StoreToRDF.store(metadata, url);
+    }
 
 }

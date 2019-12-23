@@ -11,15 +11,21 @@
     <xs:element name="coverLetter">
         <xs:complexType>
             <xs:sequence>
+                <xs:element name="date">
+                    <xs:complexType>
+                        <xs:simpleContent>
+                            <xs:extension base="xs:date">
+                                <xs:attribute name="property" type="xs:string"/>
+                            </xs:extension>
+                        </xs:simpleContent>
+                    </xs:complexType>
+                </xs:element>
                 <xs:element name="author">
                     <xs:complexType>
                         <xs:complexContent>
                             <xs:extension base="TPerson">
                                 <xs:attribute name="rel" type="xs:string" use="required"/>
-                                <xs:attribute name="vocab" type="xs:string"/>
-                                <xs:attribute name="href" type="xs:string"/>
-                                <xs:attribute name="about" type="xs:string"/>
-                                <xs:attribute name="typeof" type="xs:string"/>
+                                <xs:attribute name="href" type="xs:string" use="required"/>
                             </xs:extension>
                         </xs:complexContent>
                     </xs:complexType>
@@ -30,14 +36,27 @@
                         <xs:sequence>
                             <xs:element name="organisationName" type="xs:string"/>
                             <xs:element name="organisationAddress" type="TAddress"/>
-                            <xs:element name="contactPerson" type="TPerson"/>
+                            <xs:element name="contactPerson">
+                                <xs:complexType>
+                                    <xs:complexContent>
+                                        <xs:extension base="TPerson">
+                                            <xs:attribute name="href" type="xs:string"
+                                                use="required"/>
+                                            <xs:attribute name="rel" type="xs:string" use="required"
+                                            />
+                                        </xs:extension>
+                                    </xs:complexContent>
+                                </xs:complexType>
+                            </xs:element>
                         </xs:sequence>
                     </xs:complexType>
                 </xs:element>
                 <xs:element name="authorSignature" type="xs:base64Binary"/>
             </xs:sequence>
+            <xs:attribute name="about" type="xs:string" use="required"/>
+            <xs:attribute name="href" type="xs:string" use="required"/>
+            <xs:attribute name="rel" type="xs:string" use="required"/>
             <xs:attribute name="id" type="xs:ID" use="required"/>
-            <xs:attribute name="date" type="xs:date" use="required"/>
         </xs:complexType>
     </xs:element>
 </xs:schema>
