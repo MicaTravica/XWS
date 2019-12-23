@@ -43,7 +43,10 @@
                             <xsl:value-of select="$author/n:institution/n:address/n:city"/>, <xsl:value-of select="$author/n:institution/n:address/n:country"/>
                         </fo:block>
                         <fo:block>
-                            <xsl:value-of select="$author/n:email"/>&#160;<xsl:value-of select="$author/n:phone"/>
+                            <xsl:value-of select="$author/n:phone"/>
+                        </fo:block>
+                        <fo:block>
+                            <xsl:value-of select="$author/n:email"/>
                         </fo:block>
                     </fo:table-cell>
                 </fo:table-row>
@@ -52,8 +55,8 @@
     </xsl:template>
     
     <xsl:template match="n:chapter" name="TChapter">
-        <xsl:param name = "chapter" />
-        <fo:block font-size="20" margin-left="10px" margin-top="5px" margin-bottom="5px">
+        <xsl:param name = "chapter"/>
+        <fo:block font-size="20" margin-left="10px" margin-top="10px" margin-bottom="5px">
             <xsl:attribute name="id">
                 <xsl:value-of select="$chapter/@id"/>
             </xsl:attribute>
@@ -67,7 +70,7 @@
     </xsl:template>
     
     <xsl:template match="n:subchapter" name="TSubchapter">
-        <fo:block margin-left="10px" margin-top="2px" margin-bottom="2px">
+        <fo:block margin-left="10px" margin-top="5px" margin-bottom="2px">
             <fo:block margin-left="10px" font-size="15" margin-top="3px" margin-bottom="3px">
                 <xsl:attribute name="id">
                     <xsl:value-of select="./@id"/>
@@ -82,7 +85,7 @@
         </fo:block>
     </xsl:template>
     
-    <xsl:template match="n:paragraph" name="TParagraph">
+    <xsl:template match="n:paragraph |n:answer" name="TParagraph">
         <xsl:for-each select="./*">
             <xsl:if test="name(.) = 'text'">   
                 <fo:block margin-top="2" margin-bottom="2">
@@ -309,5 +312,13 @@
                 </xsl:call-template>
             </xsl:for-each>
         </fo:block>
+    </xsl:template>
+    
+    <xsl:template name="TQusetion">
+        <xsl:param name="qusetion"/>
+        <fo:block>
+            - <xsl:value-of select="$qusetion/n:questionText"/>
+        </fo:block>
+        <xsl:apply-templates select="$qusetion/n:answer"></xsl:apply-templates>
     </xsl:template>
 </xsl:stylesheet>
