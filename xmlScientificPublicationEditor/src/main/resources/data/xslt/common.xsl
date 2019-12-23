@@ -17,7 +17,8 @@
             <xsl:value-of select="$author/n:name"/>&#160;<xsl:value-of select="$author/n:surname"/><br/>
             <xsl:value-of select="$author/n:institution/n:name"/><br/>
             <xsl:value-of select="$author/n:institution/n:address/n:city"/>, <xsl:value-of select="$author/n:institution/n:address/n:country"/><br/>
-            <xsl:value-of select="$author/n:email"/>&#160;<xsl:value-of select="$author/n:phone"/>
+            <xsl:value-of select="$author/n:phone"/><br/>
+            <xsl:value-of select="$author/n:email"/>
         </div>
     </xsl:template>
 
@@ -48,7 +49,7 @@
         </div>
     </xsl:template>
     
-    <xsl:template match="n:paragraph" name="TParagraph">
+    <xsl:template match="n:paragraph | n:answer" name="TParagraph">
         <xsl:for-each select="./*">
             <xsl:if test="name(.) = 'text'">   
                 <p>
@@ -230,6 +231,15 @@
                     <xsl:with-param name="subchapter" select="."></xsl:with-param>
                 </xsl:call-template>
             </xsl:for-each>    
+        </div>
+    </xsl:template>
+    
+    <xsl:template name="TQusetion">
+        <xsl:param name="qusetion"/>
+        <div>
+            <span class="dot"></span>
+            <xsl:value-of select="$qusetion/n:questionText"/>
+            <xsl:apply-templates select="$qusetion/n:answer"></xsl:apply-templates>
         </div>
     </xsl:template>
 </xsl:stylesheet>

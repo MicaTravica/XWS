@@ -2,6 +2,8 @@ package com.example.xmlScientificPublicationEditor.controller;
 
 import com.example.xmlScientificPublicationEditor.service.QuestionnaireService;
 
+import java.io.ByteArrayOutputStream;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -28,7 +30,17 @@ public class QuestionnaireController extends BaseController {
 		String questionnaire = questionnaireService.findOne(id);
 		return new ResponseEntity<>(questionnaire, HttpStatus.OK);
 	}
-	
+	@GetMapping(value="/questionnaire/html/{id}", produces = MediaType.TEXT_HTML_VALUE)
+	public ResponseEntity<String> getQuestionnaireByIdHTML(@PathVariable("id") String id) throws Exception{
+		String questionnaire = questionnaireService.findOneHTML(id);
+		return new ResponseEntity<>(questionnaire, HttpStatus.OK);
+	}
+
+	@GetMapping(value="/questionnaire/pdf/{id}", produces = MediaType.APPLICATION_PDF_VALUE)
+	public ResponseEntity<byte[]> getQuestionnaireByIdPDF(@PathVariable("id") String id) throws Exception{
+		ByteArrayOutputStream questionnaire = questionnaireService.findOnePDF(id);
+		return new ResponseEntity<>(questionnaire.toByteArray(), HttpStatus.OK);
+	}
 	@PostMapping(value="/questionnaire", 
 			consumes = MediaType.APPLICATION_XML_VALUE,
 			produces = MediaType.APPLICATION_XML_VALUE)
