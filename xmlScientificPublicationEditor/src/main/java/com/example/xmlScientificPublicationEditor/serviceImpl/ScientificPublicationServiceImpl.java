@@ -7,11 +7,15 @@ import org.springframework.stereotype.Service;
 
 import com.example.xmlScientificPublicationEditor.exception.ResourceNotFoundException;
 import com.example.xmlScientificPublicationEditor.repository.ScientificPublicationRepository;
+import com.example.xmlScientificPublicationEditor.service.ProcessPSPService;
 import com.example.xmlScientificPublicationEditor.service.ScientificPublicationService;
 import com.example.xmlScientificPublicationEditor.util.XSLFOTransformer.XSLFOTransformer;
 
 @Service
 public class ScientificPublicationServiceImpl implements ScientificPublicationService {
+
+	@Autowired
+	private ProcessPSPService processPSPService;
 
 	@Autowired
 	private XSLFOTransformer xslFoTransformer;
@@ -51,7 +55,9 @@ public class ScientificPublicationServiceImpl implements ScientificPublicationSe
 
 	@Override
 	public String save(String scientificPublication) throws Exception {
-		return scientificPublicationRepository.save(scientificPublication);
+		String scID = scientificPublicationRepository.save(scientificPublication);
+		processPSPService.create(scID);
+		return scID;
 	}
 
 	@Override

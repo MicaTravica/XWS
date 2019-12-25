@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<processPSP xmlns="http://www.uns.ac.rs/Tim1"
+    id="">
+    <scientificPublication></scientificPublication>
+    <coverLetter></coverLetter>
+    <idRedactor></idRedactor>
+    <reviewAssignment id="">
+        <idScientificPublication></idScientificPublication>
+        <review id="">
+            <reviewer>
+                <idReviewer></idReviewer>
+                <idQuestionnaire></idQuestionnaire>
+            </reviewer>
+            <state></state>
+        </review>
+    </reviewAssignment>
+</processPSP>

@@ -5,6 +5,7 @@ import static com.example.xmlScientificPublicationEditor.util.template.XUpdateTe
 import java.io.StringWriter;
 
 import org.exist.xmldb.EXistResource;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.w3c.dom.Document;
 import org.xmldb.api.base.ResourceIterator;
@@ -14,6 +15,7 @@ import org.xmldb.api.modules.XMLResource;
 
 import com.example.xmlScientificPublicationEditor.exception.ResourceNotDeleted;
 import com.example.xmlScientificPublicationEditor.exception.ResourceNotFoundException;
+import com.example.xmlScientificPublicationEditor.service.IdGeneratorService;
 import com.example.xmlScientificPublicationEditor.util.DOMParser.DOMParser;
 import com.example.xmlScientificPublicationEditor.util.RDF.StoreToRDF;
 import com.example.xmlScientificPublicationEditor.util.RDF.UpdateRDF;
@@ -23,6 +25,9 @@ import com.example.xmlScientificPublicationEditor.util.existAPI.UpdateDB;
 
 @Repository
 public class QuestionnaireRepository {
+
+	@Autowired
+	private IdGeneratorService idGeneratorService;
 
 	public static String QuestionnaireCollectionId = "/db/sample/questionnaire";
 	public static String QuestionnaireSchemaPath = "src/main/resources/data/schemas/questionnaire.xsd";
@@ -57,11 +62,12 @@ public class QuestionnaireRepository {
 		return null;
 	}
 
-	// TODO: kako ce front znati koji id je slobodan za Questionnaire????
-	public String save(String q) throws Exception {
-		Document document = DOMParser.buildDocument(q, QuestionnaireSchemaPath);
-		String id = document.getDocumentElement().getAttribute("id");
-		StoreToDB.store(QuestionnaireCollectionId, id, q);
+	public String save(String questionnaire) throws Exception {
+		Document document = DOMParser.buildDocument(questionnaire, QuestionnaireSchemaPath);
+		String id = "que" + idGeneratorService.getId("questionnaire");
+		document.getElementsByTagName("questionnaire").item(0).getAttributes().getNamedItem("id").setTextContent(id);
+		String toSave = DOMParser.parseDocument(document);
+		StoreToDB.store(QuestionnaireCollectionId, id, toSave);
 		return id;
 	}
 

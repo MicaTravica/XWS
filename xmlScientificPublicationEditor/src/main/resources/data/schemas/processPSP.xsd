@@ -6,10 +6,10 @@
     <xs:element name="processPSP">
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="scientificPublication" type="xs:IDREF"/>
-                <xs:element minOccurs="0" name="coverLetter" type="xs:IDREF"/>
-                <xs:element name="idRedactor" type="xs:IDREF"/>
-                <xs:element name="reviewAssignment" type="TReviewAssignment"/>
+                <xs:element name="scientificPublication" type="xs:string"/>
+                <xs:element minOccurs="0" name="coverLetter" type="xs:string"/>
+                <xs:element name="idRedactor" type="xs:string"/>
+                <xs:element name="reviewAssignment" type="TReviewAssignment" minOccurs="0"/>
             </xs:sequence>
             <xs:attribute default="forReview" name="state">
                 <xs:simpleType>
