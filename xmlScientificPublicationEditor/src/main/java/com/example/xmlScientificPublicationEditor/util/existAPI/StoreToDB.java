@@ -15,7 +15,7 @@ public class StoreToDB {
     
 	private static ConnectionProperties conn;
     
-    public static void store(String collectionId,String documentId, String xmlEntity) throws Exception {
+    public static void store(String collectionId, String documentId, String xmlEntity) throws Exception {
         conn = AuthenticationUtilities.loadProperties();
         
         if(collectionId.isEmpty() || xmlEntity.isEmpty()){

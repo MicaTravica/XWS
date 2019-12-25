@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileReader;
 
 import org.exist.xmldb.EXistResource;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -16,13 +17,17 @@ import org.xmldb.api.base.XMLDBException;
 import org.xmldb.api.modules.XMLResource;
 
 import com.example.xmlScientificPublicationEditor.exception.ResourceNotDeleted;
+import com.example.xmlScientificPublicationEditor.service.IdGeneratorService;
+import com.example.xmlScientificPublicationEditor.util.DOMParser.DOMParser;
 import com.example.xmlScientificPublicationEditor.util.existAPI.RetriveFromDB;
 import com.example.xmlScientificPublicationEditor.util.existAPI.StoreToDB;
 import com.example.xmlScientificPublicationEditor.util.existAPI.UpdateDB;
-import com.example.xmlScientificPublicationEditor.util.DOMParser.DOMParser;
 
 @Repository
 public class ProcessPSPRepository {
+
+	@Autowired
+	private IdGeneratorService idGeneratorService;
 
 	public static String ScientificPublicationFiled = "scientificPublication";
 	public static String CoverLetterFiled = "coverLetter";
@@ -96,8 +101,7 @@ public class ProcessPSPRepository {
 
 	// TODO: kako ce front znati koji id je slobodan za Notification????
 	public Document save(Document process) throws Exception {
-		String id = "1";
-		//TODO: add generated ID
+		String id = idGeneratorService.getId("process");
 		this.setProceesId(process, id);
 		String processS = DOMParser.parseDocument(process);
 		StoreToDB.store(ProcessPSPCollectionId, id, processS);
@@ -106,7 +110,7 @@ public class ProcessPSPRepository {
 
 	public Document update(Document process) throws Exception
 	{
-		String processId = "1";
+		String processId = this.getProceesId(process);
 		this.delete(processId);
 		return this.save(process);
 	}
