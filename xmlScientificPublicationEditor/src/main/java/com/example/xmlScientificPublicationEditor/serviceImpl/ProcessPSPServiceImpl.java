@@ -3,6 +3,7 @@ package com.example.xmlScientificPublicationEditor.serviceImpl;
 import com.example.xmlScientificPublicationEditor.exception.ResourceNotFoundException;
 import com.example.xmlScientificPublicationEditor.repository.ProcessPSPRepository;
 import com.example.xmlScientificPublicationEditor.service.ProcessPSPService;
+import com.example.xmlScientificPublicationEditor.util.DOMParser.DOMParser;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,29 +24,32 @@ public class ProcessPSPServiceImpl implements ProcessPSPService{
     }
 
     @Override
-    public String findOne(String processId) throws Exception {
-        String procesStr = processPSPRepo.findOne(processId);
+    public String findOneByScientificPublicationID(String scientificPublicationId) throws Exception {
+        String procesStr = 
+                processPSPRepo.findOneByScientificPublicationID(scientificPublicationId);
+
 		if(procesStr == null) {
-			throw new ResourceNotFoundException(String.format("ProcesPSP with id %s", processId));
+			throw new ResourceNotFoundException("ProcessPSP");
 		}
 		return procesStr;
     }
 
     @Override
-    public String addCoverLetter(String processId, String coverLetterId) throws Exception {
-        String processStr = this.findOne(processId);
-        // processPSPRepo.setCoverLetter("a", coverLetterId);
+    public String setCoverLetter(String scientificPublicationId, String coverLetterId) throws Exception {
+        String processStr = this.findOneByScientificPublicationID(scientificPublicationId);
+        Document process = DOMParser.buildDocumentWithOutSchema(processStr);
+        processPSPRepo.setCoverLetter(process, coverLetterId);
         return null;
     }
 
     @Override
-    public String addRewiever(String personId) throws Exception {
+    public String setRewiever(String personId) throws Exception {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public String addReview(String processId) throws Exception {
+    public String setReview(String processId) throws Exception {
         // TODO Auto-generated method stub
         return null;
     }

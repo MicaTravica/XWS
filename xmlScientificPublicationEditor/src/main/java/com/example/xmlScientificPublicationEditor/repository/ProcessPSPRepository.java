@@ -9,17 +9,12 @@ import java.io.FileReader;
 import org.exist.xmldb.EXistResource;
 import org.springframework.stereotype.Repository;
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.w3c.dom.Text;
 import org.xmldb.api.base.ResourceIterator;
 import org.xmldb.api.base.ResourceSet;
 import org.xmldb.api.base.XMLDBException;
 import org.xmldb.api.modules.XMLResource;
 
 import com.example.xmlScientificPublicationEditor.exception.ResourceNotDeleted;
-import com.example.xmlScientificPublicationEditor.exception.ResourceNotFoundException;
 import com.example.xmlScientificPublicationEditor.util.existAPI.RetriveFromDB;
 import com.example.xmlScientificPublicationEditor.util.existAPI.StoreToDB;
 import com.example.xmlScientificPublicationEditor.util.existAPI.UpdateDB;
@@ -28,14 +23,16 @@ import com.example.xmlScientificPublicationEditor.util.DOMParser.DOMParser;
 @Repository
 public class ProcessPSPRepository {
 
+	public static String ScientificPublicationFiled = "scientificPublication";
+	public static String CoverLetterFiled = "coverLetter";
+
     public static String ProcessPSPTemplatePath = "src/main/resources/data/xml/processPSPTemplate.xml";
-    public static String ScientificPublicationFiled = "scientificPublication";
 	public static String ProcessPSPCollectionId = "/db/sample/processPSP";
 	public static String NotificationSchemaPath = "src/main/resources/data/schemas/processPSP.xsd";
 
-	public String findOne(String id) throws Exception {
+	public String findOneByScientificPublicationID(String id) throws Exception {
 		String retVal = null;
-		String xpathExp = "//processPSP[@id=\"" + id + "\"]";
+		String xpathExp = "//processPSP[scientificPublication=\"" + id + "\"]";
 		ResourceSet resultSet = RetriveFromDB.executeXPathExpression(ProcessPSPCollectionId, xpathExp,
 				TARGET_NAMESPACE);
 		if (resultSet == null) {
@@ -83,13 +80,6 @@ public class ProcessPSPRepository {
         }
     }
 
-    public Document setScientificPublicationId(Document process, String scientificPublciationID) throws Exception
-    {
-		process.getElementsByTagName(ScientificPublicationFiled).
-				item(0).setTextContent(scientificPublciationID);
-        return process;
-    }
-
 	// TODO: kako ce front znati koji id je slobodan za Notification????
 	public Document save(Document document) throws Exception {
 		String id = "1";
@@ -107,5 +97,19 @@ public class ProcessPSPRepository {
 		}
 	}
 
+
+	// SET METHODS
+    public Document setScientificPublicationId(Document process, String scientificPublciationID) throws Exception
+    {
+		process.getElementsByTagName(ScientificPublicationFiled).
+				item(0).setTextContent(scientificPublciationID);
+        return process;
+	}
+	
+	public Document setCoverLetter(Document process, String coverLetterId) {
+		process.getElementsByTagName(CoverLetterFiled).
+				item(0).setTextContent(coverLetterId);
+        return process;
+	}
 
 }
