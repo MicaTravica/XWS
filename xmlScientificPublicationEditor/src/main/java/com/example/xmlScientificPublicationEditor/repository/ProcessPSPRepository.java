@@ -9,21 +9,16 @@ import java.io.FileReader;
 import org.exist.xmldb.EXistResource;
 import org.springframework.stereotype.Repository;
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.w3c.dom.Text;
 import org.xmldb.api.base.ResourceIterator;
 import org.xmldb.api.base.ResourceSet;
 import org.xmldb.api.base.XMLDBException;
 import org.xmldb.api.modules.XMLResource;
 
 import com.example.xmlScientificPublicationEditor.exception.ResourceNotDeleted;
-import com.example.xmlScientificPublicationEditor.exception.ResourceNotFoundException;
+import com.example.xmlScientificPublicationEditor.util.DOMParser.DOMParser;
 import com.example.xmlScientificPublicationEditor.util.existAPI.RetriveFromDB;
 import com.example.xmlScientificPublicationEditor.util.existAPI.StoreToDB;
 import com.example.xmlScientificPublicationEditor.util.existAPI.UpdateDB;
-import com.example.xmlScientificPublicationEditor.util.DOMParser.DOMParser;
 
 @Repository
 public class ProcessPSPRepository {

@@ -25,7 +25,6 @@ import com.example.xmlScientificPublicationEditor.util.existAPI.UpdateDB;
 
 @Repository
 public class QuestionnaireRepository {
-	
 
 	@Autowired
 	private IdGeneratorService idGeneratorService;
@@ -63,15 +62,11 @@ public class QuestionnaireRepository {
 		return null;
 	}
 
-	// TODO: kako ce front znati koji id je slobodan za Questionnaire????
-	public String save(String q) throws Exception {
+	public String save(String questionnaire) throws Exception {
+		Document document = DOMParser.buildDocument(questionnaire, QuestionnaireSchemaPath);
 		String id = "que" + idGeneratorService.getId("questionnaire");
-		System.out.println(id);
-		Document document = DOMParser.buildDocument(q, QuestionnaireSchemaPath);
 		document.getElementsByTagName("questionnaire").item(0).getAttributes().getNamedItem("id").setTextContent(id);
-		
 		String toSave = DOMParser.parseDocument(document);
-		System.out.println(toSave);
 		StoreToDB.store(QuestionnaireCollectionId, id, toSave);
 		return id;
 	}

@@ -3,6 +3,7 @@ package com.example.xmlScientificPublicationEditor.repository;
 import static com.example.xmlScientificPublicationEditor.util.template.XUpdateTemplate.TARGET_NAMESPACE;
 
 import org.exist.xmldb.EXistResource;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.w3c.dom.Document;
 import org.xmldb.api.base.ResourceIterator;
@@ -12,13 +13,17 @@ import org.xmldb.api.modules.XMLResource;
 
 import com.example.xmlScientificPublicationEditor.exception.ResourceNotDeleted;
 import com.example.xmlScientificPublicationEditor.exception.ResourceNotFoundException;
+import com.example.xmlScientificPublicationEditor.service.IdGeneratorService;
+import com.example.xmlScientificPublicationEditor.util.DOMParser.DOMParser;
 import com.example.xmlScientificPublicationEditor.util.existAPI.RetriveFromDB;
 import com.example.xmlScientificPublicationEditor.util.existAPI.StoreToDB;
 import com.example.xmlScientificPublicationEditor.util.existAPI.UpdateDB;
-import com.example.xmlScientificPublicationEditor.util.DOMParser.DOMParser;
 
 @Repository
 public class ScientificPublicationRepository {
+
+	@Autowired
+	private IdGeneratorService idGeneratorService;
 
 	public static String scientificPublicationCollectionId = "/db/sample/scientificPublication";
 	public static String scientificPublicationSchemaPath = "src/main/resources/data/schemas/scientificPublication.xsd";
@@ -52,11 +57,13 @@ public class ScientificPublicationRepository {
 		return null;
 	}
 
-	// TODO: kako ce front znati koji id je slobodan za coverLetter????
 	public String save(String scientificPublication) throws Exception {
 		Document document = DOMParser.buildDocument(scientificPublication, scientificPublicationSchemaPath);
-		String id = document.getDocumentElement().getAttribute("id");
-		StoreToDB.store(scientificPublicationCollectionId, id, scientificPublication);
+		String id = "sp" + idGeneratorService.getId("scientificPublication");
+		document.getElementsByTagName("scientificPublication").item(0).getAttributes().getNamedItem("id")
+				.setTextContent(id);
+		String toSave = DOMParser.parseDocument(document);
+		StoreToDB.store(scientificPublicationCollectionId, id, toSave);
 		return id;
 	}
 
