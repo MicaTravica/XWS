@@ -1,11 +1,16 @@
 <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:h="http://www.w3.org/1999/xhtml">
-  <rdf:Description rdf:about="localhost:8081/api/coverLetter/cv1">
-    <pred:writenFor xmlns:pred="http://www.uns.ac.rs/Tim1/predicate/" rdf:resource="localhost:8081/api/scientificPublication/sp1"/>
+  <rdf:Description rdf:about="localhost:8081/api/coverLetter/cv3">
+    <pred:writtenFor xmlns:pred="http://www.uns.ac.rs/Tim1/examples/predicate/" rdf:resource="localhost:8081/api/scientificPublication/id666"/>
   </rdf:Description>
-  <rdf:Description rdf:about="localhost:8081/api/coverLetter/cv1">
-    <nesto xmlns="http://www.uns.ac.rs/Tim1" rdf:resource="aaaa"/>
+  <rdf:Description rdf:about="localhost:8081/api/coverLetter/cv3">
+    <pred:writtenAt xmlns:pred="http://www.uns.ac.rs/Tim1/examples/predicate/" rdf:datatype="http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral">
+		2019-12-13
+	</pred:writtenAt>
   </rdf:Description>
-  <rdf:Description rdf:about="localhost:8081/api/coverLetter/cv1">
-    <aa xmlns="http://www.uns.ac.rs/Tim1" rdf:resource="cao"/>
+  <rdf:Description rdf:about="localhost:8081/api/coverLetter/cv3">
+    <pred:author xmlns:pred="http://www.uns.ac.rs/Tim1/examples/predicate/" rdf:resource="localhost:8081/api/person/dusanbzr@gmail.com"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="localhost:8081/api/coverLetter/cv3">
+    <pred:contactPerson xmlns:pred="http://www.uns.ac.rs/Tim1/examples/predicate/" rdf:resource="localhost:8081/api/person/saska@gmail.com"/>
   </rdf:Description>
 </rdf:RDF>

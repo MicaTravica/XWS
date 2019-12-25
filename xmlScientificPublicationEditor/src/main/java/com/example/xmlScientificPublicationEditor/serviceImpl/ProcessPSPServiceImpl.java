@@ -39,6 +39,7 @@ public class ProcessPSPServiceImpl implements ProcessPSPService{
         String processStr = this.findOneByScientificPublicationID(scientificPublicationId);
         Document process = DOMParser.buildDocumentWithOutSchema(processStr);
         processPSPRepo.setCoverLetter(process, coverLetterId);
+        processPSPRepo.update(process);
         return null;
     }
 

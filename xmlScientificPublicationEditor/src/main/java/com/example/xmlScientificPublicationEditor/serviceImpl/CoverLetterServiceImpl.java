@@ -95,7 +95,12 @@ public class CoverLetterServiceImpl implements CoverLetterService {
 		Document coverLetter = DOMParser.buildDocumentWithOutSchema(cl);
 		Element root = coverLetter.getDocumentElement();
 		String id = root.getAttribute(CoverLetterRepository.ScientificPublicationID);
-		return id;
+		if(id != null){
+			id = id.split("/")[3];
+			return id;
+		}
+		return null;
+		
 	}
 
 }
