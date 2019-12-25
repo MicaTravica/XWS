@@ -112,7 +112,9 @@ public class ProcessPSPRepository {
 	{
 		String processId = this.getProceesId(process);
 		this.delete(processId);
-		return this.save(process);
+		String processS = DOMParser.parseDocument(process);
+		StoreToDB.store(ProcessPSPCollectionId, processId, processS);
+		return process;
 	}
 
 	public void delete(String id) throws Exception {
