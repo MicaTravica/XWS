@@ -29,11 +29,12 @@ public class CoverLetterRepository {
 	@Autowired
 	private IdGeneratorService idGeneratorService;
 
+    public static final String ScientificPublicationID = "href";
 	public static String coverLetterCollectionId = "/db/sample/coverLetter";
-	public static String coverLetterSchemaPath = "src/main/resources/data/schemas/coverLetter.xsd";
-	public static String CoverLetterXSLPath = "src/main/resources/data/xslt/coverLetter.xsl";
-	public static String CoverLetterXSL_FO_PATH = "src/main/resources/data/xsl-fo/coverLetter_fo.xsl";
-	public static String CV_NAMED_GRAPH_URI_PREFIX = "/example/coverLetter/";
+    public static String coverLetterSchemaPath = "src/main/resources/data/schemas/coverLetter.xsd";
+    public static String CoverLetterXSLPath = "src/main/resources/data/xslt/coverLetter.xsl";
+    public static String CoverLetterXSL_FO_PATH = "src/main/resources/data/xsl-fo/coverLetter_fo.xsl";
+    public static String CV_NAMED_GRAPH_URI_PREFIX = "/example/coverLetter/";
 
 	public String findOne(String id) throws Exception {
 		String retVal = null;
