@@ -7,14 +7,20 @@ import org.w3c.dom.Document;
  */
 public interface NotificationService {
 
-	String makeNotification(String notification) throws Exception;
+	void sendEmailNotification(String[] emails, Document document) throws Exception;
 
-	String findOne(String notifcationId) throws Exception;
+	Document setData(Document document, String content, String spUrl);
 
-	String update(String notification) throws Exception;
+	void questionnaireReviewers(String[] emails, String spUrl) throws Exception;
 
-	void delete(String notification) throws Exception;
+	void addedQuestionnaire(String[] emails, String spUrl) throws Exception;
 
-	void sendEmailNotification(Document document, String notification) throws Exception;
+	void addedCoverLetter(String[] emails, String spUrl) throws Exception;
+
+	void publicationRejected(String[] emails, String spUrl) throws Exception;
+
+	void publicationAccepted(String[] emails, String spUrl) throws Exception;
+
+	void letterOfThanks(String[] emails, String spUrl) throws Exception;
 
 }
