@@ -1,0 +1,5 @@
+<mat-toolbar color="accent">
+        <button mat-button color="primary">Publications</button>
+        <button *ngIf="role=='ROLE_REGULAR'" mat-button color="primary">New publication</button>
+        <button *ngIf="role=='ROLE_REGULAR'" mat-button color="primary">My publications</button>
+</mat-toolbar>
