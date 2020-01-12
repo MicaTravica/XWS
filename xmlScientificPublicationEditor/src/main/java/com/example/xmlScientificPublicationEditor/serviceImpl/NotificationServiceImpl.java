@@ -1,5 +1,7 @@
 package com.example.xmlScientificPublicationEditor.serviceImpl;
 
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
@@ -7,6 +9,7 @@ import org.w3c.dom.Document;
 import com.example.xmlScientificPublicationEditor.repository.NotificationRepository;
 import com.example.xmlScientificPublicationEditor.service.MailService;
 import com.example.xmlScientificPublicationEditor.service.NotificationService;
+import com.example.xmlScientificPublicationEditor.util.DOMParser.DOMParser;
 import com.example.xmlScientificPublicationEditor.util.XSLFOTransformer.XSLFOTransformer;
 
 /**
@@ -25,32 +28,67 @@ public class NotificationServiceImpl implements NotificationService {
 	private MailService mailService;
 
 	@Override
-	public String makeNotification(String notification) throws Exception {
-		Document savedNotification = notificationRepository.save(notification);
-		this.sendEmailNotification(savedNotification, notification);
-		return savedNotification.getDocumentElement().getAttribute("id");
+	public void letterOfThanks(String[] emails, String spUrl) throws Exception {
+		Document document = notificationRepository.getNotification();
+		String content = "Thanks for participating in the publication of scientific publication!";
+		document = setData(document, content, spUrl);
+		sendEmailNotification(emails, document);
 	}
 
 	@Override
-	public String findOne(String notificationId) throws Exception {
-		return notificationRepository.findOne(notificationId);
+	public void publicationAccepted(String[] emails, String spUrl) throws Exception {
+		Document document = notificationRepository.getNotification();
+		String content = "Your scientific publication has been accepted!";
+		document = setData(document, content, spUrl);
+		sendEmailNotification(emails, document);
 	}
 
 	@Override
-	public String update(String notification) throws Exception {
-		return notificationRepository.update(notification);
+	public void publicationRejected(String[] emails, String spUrl) throws Exception {
+		Document document = notificationRepository.getNotification();
+		String content = "Your scientific publication has been rejected!";
+		document = setData(document, content, spUrl);
+		sendEmailNotification(emails, document);
 	}
 
 	@Override
-	public void delete(String notificationId) throws Exception {
-		notificationRepository.delete(notificationId);
+	public void addedCoverLetter(String[] emails, String spUrl) throws Exception {
+		Document document = notificationRepository.getNotification();
+		String content = "A cover letter for the scientific publicaion has been added!";
+		document = setData(document, content, spUrl);
+		sendEmailNotification(emails, document);
 	}
 
 	@Override
-	public void sendEmailNotification(Document document, String notification) throws Exception {
+	public void addedQuestionnaire(String[] emails, String spUrl) throws Exception {
+		Document document = notificationRepository.getNotification();
+		String content = "A questionnaire for the scientific publicaion has been added!";
+		document = setData(document, content, spUrl);
+		sendEmailNotification(emails, document);
+	}
+
+	@Override
+	public void questionnaireReviewers(String[] emails, String spUrl) throws Exception {
+		Document document = notificationRepository.getNotification();
+		String content = "You have been selected as a reviewer for a scientific publication!";
+		document = setData(document, content, spUrl);
+		sendEmailNotification(emails, document);
+	}
+
+	@Override
+	public Document setData(Document document, String content, String spUrl) {
+		document.getElementsByTagName("cursive").item(0).setTextContent(content);
+		document.getElementsByTagName("spUrl").item(0).setTextContent(spUrl);
+		Date date = new Date();
+		document.getElementsByTagName("date").item(0)
+				.setTextContent((1900 + date.getYear()) + "-" + (date.getMonth() + 1) + "-" + date.getDate());
+		return document;
+	}
+
+	@Override
+	public void sendEmailNotification(String[] emails, Document document) throws Exception {
+		String notification = DOMParser.parseDocument(document);
 		String notifHTML = xslFoTransformer.generateHTML(notification, NotificationRepository.NotificationXSLPath);
-		String email = document.getElementsByTagName("email").item(0).getTextContent().trim();
-		mailService.sendEmail(email, notifHTML);
-		System.out.println(notifHTML);
+		mailService.sendEmail(emails, notifHTML);
 	}
 }

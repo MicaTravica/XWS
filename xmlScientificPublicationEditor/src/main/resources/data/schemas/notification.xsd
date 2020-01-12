@@ -6,37 +6,9 @@
     <xs:element name="notification" type="TNotification"/>
     <xs:complexType name="TNotification">
         <xs:sequence>
-            <xs:element name="email" maxOccurs="1">
-                <xs:simpleType>
-                    <xs:restriction base="xs:string">
-                        <xs:pattern
-                            value="([0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*@([0-9a-zA-Z][-\w]*[0-9a-zA-Z]\.)+[a-zA-Z]{2,9})"
-                        />
-                    </xs:restriction>
-                </xs:simpleType>
-            </xs:element>
-            <xs:element name="personId" type="xs:string"/>
+            <xs:element name="spUrl" type="xs:string"/>
             <xs:element name="content" type="TParagraph"/>
-            <xs:element name="date" type="xs:date"/>
+            <xs:element name="date" type="xs:date" minOccurs="0"/>
         </xs:sequence>
-        <xs:attribute default="unseen" name="state">
-            <xs:simpleType>
-                <xs:restriction base="xs:string">
-                    <xs:enumeration value="seen"/>
-                    <xs:enumeration value="unseen"/>
-                </xs:restriction>
-            </xs:simpleType>
-        </xs:attribute>
-        <xs:attribute default="other" name="type">
-            <xs:simpleType>
-                <xs:restriction base="xs:string">
-                    <xs:enumeration value="letterOfThanks"/>
-                    <xs:enumeration value="publicationAccepted"/>
-                    <xs:enumeration value="publicationRejected"/>
-                    <xs:enumeration value="other"/>
-                </xs:restriction>
-            </xs:simpleType>
-        </xs:attribute>
-        <xs:attribute name="id" type="xs:ID" use="required"/>
     </xs:complexType>
 </xs:schema>

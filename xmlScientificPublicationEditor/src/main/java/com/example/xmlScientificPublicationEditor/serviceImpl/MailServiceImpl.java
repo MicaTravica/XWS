@@ -19,11 +19,11 @@ public class MailServiceImpl implements MailService {
 
 	@Async
 	@Override
-	public void sendEmail(String email, String message) throws MessagingException {
+	public void sendEmail(String[] emails, String message) throws MessagingException {
 		MimeMessage mimeMessage = mailSender.createMimeMessage();
 		MimeMessageHelper mmHelper = new MimeMessageHelper(mimeMessage, true, "utf-8");
 		mmHelper.setText(message, true);
-		mmHelper.setTo(email);
+		mmHelper.setTo(emails);
 		mmHelper.setSubject("XML");
 		mailSender.send(mimeMessage);
 	}

@@ -2,10 +2,6 @@ package com.example.xmlScientificPublicationEditor.repository;
 
 import static com.example.xmlScientificPublicationEditor.util.template.XUpdateTemplate.TARGET_NAMESPACE;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-
 import org.exist.xmldb.EXistResource;
 import org.springframework.stereotype.Repository;
 import org.w3c.dom.Document;
@@ -14,6 +10,7 @@ import org.xmldb.api.base.ResourceSet;
 import org.xmldb.api.base.XMLDBException;
 import org.xmldb.api.modules.XMLResource;
 
+import com.example.xmlScientificPublicationEditor.util.MyFileReader;
 import com.example.xmlScientificPublicationEditor.util.DOMParser.DOMParser;
 import com.example.xmlScientificPublicationEditor.util.existAPI.RetriveFromDB;
 import com.example.xmlScientificPublicationEditor.util.existAPI.StoreToDB;
@@ -31,7 +28,7 @@ public class IdGeneratorRepository {
 		String xpathExp = "/";
 		ResourceSet resultSet = RetriveFromDB.executeXPathExpression(idGeneratorPath, xpathExp, TARGET_NAMESPACE);
 		if (resultSet == null) {
-			String glt = initIdGenerator();
+			String glt = MyFileReader.readFile(idGeneratorTamplate);
 			return save(element, glt);
 		}
 
@@ -52,17 +49,6 @@ public class IdGeneratorRepository {
 			}
 		}
 		return null;
-	}
-
-	public String initIdGenerator() throws Exception {
-		File file = new File(idGeneratorTamplate);
-		BufferedReader br = new BufferedReader(new FileReader(file));
-		String glt = "";
-		String st;
-		while ((st = br.readLine()) != null)
-			glt += st;
-		br.close();
-		return glt;
 	}
 
 	public String save(String element, String glt) throws Exception {

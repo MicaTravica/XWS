@@ -129,5 +129,4 @@ public class DOMParser {
 		return writer.toString();
 	}
 
-
 }
