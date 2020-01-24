@@ -25,6 +25,7 @@ public class PersonRepository {
 	@Autowired
 	private IdGeneratorService idGeneratorService;
 	public static String personCollectionId = "/db/sample/person";
+	public static String personSchemaPath = "src/main/resources/data/schemas/person.xsd";
 
 	public TPerson save(TPerson person) throws Exception {
 		String id = "person" + idGeneratorService.getId("person");
