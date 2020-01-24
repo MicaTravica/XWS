@@ -7,9 +7,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MyPublicationsComponent implements OnInit {
 
+  publications = [{ id: 'aaaaaaaa', name: 'aaaaaaaa', authors: 'aaaaaaaaaaaaaa' }];
+
   constructor() { }
 
   ngOnInit() {
+  }
+
+  withdraw(id: number) {
+
   }
 
 }

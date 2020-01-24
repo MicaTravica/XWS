@@ -12,6 +12,8 @@ import { AddPublicationComponent } from './publication/add-publication/add-publi
 import { MyPublicationsComponent } from './publication/my-publications/my-publications.component';
 import { ForRevisionComponent } from './revisions/for-revision/for-revision.component';
 import { ForPublicationComponent } from './publication/for-publication/for-publication.component';
+import { AddRevisionComponent } from './revisions/add-revision/add-revision.component';
+import { ProcessPublicationComponent } from './publication/process-publication/process-publication.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent, canActivate: [LoginGuard] },
@@ -20,7 +22,9 @@ const routes: Routes = [
   { path: 'add_publication', component: AddPublicationComponent },
   { path: 'my_publications', component: MyPublicationsComponent },
   { path: 'for_revision', component: ForRevisionComponent },
+  { path: 'add_revision', component: AddRevisionComponent },
   { path: 'for_publication', component: ForPublicationComponent },
+  { path: 'process/:id', component: ProcessPublicationComponent },
   { path: 'profile', component: ProfilDetailsComponent },
   { path: '', redirectTo: 'publications', pathMatch: 'full' },
 

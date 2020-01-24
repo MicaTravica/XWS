@@ -24,6 +24,7 @@ import { AddPublicationComponent } from './publication/add-publication/add-publi
 import { ForPublicationComponent } from './publication/for-publication/for-publication.component';
 import { AddRevisionComponent } from './revisions/add-revision/add-revision.component';
 import { ForRevisionComponent } from './revisions/for-revision/for-revision.component';
+import { ProcessPublicationComponent } from './publication/process-publication/process-publication.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +40,8 @@ import { ForRevisionComponent } from './revisions/for-revision/for-revision.comp
     AddPublicationComponent,
     ForRevisionComponent,
     ForPublicationComponent,
-    AddRevisionComponent
+    AddRevisionComponent,
+    ProcessPublicationComponent
   ],
   imports: [
     BrowserModule,

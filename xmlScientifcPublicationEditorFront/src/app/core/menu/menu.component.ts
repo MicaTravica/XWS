@@ -40,6 +40,10 @@ export class MenuComponent implements OnInit {
     this.router.navigate(['/for_revision']);
   }
 
+  showAddRevision() {
+    this.router.navigate(['/add_revision']);
+  }
+
   showForPublication() {
     this.router.navigate(['/for_publication']);
   }
