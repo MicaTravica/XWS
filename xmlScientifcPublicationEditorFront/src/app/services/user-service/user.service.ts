@@ -20,16 +20,36 @@ export class UserService {
     private router: Router,
     private authService: AuthService
   ) {
-    this.usersUrl = environment.restPath;
+    this.usersUrl = environment.restPath + '/person';
   }
 
   public me(token: string) {
-    return this.http.get(this.usersUrl + '/userme', authHttpOptions(token));
+    return this.http.get(this.usersUrl + '/userme',
+      {
+        headers: authHttpOptions(token),
+        responseType: 'text'
+      });
   }
+
+  public getPersonTemplate(): any {
+    return this.http.get(this.usersUrl + '/getTemplate',
+      {
+        headers: httpOptions(),
+        responseType: 'text'
+      });
+  }
+
+  public getAuthTemplate(): any {
+  }
+
 
   public save(user: User) {
     const userXML: string = registrationTemplate(user.name, user.surname, user.email, user.phone);
-    return this.http.post<User>(this.usersUrl + '/registration', userXML, httpOptions)
+    return this.http.post(this.usersUrl + '/registration', userXML,
+      {
+        headers: httpOptions(),
+        responseType: 'text'
+      })
     .subscribe(() => {
       this.router.navigate(['/login']);
     });

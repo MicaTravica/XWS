@@ -25,6 +25,12 @@ public class PersonController extends BaseController {
 	@Autowired
 	private PersonService personService;
 
+	@GetMapping(value = "/person/getTemplate", produces = MediaType.APPLICATION_XML_VALUE)
+	public ResponseEntity<String> getPersonTemplate() throws Exception {
+		String person = personService.generateXMLTemplate();
+        return new ResponseEntity<>(person, HttpStatus.OK);
+	}
+
 	@GetMapping(value = "/person/{email}", produces = MediaType.APPLICATION_XML_VALUE)
 	public ResponseEntity<TPerson> getPersonById(@PathVariable("email") String email ) throws Exception {
 		TPerson person = personService.findOne(email);
