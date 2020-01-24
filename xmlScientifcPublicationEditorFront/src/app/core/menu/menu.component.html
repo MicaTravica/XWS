@@ -1,9 +1,9 @@
 <mat-toolbar color="accent">
-        <button mat-button color="primary">Publications</button>
-        <button mat-button color="primary">Add publication</button>
-        <button mat-button color="primary">My publications</button>
-        <button mat-button color="primary">For revision</button>
-        <button mat-button color="primary">For publication</button>
+        <button mat-button color="primary" (click)='showPublications()'>Publications</button>
+        <button mat-button color="primary" (click)='showAddPublication()'>Add publication</button>
+        <button mat-button color="primary" (click)='showMyPublication()'>My publications</button>
+        <button mat-button color="primary" (click)='showForRevision()'>For revision</button>
+        <button mat-button color="primary" (click)='showForPublication()'>For publication</button>
         <button *ngIf="role=='ROLE_REGULAR'" mat-button color="primary">New publication</button>
         <button *ngIf="role=='ROLE_REGULAR'" mat-button color="primary">My publications</button>
 </mat-toolbar>

@@ -24,4 +24,23 @@ export class MenuComponent implements OnInit {
   ngOnInit() {
   }
 
+  showPublications() {
+    this.router.navigate(['/publications']);
+  }
+
+  showAddPublication() {
+    this.router.navigate(['/add_publication']);
+  }
+
+  showMyPublication() {
+    this.router.navigate(['/my_publications']);
+  }
+
+  showForRevision() {
+    this.router.navigate(['/for_revision']);
+  }
+
+  showForPublication() {
+    this.router.navigate(['/for_publication']);
+  }
 }
