@@ -16,6 +16,8 @@ public interface PersonService {
 
 	void delete(String email) throws Exception;
 
+	String generateXMLTemplate() throws Exception;
+
 	// void changeUserPassword(PasswordChangeDTO pcDto, String username) throws Exception;
 
 	// Person findOneByUsername(String name) throws Exception;

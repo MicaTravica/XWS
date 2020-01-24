@@ -1,18 +1,14 @@
 import { HttpHeaders } from '@angular/common/http';
 
-export const httpOptions = {
-    headers: new HttpHeaders({
-    'Content-Type': 'application/xml',
-    'Accept': 'application/xml'
-    })
+export const httpOptions = () => {
+    return new HttpHeaders()
+        .append('Content-Type', 'application/xml')
+        .append('Accept', 'application/xml')
 };
 
 export const authHttpOptions = (token) => {
-    return {
-        headers: new HttpHeaders({
-        'Content-Type': 'application/xml',
-        'Accept': 'application/xml',
-        'Authorization': 'Bearer ' + token
-        })
-    };
+    return new HttpHeaders()
+            .append('Content-Type', 'application/xml')
+            .append('Accept', 'application/xml')
+            .append('Authorization', 'Bearer' + token)
 };
