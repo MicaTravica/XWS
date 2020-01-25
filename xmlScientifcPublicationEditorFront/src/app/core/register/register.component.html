@@ -2,48 +2,12 @@
     <form [formGroup]="registerForm" (ngSubmit)="onSubmit(registerForm.value)" method="POST">
         <div>
             <mat-form-field>
-                <input matInput placeholder="Name" formControlName="name">
-            </mat-form-field>
-            <div class="error" *ngIf="submitted && form.name.errors">
-                <div *ngIf="form.name.errors.required">Name is required</div>
-            </div>
-        </div>
-        <div>
-            <mat-form-field>
-                <input matInput placeholder="Surname" formControlName="surname">
-            </mat-form-field>
-            <div class="error" *ngIf="submitted && form.surname.errors">
-                <div *ngIf="form.surname.errors.required">Surname is required</div>
-            </div>
-        </div>
-
-        <div>
-            <mat-form-field>
                 <input matInput type="email" placeholder="Email" formControlName="email">
             </mat-form-field>
             <div class="error" *ngIf="submitted && form.email.errors">
                 <div *ngIf="form.email.errors.required">Email is required</div>
             </div>
         </div>
-
-        <div>
-            <mat-form-field>
-                <input matInput placeholder="Phone" formControlName="phone">
-            </mat-form-field>
-            <div class="error" *ngIf="submitted && form.phone.errors">
-                <div *ngIf="form.phone.errors.required">Phone is required</div>
-            </div>
-        </div>
-
-        <div>
-            <mat-form-field>
-                <input matInput placeholder="Username" formControlName="username">
-            </mat-form-field>
-            <div class="error" *ngIf="submitted && form.username.errors">
-                <div *ngIf="form.username.errors.required">Username is required</div>
-            </div>
-        </div>
-
         <div>
             <mat-form-field>
                 <input matInput type="password" placeholder="Password" formControlName="password">

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { PublicationService } from 'src/app/services/publication-service/publication.service';
 declare const Xonomy: any;
 
 @Component({
@@ -8,7 +9,9 @@ declare const Xonomy: any;
 })
 export class AddPublicationComponent implements OnInit {
 
-  constructor() { }
+  publicationXml = '<list><item label=\'one\'/><item label=\'two\'/></list>';
+
+  constructor(private publicationService: PublicationService) { }
 
   ngOnInit() {
     const docSpec = {
@@ -59,10 +62,21 @@ export class AddPublicationComponent implements OnInit {
         }
       }
     };
-    const xml = '<list><item label=\'one\'/><item label=\'two\'/></list>';
+    
     const editor = document.getElementById('ecitor');
     // tslint:disable-next-line: no-unused-expression
-    new Xonomy.render(xml, editor, docSpec);
+    new Xonomy.render(this.publicationXml, editor, docSpec);
   }
+
+
+  addPublication() {
+    this.publicationXml = Xonomy.harvest() as string;
+    this.publicationService.addPublication(this.publicationXml)
+      .subscribe(res => {
+        console.log(res);
+      });
+  }
+
+
 
 }
