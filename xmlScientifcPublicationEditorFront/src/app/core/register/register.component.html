@@ -1,21 +1,6 @@
 <div>
     <form [formGroup]="registerForm" (ngSubmit)="onSubmit(registerForm.value)" method="POST">
-        <div>
-            <label for="name"> Name </label><br/>
-            <input id="name" type="text" formControlName="name">
-            <div *ngIf="submitted && form.name.errors">
-                <div *ngIf="form.name.errors.required">Name is required</div>
-            </div>
-        </div>
-
-        <div>
-            <label for="surname"> Surname </label><br/>
-            <input id="surname" type="text" formControlName="surname">
-            <div *ngIf="submitted && form.surname.errors">
-                <div *ngIf="form.surname.errors.required">Surname is required</div>
-            </div>
-        </div>
-
+        
         <div>
             <label for="email"> Email </label><br/>
             <input id="email" type="email" formControlName="email">
@@ -24,14 +9,7 @@
             </div>
         </div>
 
-        <div>
-            <label for="phone"> Phone </label><br/>
-            <input id="phone" type="text" formControlName="phone">
-            <div *ngIf="submitted && form.phone.errors">
-                <div *ngIf="form.phone.errors.required">Phone is required</div>
-            </div>
-        </div>
-
+        
         <div>
             <label for="username"> Username </label><br/>
             <input id="username" type="text" formControlName="username">

@@ -2,8 +2,8 @@
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
 
         <div>
-            <label for="username"> Username </label><br/>
-            <input id="username" type="text" formControlName="username">
+            <label for="email"> Username </label><br/>
+            <input id="email" type="text" formControlName="email">
         </div>
 
         <div>
@@ -11,7 +11,7 @@
             <input id="password" type="password" formControlName="password">
         </div>
 
-        <div *ngIf="(loginForm.controls.username.touched && loginForm.controls.username.errors?.required) ||
+        <div *ngIf="(loginForm.controls.email.touched && loginForm.controls.email.errors?.required) ||
         (loginForm.controls.password.touched && loginForm.controls.password.errors?.requrired)">
             Please enter your data!
         </div>
