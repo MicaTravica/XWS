@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { PublicationService } from 'src/app/services/publication-service/publication.service';
 declare const Xonomy: any;
 
 @Component({
@@ -8,7 +9,9 @@ declare const Xonomy: any;
 })
 export class AddPublicationComponent implements OnInit {
 
-  constructor() { }
+  publicationXml = '<list><item label=\'one\'/><item label=\'two\'/></list>';
+
+  constructor(private publicationService: PublicationService) { }
 
   ngOnInit() {
     const docSpec = {
@@ -652,7 +655,18 @@ export class AddPublicationComponent implements OnInit {
     const xml = '<scientificPublication id="sp1" version="1"><caption id = "c1" > Moj rad</caption><authors><author><name>Milica</name><surname>Travica</surname><email>mcia97@eamil.com</email><phone>123-123456</phone><institution id="ins1"><name>FTN</name><address><city>Novi Sad</city><streetNumber>1</streetNumber><floorNumber>12</floorNumber><street>Nova ulica</street><country>Serbia</country></address></institution><expertise></expertise></author><author><name>Milica</name><surname>Travica</surname><email>mcia97@eamil.com</email><phone>123-123456</phone><institution id="ins2"><name>FTN</name><address><city>Novi Sad</city><streetNumber>1</streetNumber><floorNumber>12</floorNumber><street>Nova ulica</street><country>Serbia</country></address></institution><expertise></expertise></author><author><name>Milica</name><surname>Travica</surname><email>mcia97@eamil.com</email><phone>123-123456</phone><institution id="ins3"><name>FTN</name><address><city>Novi Sad</city><streetNumber>1</streetNumber><floorNumber>12</floorNumber><street>Nova ulica</street><country>Serbia</country></address></institution><expertise></expertise></author></authors><abstract id="abs1"><keywords><keyword>rec1</keyword><keyword>druga rec</keyword><keyword>tec treca</keyword><keyword>najnovija rec</keyword><keyword>ja sam rec</keyword></keywords><paragraph/></abstract></scientificPublication>';
     const editor = document.getElementById('ecitor');
     // tslint:disable-next-line: no-unused-expression
-    new Xonomy.render(xml, editor, docSpec);
+    new Xonomy.render(this.publicationXml, editor, docSpec);
   }
+
+
+  addPublication() {
+    this.publicationXml = Xonomy.harvest() as string;
+    this.publicationService.addPublication(this.publicationXml)
+      .subscribe(res => {
+        console.log(res);
+      });
+  }
+
+
 
 }

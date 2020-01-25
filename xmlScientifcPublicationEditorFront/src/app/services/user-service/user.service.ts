@@ -32,7 +32,7 @@ export class UserService {
   }
 
   public getPersonTemplate(): any {
-    return this.http.get(this.usersUrl + '/getTemplate',
+    return this.http.get(this.usersUrl + '/getPersonTemplate',
       {
         headers: httpOptions(),
         responseType: 'text'
@@ -40,12 +40,16 @@ export class UserService {
   }
 
   public getAuthTemplate(): any {
+    return this.http.get(this.usersUrl + '/getAuthTemplate',
+      {
+        headers: httpOptions(),
+        responseType: 'text'
+      });
   }
 
 
-  public save(user: User) {
-    const userXML: string = registrationTemplate(user.name, user.surname, user.email, user.phone);
-    return this.http.post(this.usersUrl + '/registration', userXML,
+  public save(userXML: string) {
+    return this.http.post(environment.restPath + '/registration', userXML,
       {
         headers: httpOptions(),
         responseType: 'text'

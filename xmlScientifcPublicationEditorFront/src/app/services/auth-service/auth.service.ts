@@ -8,14 +8,14 @@ import { JwtHelperService } from '@auth0/angular-jwt';
   providedIn: 'root'
 })
 export class AuthService {
-  private headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+  private headers = new HttpHeaders({ 'Content-Type': 'application/xml' });
 
   constructor(
     private http: HttpClient
   ) { }
 
   login(auth: any): Observable<any> {
-    return this.http.post(environment.restPath + '/login', { username: auth.username, password: auth.password },
+    return this.http.post(environment.restPath + '/login', auth,
       { headers: this.headers, responseType: 'text' });
   }
 
@@ -33,13 +33,10 @@ export class AuthService {
   getUserRole() {
     const token = this.getToken();
     const jwt: JwtHelperService = new JwtHelperService();
-
     if (!token) {
       return 'GUEST';
     }
-
     const info = jwt.decodeToken(token);
-
     return info.role[0].authority;
   }
 }
