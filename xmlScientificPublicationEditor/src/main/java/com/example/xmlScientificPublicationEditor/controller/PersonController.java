@@ -62,7 +62,6 @@ public class PersonController extends BaseController {
 				consumes = MediaType.APPLICATION_XML_VALUE,
 				produces = MediaType.APPLICATION_XML_VALUE)
 	public ResponseEntity<String>login(@RequestBody TAuthPerson person) throws Exception {
-		System.out.println(person);
 		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(person.getEmail(), person.getPassword());
 		authenticationManager.authenticate(token);
 		UserDetails userDetails = userDetailsService.loadUserByUsername(person.getEmail());

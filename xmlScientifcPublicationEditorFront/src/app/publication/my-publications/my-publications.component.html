@@ -1,0 +1,14 @@
+<div>
+    <mat-card *ngFor="let sp of publications">
+        <mat-card-header>
+            <mat-card-title>{{sp.name}}</mat-card-title>
+            <mat-card-subtitle>{{sp.authors}}</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-actions>
+            <button mat-raised-button color="accent" (click)="withdraw(sp.id)">Withdraw</button>
+            <a mat-raised-button routerLink=".">XML</a>
+            <a mat-raised-button routerLink=".">HTML</a>
+            <a mat-raised-button routerLink=".">PDF</a>
+        </mat-card-actions>
+    </mat-card>
+</div>

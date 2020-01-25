@@ -7,10 +7,12 @@ import java.util.List;
 
 import com.example.xmlScientificPublicationEditor.service.PersonService;
 import com.example.xmlScientificPublicationEditor.model.authPerson.TAuthPerson;
+import com.example.xmlScientificPublicationEditor.model.authPerson.TRole;
 import com.example.xmlScientificPublicationEditor.model.person.TPerson;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.config.core.GrantedAuthorityDefaults;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -40,7 +42,15 @@ public class UserDetailsServiceImpl implements UserDetailsService{
 		// }
 		// treba sad da se pretvori u objekat..
 		List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
-		// grantedAuthorities.add(new SimpleGrantedAuthority(user.getUserRole().toString()));
+
+		user.getRoles().getRole().forEach(r->{
+			if(r.toString().equals(TRole.USER.toString())) {
+				grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_REGULAR"));
+			}
+			if(r.toString().equals(TRole.REDACTOR.toString())) {
+				grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+			}
+		});
 		return new org.springframework.security.core.userdetails.User(
 				user.getEmail(),
 	    		user.getPassword(),

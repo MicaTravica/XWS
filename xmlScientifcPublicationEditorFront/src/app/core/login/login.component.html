@@ -1,20 +1,22 @@
 <div>
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <p>
+            <mat-form-field>
+                <input matInput placeholder="Email" formControlName="email">
+            </mat-form-field>
+        </p>
+        <p>
+            <mat-form-field>
+                <input matInput type="password" placeholder="Password" formControlName="Password">
+            </mat-form-field>
+        </p>
 
-        <div>
-            <label for="email"> Username </label><br/>
-            <input id="email" type="text" formControlName="email">
-        </div>
-
-        <div>
-            <label for="password"> Password </label><br/>
-            <input id="password" type="password" formControlName="password">
-        </div>
-
-        <div *ngIf="(loginForm.controls.email.touched && loginForm.controls.email.errors?.required) ||
-        (loginForm.controls.password.touched && loginForm.controls.password.errors?.requrired)">
+        <div class="error" *ngIf="(loginForm.controls.email.touched && loginForm.controls.email.errors?.required) ||
+            (loginForm.controls.Password.touched && loginForm.controls.Password.errors?.required)">
             Please enter your data!
         </div>
-        <button class="button" type="submit" [disabled]="loginForm.invalid">Login</button>
+        <p>
+            <button mat-raised-button color="accent" type="submit" [disabled]="loginForm.invalid">Login</button>
+        </p>
     </form>
 </div>
