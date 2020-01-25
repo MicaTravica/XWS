@@ -1,0 +1,26 @@
+<div class="example-container">
+    <form class="example-container" [formGroup]="searchForm" (ngSubmit)="onSubmit()">
+        <mat-form-field>
+            <input matInput placeholder="Search" formControlName="search" required>
+        </mat-form-field>
+        <label>Search type: </label>
+        <mat-radio-group formControlName="searchType">
+            <mat-radio-button value="regular">Regular</mat-radio-button>
+            <mat-radio-button value="advanced">Advanced</mat-radio-button>
+        </mat-radio-group>
+        <button mat-raised-button color="accent" type="submit" [disabled]="searchForm.invalid">Search</button>
+    </form>
+</div>
+<div>
+    <mat-card *ngFor="let sp of publications">
+        <mat-card-header>
+            <mat-card-title>{{sp.name}}</mat-card-title>
+            <mat-card-subtitle>{{sp.authors}}</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-actions>
+            <a mat-raised-button routerLink=".">XML</a>
+            <a mat-raised-button routerLink=".">HTML</a>
+            <a mat-raised-button routerLink=".">PDF</a>
+        </mat-card-actions>
+    </mat-card>
+</div>
