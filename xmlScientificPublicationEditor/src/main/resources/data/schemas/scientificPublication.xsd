@@ -13,7 +13,7 @@
         <xs:complexType>
             <xs:sequence>
                 <xs:element name="caption" maxOccurs="1" minOccurs="1">
-                    <xs:complexType>
+                    <xs:complexType defaultAttributesApply="true">
                         <xs:simpleContent>
                             <xs:extension base="xs:string">
                                 <xs:attribute default="24" form="unqualified" name="font_size"
@@ -74,7 +74,7 @@
     </xs:element>
     <xs:complexType name="TChapter">
         <xs:sequence maxOccurs="1">
-            <xs:element maxOccurs="unbounded" name="paragraph"/>
+            <xs:element maxOccurs="unbounded" name="paragraph" type="TRichParagraph"/>
             <xs:element maxOccurs="unbounded" minOccurs="0" name="subchapter" type="TChapter"/>
         </xs:sequence>
         <xs:attribute name="title" type="xs:string" use="required"/>
