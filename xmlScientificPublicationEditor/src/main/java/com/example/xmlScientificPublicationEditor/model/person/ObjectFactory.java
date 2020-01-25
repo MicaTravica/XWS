@@ -36,15 +36,6 @@ public class ObjectFactory {
      */
     public ObjectFactory() {
     }
-
-    /**
-     * Create an instance of {@link TAuthPerson }
-     * 
-     */
-    public TAuthPerson createTAuthPerson() {
-        return new TAuthPerson();
-    }
-
     /**
      * Create an instance of {@link TPerson }
      * 
@@ -68,15 +59,6 @@ public class ObjectFactory {
     public TInstitution createTInstitution() {
         return new TInstitution();
     }
-
-    /**
-     * Create an instance of {@link TAuthPerson.Roles }
-     * 
-     */
-    public TAuthPerson.Roles createTAuthPersonRoles() {
-        return new TAuthPerson.Roles();
-    }
-
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link TPerson }{@code >}}
      * 

@@ -6,6 +6,7 @@ import java.util.List;
 // import javax.transaction.Transactional;
 
 import com.example.xmlScientificPublicationEditor.service.PersonService;
+import com.example.xmlScientificPublicationEditor.model.authPerson.TAuthPerson;
 import com.example.xmlScientificPublicationEditor.model.person.TPerson;
 
 
@@ -27,9 +28,9 @@ public class UserDetailsServiceImpl implements UserDetailsService{
 	@Override
 	// @Transactional
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-		TPerson user = null;
+		TAuthPerson user = null;
 		try{
-			user = personService.findOne(email);
+			user = personService.findOneAuth(email);
 		}catch(Exception e)
 		{
 			throw new UsernameNotFoundException("Error while retriving user from DB");
@@ -41,8 +42,8 @@ public class UserDetailsServiceImpl implements UserDetailsService{
 		List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
 		// grantedAuthorities.add(new SimpleGrantedAuthority(user.getUserRole().toString()));
 		return new org.springframework.security.core.userdetails.User(
-	    		user.getEmail(),
-	    		"password",
+				user.getEmail(),
+	    		user.getPassword(),
 	    		grantedAuthorities);
 	}
 

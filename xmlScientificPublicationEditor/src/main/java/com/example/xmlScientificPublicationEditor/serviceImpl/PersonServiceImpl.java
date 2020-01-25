@@ -8,12 +8,15 @@ import javax.xml.transform.stream.StreamResult;
 
 import com.example.xmlScientificPublicationEditor.exception.ResourceExistsException;
 import com.example.xmlScientificPublicationEditor.exception.ResourceNotFoundException;
+import com.example.xmlScientificPublicationEditor.model.authPerson.TAuthPerson;
+import com.example.xmlScientificPublicationEditor.model.authPerson.TRole;
 import com.example.xmlScientificPublicationEditor.model.person.TPerson;
 import com.example.xmlScientificPublicationEditor.repository.person.PersonRepository;
 import com.example.xmlScientificPublicationEditor.service.PersonService;
 
 import org.apache.xerces.xs.XSModel;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import jlibs.xml.sax.XMLDocument;
@@ -23,29 +26,38 @@ import jlibs.xml.xsd.XSParser;
 @Service
 public class PersonServiceImpl implements PersonService {
 
-    @Autowired PersonRepository personRepository;
-
+    @Autowired
+    PersonRepository personRepository;
 
     @Override
-    public TPerson registration(TPerson person) throws Exception {
-        TPerson foundPerson =
-            personRepository.findOne(
-                PersonRepository.makeXpathQueryByEmail(person.getEmail())
-            );
-        if(foundPerson != null){
-            throw new ResourceExistsException(
-                String.format("Person with email: %s", person.getEmail())
-            );
+    public TAuthPerson registration(TAuthPerson person) throws Exception {
+        TAuthPerson foundPerson = personRepository.findOneAuth(PersonRepository.makeXpathQueryByEmail(person.getEmail()));
+        if (foundPerson != null) {
+            throw new ResourceExistsException(String.format("Person with email: %s", person.getEmail()));
         }
+        
+        BCryptPasswordEncoder b =  new BCryptPasswordEncoder();
+        person.setPassword(b.encode(person.getPassword()));
+        person.getRoles().getRole().clear();
+        person.getRoles().getRole().add(TRole.USER);
         return personRepository.save(person);
     }
 
     @Override
     public TPerson findOne(String id) throws Exception {
-        TPerson person =
-            personRepository.findOne(PersonRepository.makeXpathQueryById(id));
-        if(person == null){
+        TPerson person = personRepository.findOne(PersonRepository.makeXpathQueryById(id));
+        if (person == null) {
             throw new ResourceNotFoundException(String.format("Person with id %s", id));
+        }
+        return person;
+    }
+
+    @Override
+    public TAuthPerson findOneAuth(String email) throws Exception {
+        TAuthPerson person = personRepository.findOneAuth(
+                PersonRepository.makeXpathQueryByEmailAuthPerson(email));
+        if (person == null) {
+            throw new ResourceNotFoundException(String.format("Person with email %s", email));
         }
         return person;
     }
@@ -54,7 +66,7 @@ public class PersonServiceImpl implements PersonService {
     public void delete(String personId) throws Exception {
         personRepository.deletePerson(personId);
     }
-    
+
     @Override
     public Collection<TPerson> findAll() {
         // TODO Auto-generated method stub
@@ -67,17 +79,33 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public String generateXMLTemplate() throws Exception {
+    public String generatePersonXMLTemplate() throws Exception {
         StringWriter sw = new StringWriter();
         XSModel xsModel = new XSParser().parse(PersonRepository.personSchemaPath);
         XSInstance xsInstance = new XSInstance();
         xsInstance.minimumElementsGenerated = 1;
         xsInstance.maximumElementsGenerated = 1;
-        xsInstance.generateOptionalElements = Boolean.TRUE; // null means rando  
+        xsInstance.generateOptionalElements = Boolean.TRUE; // null means rando
         QName rootElement = new QName("http://www.uns.ac.rs/Tim1", "person");
         XMLDocument sampleXml = new XMLDocument(new StreamResult(sw), true, 4, null);
         xsInstance.generate(xsModel, rootElement, sampleXml);
         return sw.toString();
     }
+
+    @Override
+    public String generateAuthXMLTemplate() throws Exception {
+        StringWriter sw = new StringWriter();
+        XSModel xsModel = new XSParser().parse(PersonRepository.userAuthSchemaPath);
+        XSInstance xsInstance = new XSInstance();
+        xsInstance.minimumElementsGenerated = 1;
+        xsInstance.maximumElementsGenerated = 1;
+        xsInstance.generateOptionalElements = Boolean.TRUE; // null means rando
+        QName rootElement = new QName("http://www.uns.ac.rs/Tim1", "auth");
+        XMLDocument sampleXml = new XMLDocument(new StreamResult(sw), true, 4, null);
+        xsInstance.generate(xsModel, rootElement, sampleXml);
+        return sw.toString();
+    }
+
     
+
 }

@@ -13,6 +13,7 @@ import org.xmldb.api.modules.XMLResource;
 import com.example.xmlScientificPublicationEditor.exception.MarshallerException;
 import com.example.xmlScientificPublicationEditor.exception.ResourceNotDeleted;
 import com.example.xmlScientificPublicationEditor.exception.ResourceNotFoundException;
+import com.example.xmlScientificPublicationEditor.model.authPerson.TAuthPerson;
 import com.example.xmlScientificPublicationEditor.model.person.TPerson;
 import com.example.xmlScientificPublicationEditor.service.IdGeneratorService;
 import com.example.xmlScientificPublicationEditor.util.existAPI.RetriveFromDB;
@@ -25,7 +26,9 @@ public class PersonRepository {
 	@Autowired
 	private IdGeneratorService idGeneratorService;
 	public static String personCollectionId = "/db/sample/person";
+	public static String authCollectionId = "/db/sample/auth";
 	public static String personSchemaPath = "src/main/resources/data/schemas/person.xsd";
+	public static String userAuthSchemaPath = "src/main/resources/data/schemas/userAuth.xsd";
 
 	public TPerson save(TPerson person) throws Exception {
 		String id = "person" + idGeneratorService.getId("person");
@@ -35,6 +38,17 @@ public class PersonRepository {
 			throw new MarshallerException("Person");
 		}
 		StoreToDB.store(personCollectionId, id, xmlPerson);
+		return person;
+	}
+
+	public TAuthPerson save(TAuthPerson person) throws Exception {
+		String id = "person" + idGeneratorService.getId("person");
+		person.setId(id);
+		String xmlPerson = PersonMarshalling.marshalAuthPerson(person);
+		if (xmlPerson == null) {
+			throw new MarshallerException("AuthPerson");
+		}
+		StoreToDB.store(authCollectionId, id, xmlPerson);
 		return person;
 	}
 
@@ -52,6 +66,33 @@ public class PersonRepository {
 				res = (XMLResource) i.nextResource();
 				// pretvori ga u TPerson
 				retVal = PersonUnmarshalling.unmarshalling(res);
+				return retVal;
+			} finally {
+				// don't forget to cleanup resources
+				try {
+					((EXistResource) res).freeResources();
+				} catch (XMLDBException xe) {
+					xe.printStackTrace();
+				}
+			}
+		}
+		return null;
+	}
+
+	public TAuthPerson findOneAuth(String xpathExp) throws Exception {
+		TAuthPerson retVal = null;
+		ResourceSet resultSet = RetriveFromDB.executeXPathExpression(authCollectionId, xpathExp, TARGET_NAMESPACE);
+		// treba isprolaziti kroz
+		if (resultSet == null) {
+			return retVal;
+		}
+		ResourceIterator i = resultSet.getIterator();
+		XMLResource res = null;
+		while (i.hasMoreResources()) {
+			try {
+				res = (XMLResource) i.nextResource();
+				// pretvori ga u TPerson
+				retVal = PersonUnmarshalling.unmarshallingAuth(res);
 				return retVal;
 			} finally {
 				// don't forget to cleanup resources
@@ -86,6 +127,11 @@ public class PersonRepository {
 		if (mods == 0) {
 			throw new ResourceNotDeleted(String.format("person with documentId %s", documentId));
 		}
+	}
+
+
+	public static String makeXpathQueryByEmailAuthPerson(String parameter) {
+		return String.format("//auth[email=\"%s\"]", parameter);
 	}
 
 	public static String makeXpathQueryByEmail(String parameter) {
