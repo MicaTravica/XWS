@@ -39,7 +39,7 @@ public class PersonServiceImpl implements PersonService {
         BCryptPasswordEncoder b =  new BCryptPasswordEncoder();
         person.setPassword(b.encode(person.getPassword()));
         person.getRoles().getRole().clear();
-        person.getRoles().getRole().add(TRole.USER);
+        person.getRoles().getRole().add(TRole.ROLE_USER);
         return personRepository.save(person);
     }
 

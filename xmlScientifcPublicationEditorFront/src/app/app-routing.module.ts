@@ -14,18 +14,20 @@ import { ForRevisionComponent } from './revisions/for-revision/for-revision.comp
 import { ForPublicationComponent } from './publication/for-publication/for-publication.component';
 import { AddRevisionComponent } from './revisions/add-revision/add-revision.component';
 import { ProcessPublicationComponent } from './publication/process-publication/process-publication.component';
+import { ROLE_USER, ROLE_REVIEWER, ROLE_REDACTOR } from './services/auth-service/constants';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent, canActivate: [LoginGuard] },
-  { path: 'register', component: RegisterComponent },
+  { path: 'register', component: RegisterComponent},
   { path: 'publications', component: SearchPublicationsComponent },
-  { path: 'add_publication', component: AddPublicationComponent },
-  { path: 'my_publications', component: MyPublicationsComponent },
-  { path: 'for_revision', component: ForRevisionComponent },
-  { path: 'add_revision', component: AddRevisionComponent },
-  { path: 'for_publication', component: ForPublicationComponent },
-  { path: 'process/:id', component: ProcessPublicationComponent },
-  { path: 'profile', component: ProfilDetailsComponent },
+  { path: 'add_publication', component: AddPublicationComponent, canActivate: [RoleGuard], data: {expectedRoles: 'ROLE_USER'}},
+  { path: 'my_publications', component: MyPublicationsComponent, canActivate: [RoleGuard], data: {expectedRoles: 'ROLE_USER'}},
+  { path: 'for_revision', component: ForRevisionComponent, canActivate: [RoleGuard], data: {expectedRoles: 'ROLE_REVIEWER|ROLE_REDACTOR'} },
+  { path: 'add_revision', component: AddRevisionComponent, canActivate: [RoleGuard], data: {expectedRoles: 'ROLE_REVIEWER|ROLE_REDACTOR'} },
+  { path: 'for_publication', component: ForPublicationComponent, canActivate: [RoleGuard], data: {expectedRoles: 'ROLE_REDACTOR'} },
+  { path: 'process/:id', component: ProcessPublicationComponent, canActivate: [RoleGuard], data: {expectedRoles: 'ROLE_REDACTOR'} },
+  { path: 'profile', component: ProfilDetailsComponent,
+      canActivate: [RoleGuard], data: {expectedRoles: 'ROLE_REVIEWER|ROLE_REDACTOR|ROLE_USER'}},
   { path: '', redirectTo: 'publications', pathMatch: 'full' },
 
 ];

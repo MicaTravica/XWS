@@ -3,7 +3,6 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { User } from '../../models/user-model/user.model'
 import { Router } from '@angular/router';
 import {httpOptions, authHttpOptions} from '../../util/http-util';
-import {registrationTemplate} from '../../util/xml-templates/registration-template';
 import { LoginComponent } from 'src/app/core/login/login.component';
 import { environment } from 'src/environments/environment';
 import { AuthService } from '../auth-service/auth.service';
