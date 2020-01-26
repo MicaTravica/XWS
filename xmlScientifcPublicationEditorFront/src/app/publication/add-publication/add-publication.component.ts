@@ -39,7 +39,7 @@ export class AddPublicationComponent implements OnInit {
           {
             caption: 'Append an <references>',
             action: Xonomy.newElementChild,
-            actionParameter: '<references/>',
+            actionParameter: '<references><reference/></references>',
             hideIf: function (jsElement) {
               return jsElement.hasChildElement('references');
             }
@@ -47,7 +47,7 @@ export class AddPublicationComponent implements OnInit {
           {
             caption: 'Append an <comments>',
             action: Xonomy.newElementChild,
-            actionParameter: '<comments/>',
+            actionParameter: '<comments><comment><content/></comment></comments>',
             hideIf: function (jsElement) {
               return jsElement.hasChildElement('comments');
             }
@@ -67,8 +67,11 @@ export class AddPublicationComponent implements OnInit {
         },
         'caption': {
           mustBeBefore: ['authors', 'abstract', 'chapter', 'references', 'comments'],
-          oneliner: true,
           canDropTo: ['scientificPublication'],
+        },
+        'value': {
+          oneliner: true,
+          canDropTo: ['caption'],
           menu: [
             {
               caption: 'Edit',
@@ -125,10 +128,22 @@ export class AddPublicationComponent implements OnInit {
           mustBeAfter: ['caption', 'authors', 'abstract', 'chapter'],
           mustBeBefore: ['comments'],
           canDropTo: ['scientificPublication'],
+          menu: [
+            {
+              caption: 'Append an <reference>',
+              action: Xonomy.newElementChild,
+              actionParameter: '<reference/>'
+            },
+          ]
         },
         'comments': {
           mustBeAfter: ['caption', 'authors', 'abstract', 'chapter', 'references'],
           canDropTo: ['scientificPublication'],
+          menu: [{
+            caption: 'Append an <comment>',
+            action: Xonomy.newElementChild,
+            actionParameter: '<comment><content/></comment>'
+          },]
         },
         'author': {
           canDropTo: ['authors'],
@@ -418,7 +433,7 @@ export class AddPublicationComponent implements OnInit {
             {
               caption: 'Append an <quote>',
               action: Xonomy.newElementChild,
-              actionParameter: '<quote><cursive/></quote>'
+              actionParameter: '<quote id="" ref=""><cursive/></quote>'
             },
             {
               caption: 'Append an <formula>',
@@ -428,12 +443,12 @@ export class AddPublicationComponent implements OnInit {
             {
               caption: 'Append an <list>',
               action: Xonomy.newElementChild,
-              actionParameter: '<list><listitem/></list>'
+              actionParameter: '<list><listitem><cursive/></listitem></list>'
             },
             {
               caption: 'Append an <image>',
               action: Xonomy.newElementChild,
-              actionParameter: '<image><description/><soruce/></image>'
+              actionParameter: '<image><description/><source/></image>'
             }, {
               caption: 'Append an <table>',
               action: Xonomy.newElementChild,
@@ -449,7 +464,7 @@ export class AddPublicationComponent implements OnInit {
           ]
         },
         'text': {
-          canDropTo: ['paragraph'],
+          canDropTo: ['paragraph', 'content'],
           menu: [
             {
               caption: 'Delete this text',
@@ -586,16 +601,21 @@ export class AddPublicationComponent implements OnInit {
           ]
         },
         'quote': {
-          
+          canDropTo: ['paragraph', 'content'],
+          menu: [
+            {
+              caption: 'Delete this quote',
+              action: Xonomy.deleteElement
+            }
+          ]
         },
         'formula': {
-
+          canDropTo: ['paragraph', 'content'],
         },
         'list': {
-          canDropTo: ['paragraph'],
+          canDropTo: ['paragraph', 'content'],
           menu: [
-            { // uskladiti sa semomo da li da bude text ili cursive
-              // dodati i kod dodavanja liste
+            {
               caption: 'Append an <listitem>',
               action: Xonomy.newElementChild,
               actionParameter: '<listitem><cursive/></listitem>'
@@ -628,6 +648,7 @@ export class AddPublicationComponent implements OnInit {
           ]
         },
         'description': {
+          oneliner: true,
           menu: [
             {
               caption: 'Edit',
@@ -645,6 +666,7 @@ export class AddPublicationComponent implements OnInit {
           ]
         },
         'source': {
+          oneliner: true,
           menu: [
             {
               caption: 'Edit',
@@ -720,6 +742,119 @@ export class AddPublicationComponent implements OnInit {
             }
           ]
         },
+        'reference': {
+          canDropTo: ['references'],
+          menu: [
+            {
+              caption: 'Append an <book>',
+              action: Xonomy.newElementChild,
+              actionParameter: '<book/>',
+              hideIf: function (jsElement) {
+                return jsElement.hasElements();
+              }
+            },
+            {
+              caption: 'Append an <link>',
+              action: Xonomy.newElementChild,
+              actionParameter: '<link/>',
+              hideIf: function (jsElement) {
+                return jsElement.hasElements();
+              }
+            },
+            {
+              caption: 'Delete this reference',
+              action: Xonomy.deleteElement,
+              hideIf: function (jsElement) {
+                return jsElement.parent().getChildElements('reference').length < 2;
+              }
+            }
+          ]
+        },
+        'book': {
+          oneliner: true,
+          menu: [
+            {
+              caption: 'Edit',
+              action: Xonomy.editRaw,
+              actionParameter: {
+                fromJs: function (jsElement) {
+                  return jsElement.getText();
+                },
+                toJs: function (txt, origElement) {
+                  origElement.addText(txt);
+                  return origElement;
+                }
+              }
+            }, {
+              caption: 'Delete this book',
+              action: Xonomy.deleteElement
+            }
+          ]
+
+        },
+        'link': {
+          oneliner: true,
+          menu: [
+            {
+              caption: 'Edit',
+              action: Xonomy.editRaw,
+              actionParameter: {
+                fromJs: function (jsElement) {
+                  return jsElement.getText();
+                },
+                toJs: function (txt, origElement) {
+                  origElement.addText(txt);
+                  return origElement;
+                }
+              }
+            }, {
+              caption: 'Delete this link',
+              action: Xonomy.deleteElement
+            }
+          ]
+        },
+        'comment': {
+          canDropTo: ['comments'],
+          menu: [
+            {
+              caption: 'Delete this comment',
+              action: Xonomy.deleteElement,
+              hideIf: function (jsElement) {
+                return jsElement.parent().getChildElements('comment').length < 2;
+              }
+            }]
+        },
+        'content': {
+          canDropTo: ['comment'],
+          menu: [
+            {
+              caption: 'Append an <text>',
+              action: Xonomy.newElementChild,
+              actionParameter: '<text><cursive/></text>'
+            },
+            {
+              caption: 'Append an <quote>',
+              action: Xonomy.newElementChild,
+              actionParameter: '<quote id="" ref=""><cursive/></quote>'
+            },
+            {
+              caption: 'Append an <formula>',
+              action: Xonomy.newElementChild,
+              actionParameter: '<formula/>'
+            },
+            {
+              caption: 'Append an <list>',
+              action: Xonomy.newElementChild,
+              actionParameter: '<list><listitem><cursive/></listitem></list>'
+            },
+            {
+              caption: 'Delete this content',
+              action: Xonomy.deleteElement,
+              hideIf: function (jsElement) {
+                return jsElement.parent().getChildElements('content').length < 2;
+              }
+            }]
+        },
         item: {
           menu: [{
             caption: 'Add @label="something"',
@@ -754,7 +889,7 @@ export class AddPublicationComponent implements OnInit {
       }
     };
     // ovo ce dolaziti sa backenda
-    this.publicationXml = '<scientificPublication id="sp1" version="1"><caption id = "c1" > Moj rad</caption><authors><author><name>Milica</name><surname>Travica</surname><email>mcia97@eamil.com</email><phone>123-123456</phone><institution id="ins1"><name>FTN</name><address><city>Novi Sad</city><streetNumber>1</streetNumber><floorNumber>12</floorNumber><street>Nova ulica</street><country>Serbia</country></address></institution><expertise></expertise></author><author><name>Milica</name><surname>Travica</surname><email>mcia97@eamil.com</email><phone>123-123456</phone><institution id="ins2"><name>FTN</name><address><city>Novi Sad</city><streetNumber>1</streetNumber><floorNumber>12</floorNumber><street>Nova ulica</street><country>Serbia</country></address></institution><expertise></expertise></author><author><name>Milica</name><surname>Travica</surname><email>mcia97@eamil.com</email><phone>123-123456</phone><institution id="ins3"><name>FTN</name><address><city>Novi Sad</city><streetNumber>1</streetNumber><floorNumber>12</floorNumber><street>Nova ulica</street><country>Serbia</country></address></institution><expertise></expertise></author></authors><abstract id="abs1"><keywords><keyword>rec1</keyword><keyword>druga rec</keyword><keyword>tec treca</keyword><keyword>najnovija rec</keyword><keyword>ja sam rec</keyword></keywords><paragraph/></abstract></scientificPublication>';
+    this.publicationXml = '<scientificPublication id="sp1" version="1"><caption id = "c1" ><value> Moj rad</value></caption><authors><author><name>Milica</name><surname>Travica</surname><email>mcia97@eamil.com</email><phone>123-123456</phone><institution id="ins1"><name>FTN</name><address><city>Novi Sad</city><streetNumber>1</streetNumber><floorNumber>12</floorNumber><street>Nova ulica</street><country>Serbia</country></address></institution><expertise></expertise></author><author><name>Milica</name><surname>Travica</surname><email>mcia97@eamil.com</email><phone>123-123456</phone><institution id="ins2"><name>FTN</name><address><city>Novi Sad</city><streetNumber>1</streetNumber><floorNumber>12</floorNumber><street>Nova ulica</street><country>Serbia</country></address></institution><expertise></expertise></author><author><name>Milica</name><surname>Travica</surname><email>mcia97@eamil.com</email><phone>123-123456</phone><institution id="ins3"><name>FTN</name><address><city>Novi Sad</city><streetNumber>1</streetNumber><floorNumber>12</floorNumber><street>Nova ulica</street><country>Serbia</country></address></institution><expertise></expertise></author></authors><abstract id="abs1"><keywords><keyword>rec1</keyword><keyword>druga rec</keyword><keyword>tec treca</keyword><keyword>najnovija rec</keyword><keyword>ja sam rec</keyword></keywords><paragraph/></abstract></scientificPublication>';
     const editor = document.getElementById('ecitor');
     // tslint:disable-next-line: no-unused-expression
     new Xonomy.render(this.publicationXml, editor, docSpec);
