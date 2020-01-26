@@ -13,21 +13,17 @@
         <xs:complexType>
             <xs:sequence>
                 <xs:element name="caption" maxOccurs="1" minOccurs="1">
-                    <xs:complexType defaultAttributesApply="true">
-                        <xs:simpleContent>
-                            <xs:extension base="xs:string">
-                                <xs:attribute default="24" form="unqualified" name="font_size"
-                                    use="optional">
-                                    <xs:simpleType>
-                                        <xs:restriction base="xs:positiveInteger">
-                                            <xs:maxInclusive value="100"/>
-                                            <xs:minInclusive value="1"/>
-                                        </xs:restriction>
-                                    </xs:simpleType>
-                                </xs:attribute>
-                                <xs:attribute name="id" type="xs:ID" use="required"/>
-                            </xs:extension>
-                        </xs:simpleContent>
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="value">
+                                <xs:simpleType>
+                                    <xs:restriction base="xs:string">
+                                        <xs:minLength value="1"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+                        </xs:sequence>
+                        <xs:attribute name="id"/>
                     </xs:complexType>
                 </xs:element>
                 <xs:element name="authors">
@@ -54,20 +50,10 @@
                     </xs:complexType>
                 </xs:element>
             </xs:sequence>
-            <xs:attribute name="numbered" type="xs:boolean"/>
             <xs:attribute name="recived_at" type="xs:date"/>
             <xs:attribute name="revisited_at" type="xs:date"/>
             <xs:attribute name="accepted_at" type="xs:date"/>
-            <xs:attribute name="font_type" type="xs:string"/>
             <xs:attribute name="id" type="xs:ID" use="required"/>
-            <xs:attribute default="available" name="state">
-                <xs:simpleType>
-                    <xs:restriction base="xs:string">
-                        <xs:enumeration value="available"/>
-                        <xs:enumeration value="deleted"/>
-                    </xs:restriction>
-                </xs:simpleType>
-            </xs:attribute>
             <xs:attribute name="version" type="xs:positiveInteger" use="required"/>
             <xs:attribute default="true" name="tableOfContent" type="xs:boolean"/>
         </xs:complexType>
@@ -119,9 +105,6 @@
             </xs:element>
         </xs:sequence>
         <xs:attribute default="true" name="border" type="xs:boolean"/>
-        <xs:attribute name="border_size" default="1" type="xs:positiveInteger"/>
-        <xs:attribute name="border_color" default="balck" type="xs:string"/>
-        <xs:attribute name="color" default="white" type="xs:string"/>
         <xs:attribute name="id" type="xs:ID" use="required"/>
     </xs:complexType>
     <xs:complexType name="TImage">
@@ -133,24 +116,35 @@
                     </xs:restriction>
                 </xs:simpleType>
             </xs:element>
-            <xs:element name="source" type="xs:string"> </xs:element>
+            <xs:element name="source">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:minLength value="1"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
         </xs:sequence>
         <xs:attribute name="height" type="xs:positiveInteger" default="100"/>
         <xs:attribute name="width" type="xs:positiveInteger" default="100"/>
         <xs:attribute name="id" type="xs:ID" use="required"/>
     </xs:complexType>
     <xs:complexType name="TReference">
-        <xs:sequence>
-            <xs:element maxOccurs="unbounded" name="author" type="TPerson"/>
-            <xs:element name="book">
-                <xs:complexType>
-                    <xs:attribute name="year" type="xs:positiveInteger"/>
-                    <xs:attribute name="name" type="xs:string"/>
-                </xs:complexType>
+        <xs:choice>
+            <xs:element name="book" minOccurs="0">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:minLength value="1"/>
+                    </xs:restriction>
+                </xs:simpleType>
             </xs:element>
-            <xs:element minOccurs="0" name="link" type="xs:string"/>
-            <xs:element minOccurs="0" name="page" type="xs:positiveInteger"/>
-        </xs:sequence>
+            <xs:element minOccurs="0" name="link">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:minLength value="1"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+        </xs:choice>
         <xs:attribute name="id" type="xs:ID" use="required"/>
     </xs:complexType>
     <xs:complexType mixed="false" name="TComment">

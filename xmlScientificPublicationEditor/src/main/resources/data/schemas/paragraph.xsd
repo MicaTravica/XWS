@@ -49,9 +49,9 @@
         </xs:attribute>
     </xs:complexType>
     <xs:complexType name="TListItem">
-        <xs:choice>
-            <xs:element name="text" type="TText"/>
-        </xs:choice>
+        <xs:sequence>
+            <xs:element name="cursive" type="TCursive"/>
+        </xs:sequence>
     </xs:complexType>
     <xs:complexType name="TQuote">
         <xs:sequence>
