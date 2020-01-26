@@ -31,12 +31,12 @@ import javax.xml.bind.annotation.XmlType;
 @XmlEnum
 public enum TRole {
 
-    @XmlEnumValue("user")
-    USER("user"),
-    @XmlEnumValue("reviewer")
-    REVIEWER("reviewer"),
-    @XmlEnumValue("redactor")
-    REDACTOR("redactor");
+    @XmlEnumValue("ROLE_USER")
+    ROLE_USER("ROLE_USER"),
+    @XmlEnumValue("ROLE_REVIEWER")
+    ROLE_REVIEWER("ROLE_REVIEWER"),
+    @XmlEnumValue("ROLE_REDACTOR")
+    ROLE_REDACTOR("ROLE_REDACTOR");
     private final String value;
 
     TRole(String v) {
