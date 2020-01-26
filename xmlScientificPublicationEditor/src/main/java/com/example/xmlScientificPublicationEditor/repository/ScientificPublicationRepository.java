@@ -60,8 +60,8 @@ public class ScientificPublicationRepository {
 	public String save(String scientificPublication) throws Exception {
 		Document document = DOMParser.buildDocument(scientificPublication, scientificPublicationSchemaPath);
 		String id = "sp" + idGeneratorService.getId("scientificPublication");
-		document.getElementsByTagName("scientificPublication").item(0).getAttributes().getNamedItem("id")
-				.setTextContent(id);
+		document.getDocumentElement().getAttributes()
+					.getNamedItem("id").setTextContent(id);
 		String toSave = DOMParser.parseDocument(document);
 		StoreToDB.store(scientificPublicationCollectionId, id, toSave);
 		return id;

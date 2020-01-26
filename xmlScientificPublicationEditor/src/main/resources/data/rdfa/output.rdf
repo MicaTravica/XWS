@@ -1,16 +1,8 @@
 <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:h="http://www.w3.org/1999/xhtml">
-  <rdf:Description rdf:about="localhost:8081/api/coverLetter/cv4">
-    <pred:writtenFor xmlns:pred="http://www.uns.ac.rs/Tim1/examples/predicate/" rdf:resource="localhost:8081/api/scientificPublication/sp2"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="localhost:8081/api/coverLetter/cv4">
-    <pred:writtenAt xmlns:pred="http://www.uns.ac.rs/Tim1/examples/predicate/" rdf:datatype="http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral">
-		2019-12-13
-	</pred:writtenAt>
-  </rdf:Description>
-  <rdf:Description rdf:about="localhost:8081/api/coverLetter/cv4">
-    <pred:author xmlns:pred="http://www.uns.ac.rs/Tim1/examples/predicate/" rdf:resource="localhost:8081/api/person/dusanbzr@gmail.com"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="localhost:8081/api/coverLetter/cv4">
-    <pred:contactPerson xmlns:pred="http://www.uns.ac.rs/Tim1/examples/predicate/" rdf:resource="localhost:8081/api/person/saska@gmail.com"/>
-  </rdf:Description>
+  <!--Could not produce the triple for: localhost:8081/api/questionnaire/q1 - pred:rewieved - localhost:8081/api/scientificPublication/1-->
+  <!--Could not produce the triple for: localhost:8081/api/questionnaire/q1 - pred:writtenAt - 
+        2019-12-13
+    -->
+  <!--Could not produce the triple for: localhost:8081/api/questionnaire/q1 - pred:reviewer - localhost:8081/api/person/dusanbzr@gmail.com-->
+  <!--Could not produce the triple for: localhost:8081/api/questionnaire/q1 - pred:question - localhost:8081/api/questionnaire/q1/qe1-->
 </rdf:RDF>

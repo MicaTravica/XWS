@@ -38,7 +38,7 @@ public class CoverLetterRepository {
 
 	public String findOne(String id) throws Exception {
 		String retVal = null;
-		String xpathExp = "//coverLetter[@id=\"" + id + "\"]";
+		String xpathExp = "//ns1:coverLetter[@id=\"" + id + "\"]";
 		ResourceSet resultSet = RetriveFromDB.executeXPathExpression(coverLetterCollectionId, xpathExp,
 				TARGET_NAMESPACE);
 		if (resultSet == null) {
@@ -66,7 +66,7 @@ public class CoverLetterRepository {
 	public String save(String coverLetter) throws Exception {
 		Document document = DOMParser.buildDocument(coverLetter, coverLetterSchemaPath);
 		String id = "cl" + idGeneratorService.getId("coverLetter");
-		document.getElementsByTagName("coverLetter").item(0).getAttributes().getNamedItem("id").setTextContent(id);
+		document.getDocumentElement().getAttributes().getNamedItem("id").setTextContent(id);
 		String toSave = DOMParser.parseDocument(document);
 		StoreToDB.store(coverLetterCollectionId, id, toSave);
 		return id;
@@ -86,7 +86,7 @@ public class CoverLetterRepository {
 	}
 
 	public void delete(String id) throws Exception {
-		String xpathExp = "/coverLetter";
+		String xpathExp = "/ns1:coverLetter";
 		long mods = UpdateDB.delete(coverLetterCollectionId, id, xpathExp);
 		if (mods == 0) {
 			throw new ResourceNotDeleted(String.format("Cover letter with documentId %s", id));

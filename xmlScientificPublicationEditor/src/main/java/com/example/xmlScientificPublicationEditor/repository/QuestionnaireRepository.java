@@ -37,7 +37,7 @@ public class QuestionnaireRepository {
 
 	public String findOne(String id) throws Exception {
 		String retVal = null;
-		String xpathExp = "//questionnaire[@id=\"" + id + "\"]";
+		String xpathExp = "//ns1:questionnaire[@id=\"" + id + "\"]";
 		ResourceSet resultSet = RetriveFromDB.executeXPathExpression(QuestionnaireCollectionId, xpathExp,
 				TARGET_NAMESPACE);
 		if (resultSet == null) {
@@ -65,7 +65,7 @@ public class QuestionnaireRepository {
 	public String save(String questionnaire) throws Exception {
 		Document document = DOMParser.buildDocument(questionnaire, QuestionnaireSchemaPath);
 		String id = "que" + idGeneratorService.getId("questionnaire");
-		document.getElementsByTagName("questionnaire").item(0).getAttributes().getNamedItem("id").setTextContent(id);
+		document.getDocumentElement().getAttributes().getNamedItem("id").setTextContent(id);
 		String toSave = DOMParser.parseDocument(document);
 		StoreToDB.store(QuestionnaireCollectionId, id, toSave);
 		return id;
@@ -85,7 +85,7 @@ public class QuestionnaireRepository {
 	}
 
 	public void delete(String id) throws Exception {
-		String xpathExp = "/questionnaire";
+		String xpathExp = "/ns1:questionnaire";
 		long mods = UpdateDB.delete(QuestionnaireCollectionId, id, xpathExp);
 		if (mods == 0) {
 			throw new ResourceNotDeleted(String.format("Questionnaire with documentId %s", id));
