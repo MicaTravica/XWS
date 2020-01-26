@@ -9,7 +9,7 @@ declare const Xonomy: any;
 })
 export class AddPublicationComponent implements OnInit {
 
-  publicationXml = '<list><item label=\'one\'/><item label=\'two\'/></list>';
+  publicationXml = '';
 
   constructor(private publicationService: PublicationService) { }
 
@@ -138,7 +138,6 @@ export class AddPublicationComponent implements OnInit {
               action: Xonomy.deleteElement,
               hideIf: function (jsElement) {
                 return jsElement.parent().getChildElements('author').length < 2;
-
               }
             }]
         },
@@ -459,7 +458,6 @@ export class AddPublicationComponent implements OnInit {
           ]
         },
         'cursive': {
-          canDropTo: ['paragraph'],
           menu: [
             {
               caption: 'Append an <bold>',
@@ -572,7 +570,7 @@ export class AddPublicationComponent implements OnInit {
             {
               caption: 'Delete this underline',
               action: Xonomy.deleteElement
-            },{
+            }, {
               caption: 'Edit',
               action: Xonomy.editRaw,
               actionParameter: {
@@ -586,7 +584,6 @@ export class AddPublicationComponent implements OnInit {
               }
             }
           ]
-          
         },
         'quote': {
           
@@ -595,28 +592,133 @@ export class AddPublicationComponent implements OnInit {
 
         },
         'list': {
-          
+          canDropTo: ['paragraph'],
+          menu: [
+            { // uskladiti sa semomo da li da bude text ili cursive
+              // dodati i kod dodavanja liste
+              caption: 'Append an <listitem>',
+              action: Xonomy.newElementChild,
+              actionParameter: '<listitem><cursive/></listitem>'
+            },
+            {
+              caption: 'Delete this list',
+              action: Xonomy.deleteElement
+            }
+          ]
         },
         'listitem': {
-          
+          canDropTo: ['list'],
+          menu: [
+            {
+              caption: 'Delete this listitem',
+              action: Xonomy.deleteElement,
+              hideIf: function (jsElement) {
+                return jsElement.parent().getChildElements('listitem').length < 2;
+              }
+            }
+          ]
         },
         'image': {
-
+          canDropTo: ['paragraph'],
+          menu: [
+            {
+              caption: 'Delete this image',
+              action: Xonomy.deleteElement,
+            }
+          ]
         },
         'description': {
-          
+          menu: [
+            {
+              caption: 'Edit',
+              action: Xonomy.editRaw,
+              actionParameter: {
+                fromJs: function (jsElement) {
+                  return jsElement.getText();
+                },
+                toJs: function (txt, origElement) {
+                  origElement.addText(txt);
+                  return origElement;
+                }
+              }
+            }
+          ]
         },
         'source': {
-
+          menu: [
+            {
+              caption: 'Edit',
+              action: Xonomy.editRaw,
+              actionParameter: {
+                fromJs: function (jsElement) {
+                  return jsElement.getText();
+                },
+                toJs: function (txt, origElement) {
+                  origElement.addText(txt);
+                  return origElement;
+                }
+              }
+            }
+          ]
         },
         'table': {
-
+          canDropTo: ['paragraph'],
+          menu: [
+            {
+              caption: 'Append an <table_row>',
+              action: Xonomy.newElementChild,
+              actionParameter: '<table_row><table_cell/></table_row>'
+            },
+            {
+              caption: 'Delete this table',
+              action: Xonomy.deleteElement
+            }
+          ]
         },
         'table_row': {
-          
+          canDropTo: ['table'],
+          localDropOnly: function (jsElement) {
+            return jsElement.parent().getChildElements('table_row').length < 2;
+          },
+          menu: [
+            {
+              caption: 'Append an <table_cell>',
+              action: Xonomy.newElementChild,
+              actionParameter: '<table_cell/>'
+            },
+            {
+              caption: 'Delete this table_row',
+              action: Xonomy.deleteElement,
+              hideIf: function (jsElement) {
+                return jsElement.parent().getChildElements('table_row').length < 2;
+              }
+            }
+          ]
         },
         'table_cell': {
-          
+          canDropTo: ['table_row'],
+          localDropOnly: function (jsElement) {
+            return jsElement.parent().getChildElements('table_cell').length < 2;
+          },
+          menu: [
+            {
+              caption: 'Append an <cursive>',
+              action: Xonomy.newElementChild,
+              actionParameter: '<cursive/>'
+            },
+            {
+              caption: 'Append an <image>',
+              action: Xonomy.newElementChild,
+              actionParameter: '<image><description/><source/></image>'
+            },
+            {
+              caption: 'Delete this table_cell',
+              action: Xonomy.deleteElement,
+              hideIf: function (jsElement) {
+                return jsElement.parent().getChildElements('table_cell').length < 2;
+              }
+            }
+          ]
         },
         item: {
           menu: [{
@@ -652,7 +754,7 @@ export class AddPublicationComponent implements OnInit {
       }
     };
     // ovo ce dolaziti sa backenda
-    const xml = '<scientificPublication id="sp1" version="1"><caption id = "c1" > Moj rad</caption><authors><author><name>Milica</name><surname>Travica</surname><email>mcia97@eamil.com</email><phone>123-123456</phone><institution id="ins1"><name>FTN</name><address><city>Novi Sad</city><streetNumber>1</streetNumber><floorNumber>12</floorNumber><street>Nova ulica</street><country>Serbia</country></address></institution><expertise></expertise></author><author><name>Milica</name><surname>Travica</surname><email>mcia97@eamil.com</email><phone>123-123456</phone><institution id="ins2"><name>FTN</name><address><city>Novi Sad</city><streetNumber>1</streetNumber><floorNumber>12</floorNumber><street>Nova ulica</street><country>Serbia</country></address></institution><expertise></expertise></author><author><name>Milica</name><surname>Travica</surname><email>mcia97@eamil.com</email><phone>123-123456</phone><institution id="ins3"><name>FTN</name><address><city>Novi Sad</city><streetNumber>1</streetNumber><floorNumber>12</floorNumber><street>Nova ulica</street><country>Serbia</country></address></institution><expertise></expertise></author></authors><abstract id="abs1"><keywords><keyword>rec1</keyword><keyword>druga rec</keyword><keyword>tec treca</keyword><keyword>najnovija rec</keyword><keyword>ja sam rec</keyword></keywords><paragraph/></abstract></scientificPublication>';
+    this.publicationXml = '<scientificPublication id="sp1" version="1"><caption id = "c1" > Moj rad</caption><authors><author><name>Milica</name><surname>Travica</surname><email>mcia97@eamil.com</email><phone>123-123456</phone><institution id="ins1"><name>FTN</name><address><city>Novi Sad</city><streetNumber>1</streetNumber><floorNumber>12</floorNumber><street>Nova ulica</street><country>Serbia</country></address></institution><expertise></expertise></author><author><name>Milica</name><surname>Travica</surname><email>mcia97@eamil.com</email><phone>123-123456</phone><institution id="ins2"><name>FTN</name><address><city>Novi Sad</city><streetNumber>1</streetNumber><floorNumber>12</floorNumber><street>Nova ulica</street><country>Serbia</country></address></institution><expertise></expertise></author><author><name>Milica</name><surname>Travica</surname><email>mcia97@eamil.com</email><phone>123-123456</phone><institution id="ins3"><name>FTN</name><address><city>Novi Sad</city><streetNumber>1</streetNumber><floorNumber>12</floorNumber><street>Nova ulica</street><country>Serbia</country></address></institution><expertise></expertise></author></authors><abstract id="abs1"><keywords><keyword>rec1</keyword><keyword>druga rec</keyword><keyword>tec treca</keyword><keyword>najnovija rec</keyword><keyword>ja sam rec</keyword></keywords><paragraph/></abstract></scientificPublication>';
     const editor = document.getElementById('ecitor');
     // tslint:disable-next-line: no-unused-expression
     new Xonomy.render(this.publicationXml, editor, docSpec);
