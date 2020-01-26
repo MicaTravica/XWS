@@ -9,7 +9,7 @@
             <xs:element name="idScientificPublication" type="xs:IDREF"/>
             <xs:element maxOccurs="unbounded" name="review" type="TReview"/>
         </xs:sequence>
-        <xs:attribute name="id" type="xs:ID" use="required"/>
+        <xs:attribute name="id" type="xs:string" use="required"/>
         <xs:attribute default="inProgress" name="state">
             <xs:simpleType>
                 <xs:restriction base="xs:string">
@@ -25,8 +25,8 @@
             <xs:element name="reviewer">
                 <xs:complexType>
                     <xs:sequence>
-                        <xs:element name="idReviewer" type="xs:IDREF"/>
-                        <xs:element name="idQuestionnaire" type="xs:IDREF"/>
+                        <xs:element name="idReviewer" type="xs:string"/>
+                        <xs:element name="idQuestionnaire" type="xs:string"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
@@ -41,7 +41,7 @@
             </xs:element>
         </xs:sequence>
         <xs:attribute name="id" type="xs:ID" use="required"/>
-        <xs:attribute name="idScientificPublication" type="xs:IDREF"/>
+        <xs:attribute name="idScientificPublication" type="xs:string"/>
         <xs:attribute name="versionScientificPublication" type="xs:positiveInteger"/>
     </xs:complexType>
 </xs:schema>

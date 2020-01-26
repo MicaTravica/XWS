@@ -23,7 +23,7 @@
                                 </xs:simpleType>
                             </xs:element>
                         </xs:sequence>
-                        <xs:attribute name="id"/>
+                        <xs:attribute name="id" type="xs:string" use="required"/>
                     </xs:complexType>
                 </xs:element>
                 <xs:element name="authors">
@@ -50,12 +50,14 @@
                     </xs:complexType>
                 </xs:element>
             </xs:sequence>
-            <xs:attribute name="recived_at" type="xs:date"/>
-            <xs:attribute name="revisited_at" type="xs:date"/>
-            <xs:attribute name="accepted_at" type="xs:date"/>
-            <xs:attribute name="id" type="xs:ID" use="required"/>
+
+            <xs:attribute name="id" type="xs:string" use="required"/>
             <xs:attribute name="version" type="xs:positiveInteger" use="required"/>
             <xs:attribute default="true" name="tableOfContent" type="xs:boolean"/>
+            <xs:attribute name="accepted_at" type="xs:date"/>
+            <xs:attribute name="revisited_at" type="xs:date"/>
+            <xs:attribute name="recived_at" type="xs:date"/>
+            <xs:anyAttribute processContents="lax"/>
         </xs:complexType>
     </xs:element>
     <xs:complexType name="TChapter">
@@ -64,7 +66,7 @@
             <xs:element maxOccurs="unbounded" minOccurs="0" name="subchapter" type="TChapter"/>
         </xs:sequence>
         <xs:attribute name="title" type="xs:string" use="required"/>
-        <xs:attribute name="id" type="xs:ID" use="required"/>
+        <xs:attribute name="id" type="xs:string" use="required"/>
     </xs:complexType>
     <xs:complexType name="TAbstract">
         <xs:sequence>
@@ -83,7 +85,7 @@
             </xs:element>
             <xs:element maxOccurs="unbounded" name="paragraph" type="TRichParagraph"/>
         </xs:sequence>
-        <xs:attribute name="id" type="xs:ID" use="required"/>
+        <xs:attribute name="id" type="xs:string" use="required"/>
     </xs:complexType>
     <xs:complexType name="TTable">
         <xs:sequence>
@@ -105,7 +107,7 @@
             </xs:element>
         </xs:sequence>
         <xs:attribute default="true" name="border" type="xs:boolean"/>
-        <xs:attribute name="id" type="xs:ID" use="required"/>
+        <xs:attribute name="id" type="xs:string" use="required"/>
     </xs:complexType>
     <xs:complexType name="TImage">
         <xs:sequence>
@@ -126,7 +128,7 @@
         </xs:sequence>
         <xs:attribute name="height" type="xs:positiveInteger" default="100"/>
         <xs:attribute name="width" type="xs:positiveInteger" default="100"/>
-        <xs:attribute name="id" type="xs:ID" use="required"/>
+        <xs:attribute name="id" type="xs:string" use="required"/>
     </xs:complexType>
     <xs:complexType name="TReference">
         <xs:choice>
@@ -145,14 +147,14 @@
                 </xs:simpleType>
             </xs:element>
         </xs:choice>
-        <xs:attribute name="id" type="xs:ID" use="required"/>
+        <xs:attribute name="id" type="xs:string" use="required"/>
     </xs:complexType>
     <xs:complexType mixed="false" name="TComment">
         <xs:choice>
             <xs:element name="content" type="TParagraph"/>
         </xs:choice>
-        <xs:attribute name="ref" type="xs:IDREF"/>
-        <xs:attribute name="id" type="xs:ID"/>
+        <xs:attribute name="id" type="xs:string" use="required"/>
+        <xs:anyAttribute/>
     </xs:complexType>
     <xs:complexType name="TRichParagraph">
         <xs:complexContent mixed="false">

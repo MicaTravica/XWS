@@ -6,7 +6,6 @@
 
     <xs:include schemaLocation="paragraph.xsd"/>
     <xs:include schemaLocation="person.xsd"/>
-    <xs:include schemaLocation="predicate.xsd"/>
 
     <xs:element name="questionnaire">
         <xs:complexType>
@@ -15,7 +14,7 @@
                     <xs:complexType>
                         <xs:simpleContent>
                             <xs:extension base="xs:date">
-                                <xs:attribute name="property" type="xs:string" use="required"/>
+                                <xs:anyAttribute processContents="lax"/>
                             </xs:extension>
                         </xs:simpleContent>
                     </xs:complexType>
@@ -24,13 +23,12 @@
                     <xs:complexType>
                         <xs:complexContent>
                             <xs:extension base="TPerson">
-                                <xs:attribute name="rel" type="xs:string" use="required"/>
-                                <xs:attribute name="href" type="xs:string" use="required"/>
+                                <xs:anyAttribute processContents="lax"/>
                             </xs:extension>
                         </xs:complexContent>
                     </xs:complexType>
                 </xs:element>
-                <xs:element maxOccurs="unbounded" minOccurs="1" name="content" type="TParagraph"/>
+                <xs:element maxOccurs="unbounded" minOccurs="0" name="content" type="TParagraph"/>
                 <xs:element name="questions">
                     <xs:complexType>
                         <xs:sequence>
@@ -40,10 +38,8 @@
                 </xs:element>
                 <xs:element name="mark" type="xs:positiveInteger"/>
             </xs:sequence>
-            <xs:attribute name="id" type="xs:ID" use="required"/>
-            <xs:attribute name="about" type="xs:string" use="required"/>
-            <xs:attribute name="href" type="xs:string" use="required"/>
-            <xs:attribute name="rel" type="xs:string" use="required"/>
+            <xs:attribute name="id" type="xs:string" use="required"/>
+            <xs:anyAttribute processContents="lax"/>
         </xs:complexType>
     </xs:element>
     <xs:complexType name="TQuestion">
@@ -57,9 +53,8 @@
             </xs:element>
             <xs:element name="answer" type="TParagraph"/>
         </xs:sequence>
-        <xs:attribute name="rel" type="xs:string" use="required"/>
-        <xs:attribute name="href" type="xs:string" use="required"/>
-        <xs:attribute name="id" type="xs:ID" use="required"/>
+        <xs:attribute name="id" type="xs:string" use="required"/>
+        <xs:anyAttribute processContents="lax"/>
     </xs:complexType>
 
 </xs:schema>
