@@ -66,7 +66,7 @@ public class ScientificPublicationController extends BaseController {
 			produces = MediaType.APPLICATION_XML_VALUE)
 	public ResponseEntity<String> addScientificPublication(@RequestBody String scientificPublication) throws Exception {
 		String id = scientificPublicationService.save(scientificPublication);
-		return new ResponseEntity<>(String.format("You succesfully add sccientific publication with id %s", id), HttpStatus.OK);
+		return new ResponseEntity<>(String.format("You succesfully add scientific publication with id %s", id), HttpStatus.OK);
 	}
 	
 	@PutMapping(value="/scientificPublication", consumes = MediaType.APPLICATION_XML_VALUE,produces = MediaType.APPLICATION_XML_VALUE)
