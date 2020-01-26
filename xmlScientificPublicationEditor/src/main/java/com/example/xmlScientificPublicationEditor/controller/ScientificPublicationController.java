@@ -80,5 +80,11 @@ public class ScientificPublicationController extends BaseController {
 		scientificPublicationService.delete(id);
 		return new ResponseEntity<>(HttpStatus.ACCEPTED);
 	}
+	
+	@GetMapping(value = "/scientificPublication/getSPTemplate", produces = MediaType.APPLICATION_XML_VALUE)
+	public ResponseEntity<String> getSPTemplate() throws Exception {
+		String sp = scientificPublicationService.generateSPXMLTemplate();
+        return new ResponseEntity<>(sp, HttpStatus.OK);
+	}
 
 }

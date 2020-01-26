@@ -14,15 +14,22 @@ export class PublicationService {
   constructor(
     private http: HttpClient,
     private authService: AuthService
-    ) {
+  ) {
     this.usersUrl = environment.restPath + '/scientificPublication';
   }
 
+  getPublicationTeplate() {
+    return this.http.get(this.usersUrl + '/getSPTemplate',
+      {
+        headers: authHttpOptions(this.authService.getToken()),
+        responseType: 'text'
+      });
+  }
   addPublication(publication: string) {
     return this.http.post(this.usersUrl, publication,
       {
-          headers: authHttpOptions(this.authService.getToken()),
-          responseType: 'text'
-    });
+        headers: authHttpOptions(this.authService.getToken()),
+        responseType: 'text'
+      });
   }
 }

@@ -16,4 +16,6 @@ public interface ScientificPublicationService {
 
 	ByteArrayOutputStream findOnePDF(String id) throws Exception;
 
+	String generateSPXMLTemplate() throws Exception;
+
 }

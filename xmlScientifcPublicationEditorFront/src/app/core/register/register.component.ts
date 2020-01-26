@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 
-import { UserService } from '../../services/user-service/user.service'
+import { UserService } from '../../services/user-service/user.service';
 import { Auth } from 'src/app/models/auth-model/auth.model';
 
 declare var require: any;
@@ -16,7 +16,6 @@ const convert = require('xml-js');
 export class RegisterComponent implements OnInit {
   registerForm;
   submitted;
-  
   constructor(
     private userService: UserService,
     private formBuilder: FormBuilder

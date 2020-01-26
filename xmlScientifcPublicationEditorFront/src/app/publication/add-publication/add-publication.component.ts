@@ -22,25 +22,25 @@ export class AddPublicationComponent implements OnInit {
         console.log('I be validatin\' now!')
       },
       elements: {
-        'scientificPublication': {
+        'ns:scientificPublication': {
           menu: [
             {
-              caption: 'Append an <chapter>',
+              caption: 'Append an <ns:chapter>',
               action: Xonomy.newElementChild,
-              actionParameter: '<chapter id="chapter" title="some title"><paragraph id="paragraph"/></chapter>'
+              actionParameter: '<ns:chapter id="chapter" title="some title" xmlns:ns="http://www.uns.ac.rs/Tim1"><ns:paragraph id="paragraph"/></ns:chapter>'
             },
             {
-              caption: 'Append an <references>',
+              caption: 'Append an <ns:references>',
               action: Xonomy.newElementChild,
-              actionParameter: '<references><reference id="reference"/></references>',
+              actionParameter: '<ns:references xmlns:ns="http://www.uns.ac.rs/Tim1"><ns:reference id="reference"/></ns:references>',
               hideIf: function (jsElement) {
                 return jsElement.hasChildElement('references');
               }
             },
             {
-              caption: 'Append an <comments>',
+              caption: 'Append an <ns:comments>',
               action: Xonomy.newElementChild,
-              actionParameter: '<comments><comment id="comment" ref=""><content id="content"/></comment></comments>',
+              actionParameter: '<ns:comments xmlns:ns="http://www.uns.ac.rs/Tim1"><ns:comment id="comment" ref=""><ns:content id="content"/></ns:comment></ns:comments>',
               hideIf: function (jsElement) {
                 return jsElement.hasChildElement('comments');
               }
@@ -54,13 +54,13 @@ export class AddPublicationComponent implements OnInit {
             }
           }
         },
-        'caption': {
-          mustBeBefore: ['authors', 'abstract', 'chapter', 'references', 'comments'],
-          canDropTo: ['scientificPublication'],
+        'ns:caption': {
+          mustBeBefore: ['ns:authors', 'ns:abstract', 'ns:chapter', 'ns:references', 'ns:comments'],
+          canDropTo: ['ns:scientificPublication'],
         },
-        'value': {
+        'ns:value': {
           oneliner: true,
-          canDropTo: ['caption'],
+          canDropTo: ['ns:caption'],
           menu: [
             {
               caption: 'Edit',
@@ -77,40 +77,40 @@ export class AddPublicationComponent implements OnInit {
             }
           ]
         },
-        'authors': {
-          mustBeAfter: ['caption'],
-          mustBeBefore: ['abstract', 'chapter', 'references', 'comments'],
-          canDropTo: ['scientificPublication'],
+        'ns:authors': {
+          mustBeAfter: ['ns:caption'],
+          mustBeBefore: ['ns:abstract', 'ns:chapter', 'ns:references', 'ns:comments'],
+          canDropTo: ['ns:scientificPublication'],
           menu: [
             {
-              caption: 'Append an <author>',
+              caption: 'Append an <ns:author>',
               action: Xonomy.newElementChild,
-              actionParameter: '<author id="author"><name/><surname/><email/><phone/><institution id="institution"><name/><address><city/><street/><country/></address></institution></author>'
+              actionParameter: '<ns:author id="author" xmlns:ns="http://www.uns.ac.rs/Tim1"><ns:name/><ns:surname/><ns:email/><ns:phone/><ns:institution id="institution"><ns:name/><ns:address><ns:city/><ns:street/><ns:country/></ns:address></ns:institution></ns:author>'
             }]
         },
-        'abstract': {
-          mustBeAfter: ['caption', 'authors'],
-          mustBeBefore: ['chapter', 'references', 'comments'],
-          canDropTo: ['scientificPublication'],
+        'ns:abstract': {
+          mustBeAfter: ['ns:caption', 'ns:authors'],
+          mustBeBefore: ['ns:chapter', 'ns:references', 'ns:comments'],
+          canDropTo: ['ns:scientificPublication'],
           menu: [{
-            caption: 'Append an <paragraph>',
+            caption: 'Append an <ns:paragraph>',
             action: Xonomy.newElementChild,
-            actionParameter: '<paragraph id="paragraph"/>'
+            actionParameter: '<ns:paragraph id="paragraph" xmlns:ns="http://www.uns.ac.rs/Tim1"/>'
           },
           ]
         },
-        'chapter': {
-          mustBeAfter: ['caption', 'authors', 'abstract'],
-          mustBeBefore: ['references', 'comments'],
-          canDropTo: ['scientificPublication'],
+        'ns:chapter': {
+          mustBeAfter: ['ns:caption', 'ns:authors', 'ns:abstract'],
+          mustBeBefore: ['ns:references', 'ns:comments'],
+          canDropTo: ['ns:scientificPublication'],
           menu: [{
-            caption: 'Append an <paragraph>',
+            caption: 'Append an <ns:paragraph>',
             action: Xonomy.newElementChild,
-            actionParameter: '<paragraph id="paragraph"/>'
+            actionParameter: '<ns:paragraph id="paragraph" xmlns:ns="http://www.uns.ac.rs/Tim1"/>'
           }, {
-            caption: 'Append an <subchapter>',
+            caption: 'Append an <ns:subchapter>',
             action: Xonomy.newElementChild,
-            actionParameter: '<subchapter id="subchapter" title="some title"><paragraph id="paragraph"/></subchapter>'
+            actionParameter: '<ns:subchapter id="subchapter" title="some title" xmlns:ns="http://www.uns.ac.rs/Tim1"><ns:paragraph id="paragraph"/></ns:subchapter>'
           }],
           attributes: {
             'title': {
@@ -118,29 +118,29 @@ export class AddPublicationComponent implements OnInit {
             }
           }
         },
-        'references': {
-          mustBeAfter: ['caption', 'authors', 'abstract', 'chapter'],
-          mustBeBefore: ['comments'],
-          canDropTo: ['scientificPublication'],
+        'ns:references': {
+          mustBeAfter: ['ns:caption', 'ns:authors', 'ns:abstract', 'ns:chapter'],
+          mustBeBefore: ['ns:comments'],
+          canDropTo: ['ns:scientificPublication'],
           menu: [
             {
-              caption: 'Append an <reference>',
+              caption: 'Append an <ns:reference>',
               action: Xonomy.newElementChild,
-              actionParameter: '<reference id="reference"/>'
+              actionParameter: '<ns:reference id="reference" xmlns:ns="http://www.uns.ac.rs/Tim1"/>'
             },
           ]
         },
-        'comments': {
-          mustBeAfter: ['caption', 'authors', 'abstract', 'chapter', 'references'],
-          canDropTo: ['scientificPublication'],
+        'ns:comments': {
+          mustBeAfter: ['ns:caption', 'ns:authors', 'ns:abstract', 'ns:chapter', 'ns:references'],
+          canDropTo: ['ns:scientificPublication'],
           menu: [{
-            caption: 'Append an <comment>',
+            caption: 'Append an <ns:comment>',
             action: Xonomy.newElementChild,
-            actionParameter: '<comment id="comment" ref=""><content id="content"/></comment>'
+            actionParameter: '<ns:comment id="comment" ref="" xmlns:ns="http://www.uns.ac.rs/Tim1"><ns:content id="content"/></ns:comment>'
           },]
         },
-        'author': {
-          canDropTo: ['authors'],
+        'ns:author': {
+          canDropTo: ['ns:authors'],
           menu: [
             {
               caption: 'Delete this author',
@@ -150,10 +150,10 @@ export class AddPublicationComponent implements OnInit {
               }
             }]
         },
-        'name': {
+        'ns:name': {
           oneliner: true,
-          mustBeBefore: ['surname', 'email', 'phone', 'institution', 'address'],
-          canDropTo: ['author', 'institution'],
+          mustBeBefore: ['ns:surname', 'ns:email', 'ns:phone', 'ns:institution', 'ns:address'],
+          canDropTo: ['ns:author', 'ns:institution'],
           menu: [
             {
               caption: 'Edit',
@@ -170,11 +170,11 @@ export class AddPublicationComponent implements OnInit {
             }
           ]
         },
-        'surname': {
+        'ns:surname': {
           oneliner: true,
-          mustBeAfter: ['name'],
-          mustBeBefore: ['email', 'phone', 'institution'],
-          canDropTo: ['author'],
+          mustBeAfter: ['ns:name'],
+          mustBeBefore: ['ns:email', 'ns:phone', 'ns:institution'],
+          canDropTo: ['ns:author'],
           menu: [
             {
               caption: 'Edit',
@@ -191,11 +191,11 @@ export class AddPublicationComponent implements OnInit {
             }
           ]
         },
-        'email': {
+        'ns:email': {
           oneliner: true,
-          mustBeAfter: ['name', 'surname'],
-          mustBeBefore: ['phone', 'institution'],
-          canDropTo: ['author'], menu: [
+          mustBeAfter: ['ns:name', 'ns:surname'],
+          mustBeBefore: ['ns:phone', 'ns:institution'],
+          canDropTo: ['ns:author'], menu: [
             {
               caption: 'Edit',
               action: Xonomy.editRaw,
@@ -211,11 +211,11 @@ export class AddPublicationComponent implements OnInit {
             }
           ]
         },
-        'phone': {
+        'ns:phone': {
           oneliner: true,
-          mustBeAfter: ['name', 'surname', 'email'],
-          mustBeBefore: ['institution'],
-          canDropTo: ['author'],
+          mustBeAfter: ['ns:name', 'ns:surname', 'ns:email'],
+          mustBeBefore: ['ns:institution'],
+          canDropTo: ['ns:author'],
           menu: [
             {
               caption: 'Edit',
@@ -232,35 +232,35 @@ export class AddPublicationComponent implements OnInit {
             }
           ]
         },
-        'institution': {
-          mustBeAfter: ['name', 'surname', 'email', 'phone'],
-          canDropTo: ['author'],
+        'ns:institution': {
+          mustBeAfter: ['ns:name', 'ns:surname', 'ns:email', 'ns:phone'],
+          canDropTo: ['ns:author'],
         },
-        'address': {
-          mustBeAfter: ['name'],
-          canDropTo: ['institution'],
+        'ns:address': {
+          mustBeAfter: ['ns:name'],
+          canDropTo: ['ns:institution'],
           menu: [
             {
-              caption: 'Append an <streetNumber>',
+              caption: 'Append an <ns:streetNumber>',
               action: Xonomy.newElementChild,
-              actionParameter: '<streetNumber> </streetNumber>',
+              actionParameter: '<ns:streetNumber xmlns:ns="http://www.uns.ac.rs/Tim1"> </ns:streetNumber>',
               hideIf: function (jsElement) {
                 return jsElement.hasChildElement('streetNumber');
               }
             }, {
-              caption: 'Append an <floorNumber>',
+              caption: 'Append an <ns:floorNumber>',
               action: Xonomy.newElementChild,
-              actionParameter: '<floorNumber> </floorNumber>',
+              actionParameter: '<ns:floorNumber xmlns:ns="http://www.uns.ac.rs/Tim1"> </ns:floorNumber>',
               hideIf: function (jsElement) {
                 return jsElement.hasChildElement('floorNumber');
               }
             }
           ]
         },
-        'city': {
+        'ns:city': {
           oneliner: true,
-          mustBeBefore: ['streetNumber', 'floorNumber', 'street', 'country'],
-          canDropTo: ['address'],
+          mustBeBefore: ['ns:streetNumber', 'ns:floorNumber', 'ns:street', 'ns:country'],
+          canDropTo: ['ns:address'],
           menu: [
             {
               caption: 'Edit',
@@ -277,11 +277,11 @@ export class AddPublicationComponent implements OnInit {
             }
           ]
         },
-        'streetNumber': {
+        'ns:streetNumber': {
           oneliner: true,
-          mustBeAfter: ['city'],
-          mustBeBefore: ['floorNumber', 'street', 'country'],
-          canDropTo: ['address'],
+          mustBeAfter: ['ns:city'],
+          mustBeBefore: ['ns:floorNumber', 'ns:street', 'ns:country'],
+          canDropTo: ['ns:address'],
           menu: [
             {
               caption: 'Edit',
@@ -302,11 +302,11 @@ export class AddPublicationComponent implements OnInit {
             }
           ],
         },
-        'floorNumber': {
+        'ns:floorNumber': {
           oneliner: true,
-          mustBeAfter: ['city', 'streetNumber'],
-          mustBeBefore: ['street', 'country'],
-          canDropTo: ['address'],
+          mustBeAfter: ['ns:city', 'ns:streetNumber'],
+          mustBeBefore: ['ns:street', 'ns:country'],
+          canDropTo: ['ns:address'],
           menu: [{
             caption: 'Delete this floorNumber',
             action: Xonomy.deleteElement
@@ -326,11 +326,11 @@ export class AddPublicationComponent implements OnInit {
           }
           ]
         },
-        'street': {
+        'ns:street': {
           oneliner: true,
-          mustBeAfter: ['city', 'streetNumber', 'floorNumber'],
-          mustBeBefore: ['country'],
-          canDropTo: ['address'], menu: [
+          mustBeAfter: ['ns:city', 'ns:streetNumber', 'ns:floorNumber'],
+          mustBeBefore: ['ns:country'],
+          canDropTo: ['ns:address'], menu: [
             {
               caption: 'Edit',
               action: Xonomy.editRaw,
@@ -346,38 +346,39 @@ export class AddPublicationComponent implements OnInit {
             }
           ]
         },
-        'country': {
+        'ns:country': {
           oneliner: true,
-          mustBeAfter: ['city', 'streetNumber', 'floorNumber', 'street'],
-          canDropTo: ['address'], menu: [
-            {
-              caption: 'Edit',
-              action: Xonomy.editRaw,
-              actionParameter: {
-                fromJs: function (jsElement) {
-                  return jsElement.getText();
-                },
-                toJs: function (txt, origElement) {
-                  origElement.addText(txt);
-                  return origElement;
-                }
-              }
-            }
-          ]
-        },
-        'keywords': {
-          mustBeBefore: ['paragraph'],
-          canDropTo: ['abstract'],
+          mustBeAfter: ['ns:city', 'ns:streetNumber', 'ns:floorNumber', 'ns:street'],
+          canDropTo: ['ns:address'],
           menu: [
             {
-              caption: 'Append an <keyword>',
-              action: Xonomy.newElementChild,
-              actionParameter: '<keyword/>'
+              caption: 'Edit',
+              action: Xonomy.editRaw,
+              actionParameter: {
+                fromJs: function (jsElement) {
+                  return jsElement.getText();
+                },
+                toJs: function (txt, origElement) {
+                  origElement.addText(txt);
+                  return origElement;
+                }
+              }
             }
           ]
         },
-        'keyword': {
-          canDropTo: ['keywords'],
+        'ns:keywords': {
+          mustBeBefore: ['ns:paragraph'],
+          canDropTo: ['ns:abstract'],
+          menu: [
+            {
+              caption: 'Append an <ns:keyword>',
+              action: Xonomy.newElementChild,
+              actionParameter: '<ns:keyword xmlns:ns="http://www.uns.ac.rs/Tim1"/>'
+            }
+          ]
+        },
+        'ns:keyword': {
+          canDropTo: ['ns:keywords'],
           menu: [{
             caption: 'Edit',
             action: Xonomy.editRaw,
@@ -399,18 +400,18 @@ export class AddPublicationComponent implements OnInit {
             }
           }]
         },
-        'subchapter': {
-          mustBeAfter: ['paragraph'],
-          canDropTo: ['chapter', 'subchapter'],
+        'ns:subchapter': {
+          mustBeAfter: ['ns:paragraph'],
+          canDropTo: ['ns:chapter', 'ns:subchapter'],
           menu: [
             {
-              caption: 'Append an <paragraph>',
+              caption: 'Append an <ns:paragraph>',
               action: Xonomy.newElementChild,
-              actionParameter: '<paragraph id="paragraph"/>'
+              actionParameter: '<ns:paragraph id="paragraph" xmlns:ns="http://www.uns.ac.rs/Tim1"/>'
             }, {
-              caption: 'Append an <subchapter>',
+              caption: 'Append an <ns:subchapter>',
               action: Xonomy.newElementChild,
-              actionParameter: '<subchapter id="subchapter" title="some title"><paragraph id="paragraph"/></subchapter>'
+              actionParameter: '<ns:subchapter id="subchapter" title="some title" xmlns:ns="http://www.uns.ac.rs/Tim1"><ns:paragraph id="paragraph"/></ns:subchapter>'
             }
           ],
           attributes: {
@@ -419,39 +420,39 @@ export class AddPublicationComponent implements OnInit {
             }
           }
         },
-        'paragraph': {
-          mustBeAfter: ['keywords'],
-          mustBeBefore: ['subchapter'],
-          canDropTo: ['abstract'],
+        'ns:paragraph': {
+          mustBeAfter: ['ns:keywords'],
+          mustBeBefore: ['ns:subchapter'],
+          canDropTo: ['ns:abstract'],
           menu: [
             {
-              caption: 'Append an <text>',
+              caption: 'Append an <ns:text>',
               action: Xonomy.newElementChild,
-              actionParameter: '<text id="text"><cursive/></text>'
+              actionParameter: '<ns:text id="text" xmlns:ns="http://www.uns.ac.rs/Tim1"><ns:cursive/></ns:text>'
             },
             {
-              caption: 'Append an <quote>',
+              caption: 'Append an <ns:quote>',
               action: Xonomy.newElementChild,
-              actionParameter: '<quote id="quote" ref=""><cursive/></quote>'
+              actionParameter: '<ns:quote id="quote" ref="" xmlns:ns="http://www.uns.ac.rs/Tim1"><ns:cursive/></ns:quote>'
             },
             {
-              caption: 'Append an <formula>',
+              caption: 'Append an <ns:formula>',
               action: Xonomy.newElementChild,
-              actionParameter: '<formula/>'
+              actionParameter: '<ns:formula xmlns:ns="http://www.uns.ac.rs/Tim1"/>'
             },
             {
-              caption: 'Append an <list>',
+              caption: 'Append an <ns:list>',
               action: Xonomy.newElementChild,
-              actionParameter: '<list id="list" type="ordered"><listitem><cursive/></listitem></list>'
+              actionParameter: '<ns:list id="list" type="ordered" xmlns:ns="http://www.uns.ac.rs/Tim1"><ns:listitem><ns:cursive/></ns:listitem></ns:list>'
             },
             {
-              caption: 'Append an <image>',
+              caption: 'Append an <ns:image>',
               action: Xonomy.newElementChild,
-              actionParameter: '<image id="image"><description/><source/></image>'
+              actionParameter: '<ns:image id="image" xmlns:ns="http://www.uns.ac.rs/Tim1"><ns:description/><ns:source/></ns:image>'
             }, {
-              caption: 'Append an <table>',
+              caption: 'Append an <ns:table>',
               action: Xonomy.newElementChild,
-              actionParameter: '<table id="table" border="true"><table_row><table_cell/></table_row></table>'
+              actionParameter: '<ns:table id="table" border="true" xmlns:ns="http://www.uns.ac.rs/Tim1"><ns:table_row><ns:table_cell/></ns:table_row></ns:table>'
             },
             {
               caption: 'Delete this paragraph',
@@ -462,8 +463,8 @@ export class AddPublicationComponent implements OnInit {
             }
           ]
         },
-        'text': {
-          canDropTo: ['paragraph', 'content'],
+        'ns:text': {
+          canDropTo: ['ns:paragraph', 'ns:content'],
           menu: [
             {
               caption: 'Delete this text',
@@ -471,22 +472,22 @@ export class AddPublicationComponent implements OnInit {
             }
           ]
         },
-        'cursive': {
+        'ns:cursive': {
           menu: [
             {
-              caption: 'Append an <bold>',
+              caption: 'Append an <ns:bold>',
               action: Xonomy.newElementChild,
-              actionParameter: '<bold/>'
+              actionParameter: '<ns:bold xmlns:ns="http://www.uns.ac.rs/Tim1"/>'
             },
             {
-              caption: 'Append an <italic>',
+              caption: 'Append an <ns:italic>',
               action: Xonomy.newElementChild,
-              actionParameter: '<italic/>'
+              actionParameter: '<ns:italic xmlns:ns="http://www.uns.ac.rs/Tim1"/>'
             },
             {
-              caption: 'Append an <underline>',
+              caption: 'Append an <ns:underline>',
               action: Xonomy.newElementChild,
-              actionParameter: '<underline/>'
+              actionParameter: '<ns:underline xmlns:ns="http://www.uns.ac.rs/Tim1"/>'
             },
             {
               caption: 'Edit',
@@ -503,18 +504,18 @@ export class AddPublicationComponent implements OnInit {
             }
           ]
         },
-        'bold': {
-          canDropTo: ['cursive', 'italic', 'underline'],
+        'ns:bold': {
+          canDropTo: ['ns:cursive', 'ns:italic', 'ns:underline'],
           menu: [
             {
-              caption: 'Append an <italic>',
+              caption: 'Append an <ns:italic>',
               action: Xonomy.newElementChild,
-              actionParameter: '<italic/>'
+              actionParameter: '<ns:italic xmlns:ns="http://www.uns.ac.rs/Tim1"/>'
             },
             {
-              caption: 'Append an <underline>',
+              caption: 'Append an <ns:underline>',
               action: Xonomy.newElementChild,
-              actionParameter: '<underline/>'
+              actionParameter: '<ns:underline xmlns:ns="http://www.uns.ac.rs/Tim1"/>'
             },
             {
               caption: 'Delete this bold',
@@ -535,18 +536,18 @@ export class AddPublicationComponent implements OnInit {
             }
           ]
         },
-        'italic': {
-          canDropTo: ['cursive', 'bold', 'underline'],
+        'ns:italic': {
+          canDropTo: ['ns:cursive', 'ns:bold', 'ns:underline'],
           menu: [
             {
-              caption: 'Append an <bold>',
+              caption: 'Append an <ns:bold>',
               action: Xonomy.newElementChild,
-              actionParameter: '<bold/>'
+              actionParameter: '<ns:bold xmlns:ns="http://www.uns.ac.rs/Tim1"/>'
             },
             {
-              caption: 'Append an <underline>',
+              caption: 'Append an <ns:underline>',
               action: Xonomy.newElementChild,
-              actionParameter: '<underline/>'
+              actionParameter: '<ns:underline xmlns:ns="http://www.uns.ac.rs/Tim1"/>'
             },
             {
               caption: 'Delete this italic',
@@ -568,18 +569,18 @@ export class AddPublicationComponent implements OnInit {
           ]
 
         },
-        'underline': {
-          canDropTo: ['cursive', 'italic', 'bold'],
+        'ns:underline': {
+          canDropTo: ['ns:cursive', 'ns:italic', 'ns:bold'],
           menu: [
             {
-              caption: 'Append an <bold>',
+              caption: 'Append an <ns:bold>',
               action: Xonomy.newElementChild,
-              actionParameter: '<bold/>'
+              actionParameter: '<ns:bold xmlns:ns="http://www.uns.ac.rs/Tim1"/>'
             },
             {
-              caption: 'Append an <italic>',
+              caption: 'Append an <ns:italic>',
               action: Xonomy.newElementChild,
-              actionParameter: '<italic/>'
+              actionParameter: '<ns:italic xmlns:ns="http://www.uns.ac.rs/Tim1"/>'
             },
             {
               caption: 'Delete this underline',
@@ -599,8 +600,8 @@ export class AddPublicationComponent implements OnInit {
             }
           ]
         },
-        'quote': {
-          canDropTo: ['paragraph', 'content'],
+        'ns:quote': {
+          canDropTo: ['ns:paragraph', 'ns:content'],
           menu: [
             {
               caption: 'Delete this quote',
@@ -613,16 +614,16 @@ export class AddPublicationComponent implements OnInit {
             }
           }
         },
-        'formula': {
-          canDropTo: ['paragraph', 'content'],
+        'ns:formula': {
+          canDropTo: ['ns:paragraph', 'ns:content'],
         },
-        'list': {
-          canDropTo: ['paragraph', 'content'],
+        'ns:list': {
+          canDropTo: ['ns:paragraph', 'ns:content'],
           menu: [
             {
-              caption: 'Append an <listitem>',
+              caption: 'Append an <ns:listitem>',
               action: Xonomy.newElementChild,
-              actionParameter: '<listitem><cursive/></listitem>'
+              actionParameter: '<ns:listitem xmlns:ns="http://www.uns.ac.rs/Tim1"><ns:cursive/></ns:listitem>'
             },
             {
               caption: 'Delete this list',
@@ -638,8 +639,8 @@ export class AddPublicationComponent implements OnInit {
             }
           }
         },
-        'listitem': {
-          canDropTo: ['list'],
+        'ns:listitem': {
+          canDropTo: ['ns:list'],
           menu: [
             {
               caption: 'Delete this listitem',
@@ -650,8 +651,8 @@ export class AddPublicationComponent implements OnInit {
             }
           ]
         },
-        'image': {
-          canDropTo: ['paragraph'],
+        'ns:image': {
+          canDropTo: ['ns:paragraph'],
           menu: [
             {
               caption: 'Delete this image',
@@ -682,7 +683,7 @@ export class AddPublicationComponent implements OnInit {
             }
           }
         },
-        'description': {
+        'ns:description': {
           oneliner: true,
           menu: [
             {
@@ -700,7 +701,7 @@ export class AddPublicationComponent implements OnInit {
             }
           ]
         },
-        'source': {
+        'ns:source': {
           oneliner: true,
           menu: [
             {
@@ -718,13 +719,13 @@ export class AddPublicationComponent implements OnInit {
             }
           ]
         },
-        'table': {
-          canDropTo: ['paragraph'],
+        'ns:table': {
+          canDropTo: ['ns:paragraph'],
           menu: [
             {
-              caption: 'Append an <table_row>',
+              caption: 'Append an <ns:table_row>',
               action: Xonomy.newElementChild,
-              actionParameter: '<table_row><table_cell/></table_row>'
+              actionParameter: '<ns:table_row xmlns:ns="http://www.uns.ac.rs/Tim1"><ns:table_cell/></ns:table_row>'
             },
             {
               caption: 'Delete this table',
@@ -740,16 +741,16 @@ export class AddPublicationComponent implements OnInit {
             }
           }
         },
-        'table_row': {
-          canDropTo: ['table'],
+        'ns:table_row': {
+          canDropTo: ['ns:table'],
           localDropOnly: function (jsElement) {
             return jsElement.parent().getChildElements('table_row').length < 2;
           },
           menu: [
             {
-              caption: 'Append an <table_cell>',
+              caption: 'Append an <ns:table_cell>',
               action: Xonomy.newElementChild,
-              actionParameter: '<table_cell/>'
+              actionParameter: '<ns:table_cell xmlns:ns="http://www.uns.ac.rs/Tim1"/>'
             },
             {
               caption: 'Delete this table_row',
@@ -760,21 +761,21 @@ export class AddPublicationComponent implements OnInit {
             }
           ]
         },
-        'table_cell': {
-          canDropTo: ['table_row'],
+        'ns:table_cell': {
+          canDropTo: ['ns:table_row'],
           localDropOnly: function (jsElement) {
             return jsElement.parent().getChildElements('table_cell').length < 2;
           },
           menu: [
             {
-              caption: 'Append an <cursive>',
+              caption: 'Append an <ns:cursive>',
               action: Xonomy.newElementChild,
-              actionParameter: '<cursive/>'
+              actionParameter: '<ns:cursive xmlns:ns="http://www.uns.ac.rs/Tim1"/>'
             },
             {
-              caption: 'Append an <image>',
+              caption: 'Append an <ns:image>',
               action: Xonomy.newElementChild,
-              actionParameter: '<image id="image"><description/><source/></image>'
+              actionParameter: '<ns:image id="image" xmlns:ns="http://www.uns.ac.rs/Tim1"><ns:description/><ns:source/></ns:image>'
             },
             {
               caption: 'Delete this table_cell',
@@ -785,21 +786,21 @@ export class AddPublicationComponent implements OnInit {
             }
           ]
         },
-        'reference': {
-          canDropTo: ['references'],
+        'ns:reference': {
+          canDropTo: ['ns:references'],
           menu: [
             {
-              caption: 'Append an <book>',
+              caption: 'Append an <ns:book>',
               action: Xonomy.newElementChild,
-              actionParameter: '<book/>',
+              actionParameter: '<ns:book xmlns:ns="http://www.uns.ac.rs/Tim1"/>',
               hideIf: function (jsElement) {
                 return jsElement.hasElements();
               }
             },
             {
-              caption: 'Append an <link>',
+              caption: 'Append an <ns:link>',
               action: Xonomy.newElementChild,
-              actionParameter: '<link/>',
+              actionParameter: '<ns:link xmlns:ns="http://www.uns.ac.rs/Tim1"/>',
               hideIf: function (jsElement) {
                 return jsElement.hasElements();
               }
@@ -813,7 +814,7 @@ export class AddPublicationComponent implements OnInit {
             }
           ]
         },
-        'book': {
+        'ns:book': {
           oneliner: true,
           menu: [
             {
@@ -835,7 +836,7 @@ export class AddPublicationComponent implements OnInit {
           ]
 
         },
-        'link': {
+        'ns:link': {
           oneliner: true,
           menu: [
             {
@@ -856,8 +857,8 @@ export class AddPublicationComponent implements OnInit {
             }
           ]
         },
-        'comment': {
-          canDropTo: ['comments'],
+        'ns:comment': {
+          canDropTo: ['ns:comments'],
           menu: [
             {
               caption: 'Delete this comment',
@@ -872,28 +873,28 @@ export class AddPublicationComponent implements OnInit {
             }
           }
         },
-        'content': {
-          canDropTo: ['comment'],
+        'ns:content': {
+          canDropTo: ['ns:comment'],
           menu: [
             {
-              caption: 'Append an <text>',
+              caption: 'Append an <ns:text>',
               action: Xonomy.newElementChild,
-              actionParameter: '<text id="text"><cursive/></text>'
+              actionParameter: '<ns:text id="text" xmlns:ns="http://www.uns.ac.rs/Tim1"><ns:cursive/></ns:text>'
             },
             {
-              caption: 'Append an <quote>',
+              caption: 'Append an <ns:quote>',
               action: Xonomy.newElementChild,
-              actionParameter: '<quote id="quote" ref=""><cursive/></quote>'
+              actionParameter: '<ns:quote id="quote" ref="" xmlns:ns="http://www.uns.ac.rs/Tim1"><ns:cursive/></ns:quote>'
             },
             {
-              caption: 'Append an <formula>',
+              caption: 'Append an <ns:formula>',
               action: Xonomy.newElementChild,
-              actionParameter: '<formula/>'
+              actionParameter: '<ns:formula xmlns:ns="http://www.uns.ac.rs/Tim1"/>'
             },
             {
-              caption: 'Append an <list>',
+              caption: 'Append an <ns:list>',
               action: Xonomy.newElementChild,
-              actionParameter: '<list id="list" type="ordered"><listitem><cursive/></listitem></list>'
+              actionParameter: '<ns:list id="list" type="ordered" xmlns:ns="http://www.uns.ac.rs/Tim1"><ns:listitem><ns:cursive/></ns:listitem></ns:list>'
             },
             {
               caption: 'Delete this content',
@@ -905,11 +906,16 @@ export class AddPublicationComponent implements OnInit {
         }
       }
     };
-    // ovo ce dolaziti sa backenda
-    this.publicationXml = '<?xml version="1.0" encoding="UTF-8"?><scientificPublication xmlns="http://www.uns.ac.rs/Tim1"  id="sp1" tableOfContent="true" version="1"><caption id = "c1" ><value> Moj rad</value></caption><authors><author><name>Milica</name><surname>Travica</surname><email>mcia97@eamil.com</email><phone>123-123456</phone><institution id="ins1"><name>FTN</name><address><city>Novi Sad</city><streetNumber>1</streetNumber><floorNumber>12</floorNumber><street>Nova ulica</street><country>Serbia</country></address></institution><expertise></expertise></author><author><name>Milica</name><surname>Travica</surname><email>mcia97@eamil.com</email><phone>123-123456</phone><institution id="ins2"><name>FTN</name><address><city>Novi Sad</city><streetNumber>1</streetNumber><floorNumber>12</floorNumber><street>Nova ulica</street><country>Serbia</country></address></institution><expertise></expertise></author><author><name>Milica</name><surname>Travica</surname><email>mcia97@eamil.com</email><phone>123-123456</phone><institution id="ins3"><name>FTN</name><address><city>Novi Sad</city><streetNumber>1</streetNumber><floorNumber>12</floorNumber><street>Nova ulica</street><country>Serbia</country></address></institution><expertise></expertise></author></authors><abstract id="abs1"><keywords><keyword>rec1</keyword><keyword>druga rec</keyword><keyword>tec treca</keyword><keyword>najnovija rec</keyword><keyword>ja sam rec</keyword></keywords><paragraph id="paragraph"/></abstract></scientificPublication>';
-    const editor = document.getElementById('ecitor');
-    // tslint:disable-next-line: no-unused-expression
-    new Xonomy.render(this.publicationXml, editor, docSpec);
+    this.publicationService.getPublicationTeplate().subscribe(
+      (data: string) => {
+        this.publicationXml = data;
+        const editor = document.getElementById('editor');
+        // tslint:disable-next-line: no-unused-expression
+        new Xonomy.render(this.publicationXml, editor, docSpec);
+      }, () => { },
+      () => {
+      }
+    );
   }
 
   addPublication() {
