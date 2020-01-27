@@ -906,7 +906,7 @@ export class AddPublicationComponent implements OnInit {
         }
       }
     };
-    this.publicationService.getPublicationTeplate().subscribe(
+    this.publicationService.getPublicationTemplate().subscribe(
       (data: string) => {
         this.publicationXml = data;
         const editor = document.getElementById('editor');
