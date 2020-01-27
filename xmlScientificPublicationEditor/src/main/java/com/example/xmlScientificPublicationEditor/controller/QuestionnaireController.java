@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -59,6 +60,13 @@ public class QuestionnaireController extends BaseController {
 	public ResponseEntity<String> delete(@PathVariable("id")String id) throws Exception{
 		questionnaireService.delete(id);
 		return new ResponseEntity<>(HttpStatus.ACCEPTED);
+	}
+	
+	@GetMapping(value = "/questionnaire/getQuestionnaireTemplate", produces = MediaType.APPLICATION_XML_VALUE)
+	@PreAuthorize("hasRole('ROLE_REVIEWER') or hasRole('ROLE_REDACTOR')")
+	public ResponseEntity<String> getQuestionnaireTemplate() throws Exception {
+		String questionnaire = questionnaireService.generateQuestionnaireXMLTemplate();
+        return new ResponseEntity<>(questionnaire, HttpStatus.OK);
 	}
 
 }
