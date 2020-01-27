@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CoverLetterService } from '../services/cover-letter-service/cover-letter.service';
 import { docSpec } from '../util/xonomy-editor-doc-spec/doc-spec-coverLetter';
+import { ToastrService } from 'ngx-toastr';
+import { HttpErrorResponse } from '@angular/common/http';
 declare const Xonomy: any;
 
 @Component({
@@ -11,8 +13,12 @@ declare const Xonomy: any;
 export class AddCoverLetterComponent implements OnInit {
 
   clXml = '';
+  file: File;
 
-  constructor(private clService: CoverLetterService) { }
+  constructor(
+    private clService: CoverLetterService,
+    private toastr: ToastrService
+  ) { }
 
   ngOnInit() {
 
@@ -28,10 +34,24 @@ export class AddCoverLetterComponent implements OnInit {
 
   addCL() {
     this.clXml = Xonomy.harvest() as string;
-    this.clService.addCL(this.clXml)
-      .subscribe(res => {
-        console.log(res);
+    this.clService.addCL(this.clXml).subscribe(
+      (data: string) => {
+        this.toastr.success(data);
+      }, (error: HttpErrorResponse) => {
+        this.toastr.error(error.error);
       });
   }
 
+  onFileSelected(event: any) {
+    this.file = event.target.files[0];
+  }
+
+  onUpload() {
+    this.clService.upload(this.file).subscribe(
+      (data: string) => {
+        this.toastr.success(data);
+      }, (error: HttpErrorResponse) => {
+        this.toastr.error(error.error);
+      });
+  }
 }
