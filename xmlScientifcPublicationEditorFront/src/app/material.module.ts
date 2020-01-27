@@ -1,7 +1,5 @@
 import { NgModule } from '@angular/core';
 
-import { MatFileUploadModule } from 'angular-material-fileupload';
-
 import {
   MatButtonModule,
   MatMenuModule,
@@ -46,8 +44,7 @@ import {
     MatCheckboxModule,
     MatTabsModule,
     MatDialogModule,
-    MatRadioModule,
-    MatFileUploadModule
+    MatRadioModule
   ],
   exports: [
     MatButtonModule,
@@ -69,8 +66,7 @@ import {
     MatCheckboxModule,
     MatTabsModule,
     MatDialogModule,
-    MatRadioModule,
-    MatFileUploadModule
+    MatRadioModule
   ]
 })
 export class MaterialModule {}
