@@ -18,7 +18,7 @@ export class PublicationService {
     this.url = environment.restPath + '/scientificPublication';
   }
 
-  getPublicationTeplate() {
+  getPublicationTemplate() {
     return this.http.get(this.url + '/getSPTemplate',
       {
         headers: authHttpOptions(this.authService.getToken()),

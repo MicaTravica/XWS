@@ -1025,12 +1025,7 @@ export class AddPublicationComponent implements OnInit {
         }
       }
     };
-<<<<<<< HEAD
     this.publicationService.getPublicationTemplate().subscribe(
-=======
-
-    this.publicationService.getPublicationTeplate().subscribe(
->>>>>>> master
       (data: string) => {
         this.publicationXml = data;
         const editor = document.getElementById('editor');
