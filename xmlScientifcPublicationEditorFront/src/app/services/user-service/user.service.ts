@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { User } from '../../models/user-model/user.model'
 import { Router } from '@angular/router';
 import {httpOptions, authHttpOptions} from '../../util/http-util';
-import { LoginComponent } from 'src/app/core/login/login.component';
 import { environment } from 'src/environments/environment';
 import { AuthService } from '../auth-service/auth.service';
 
@@ -58,17 +56,12 @@ export class UserService {
     });
   }
 
-  public getUserFromLocalStorage() {
-    let user: User = new User();
-    const u = localStorage.getItem('user');
-    if (!u) {
-      const token = this.authService.getToken();
-      this.me(token).subscribe(
-      data => {
-        localStorage.setItem('user', JSON.stringify(data));
-      });
-    }
-    user = user.deserialize(u);
-    return user;
+  public savePerson(personXML: string) {
+    const token = this.authService.getToken();
+    return this.http.put(environment.restPath, personXML,
+      {
+        headers: authHttpOptions(token),
+        responseType: 'text'
+      })
   }
 }

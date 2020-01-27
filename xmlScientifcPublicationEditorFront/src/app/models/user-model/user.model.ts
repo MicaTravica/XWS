@@ -1,19 +1,20 @@
-import {Deserializable} from '../deserializable.model';
+export class Person {
+  public 'ns:name': string;
+  public 'ns:surname': string;
+  public 'ns:email': string;
+  public 'ns:phone': string;
+  public 'ns:institution': Institution;
+}
 
-export class User implements Deserializable {
-  public id: number;
-  public name: string;
-  public surname: string;
-  public email: string;
-  public phone: string;
-  public username: string;
-  public password: string;
+export class Institution {
+  public 'ns:name': string;
+  public 'ns:address': Address;
+}
 
-  deserialize(input: any): this {
-    return Object.assign(this, input);
-  }
-
-  getEmail() {
-    return this.email;
-  }
+export class Address {
+  public 'ns:city': string;
+  public 'ns:streetNumber': number;
+  public 'ns:floorNumber': number;
+  public 'ns:street': string;
+  public 'ns:country': string;
 }

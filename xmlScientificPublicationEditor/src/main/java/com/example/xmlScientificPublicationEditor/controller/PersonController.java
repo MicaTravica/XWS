@@ -52,8 +52,8 @@ public class PersonController extends BaseController {
         return new ResponseEntity<>(auth, HttpStatus.OK);
 	}
 
-	@GetMapping(value = "/person/{email}", produces = MediaType.APPLICATION_XML_VALUE)
-	public ResponseEntity<TPerson> getPersonById(@PathVariable("email") String email ) throws Exception {
+	@GetMapping(value = "/person/{id}", produces = MediaType.APPLICATION_XML_VALUE)
+	public ResponseEntity<TPerson> getPersonById(@PathVariable("id") String email ) throws Exception {
 		TPerson person = personService.findOne(email);
         return new ResponseEntity<>(person, HttpStatus.OK);
 	}

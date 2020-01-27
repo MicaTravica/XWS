@@ -1,6 +1,7 @@
 package com.example.xmlScientificPublicationEditor.serviceImpl;
 
 import java.io.StringWriter;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -11,6 +12,8 @@ import com.example.xmlScientificPublicationEditor.exception.ResourceExistsExcept
 import com.example.xmlScientificPublicationEditor.exception.ResourceNotFoundException;
 import com.example.xmlScientificPublicationEditor.model.authPerson.TAuthPerson;
 import com.example.xmlScientificPublicationEditor.model.authPerson.TRole;
+import com.example.xmlScientificPublicationEditor.model.person.TAddress;
+import com.example.xmlScientificPublicationEditor.model.person.TInstitution;
 import com.example.xmlScientificPublicationEditor.model.person.TPerson;
 import com.example.xmlScientificPublicationEditor.repository.person.PersonRepository;
 import com.example.xmlScientificPublicationEditor.service.PersonService;
@@ -41,9 +44,32 @@ public class PersonServiceImpl implements PersonService {
         person.setPassword(b.encode(person.getPassword()));
         person.getRoles().getRole().clear();
         person.getRoles().getRole().add(TRole.ROLE_USER);
+        TPerson tp = generatePerson(person);
+        TPerson saved = personRepository.save(tp);
+        person.setPerson(saved.getId());
         return personRepository.save(person);
     }
 
+    private TPerson generatePerson(TAuthPerson person) {
+    	TPerson tp = new TPerson();
+    	tp.setId("person");
+        tp.setName("Name");
+        tp.setSurname("Surname");
+        tp.setPhone("123-123456");
+        tp.setEmail(person.getEmail());
+        TInstitution ti = new TInstitution();
+        ti.setName("Institution name");
+        TAddress ta = new TAddress();
+        ta.setCity("City");
+        ta.setFloorNumber(BigInteger.ZERO);
+        ta.setStreetNumber("0");
+        ta.setStreet("Street");
+        ta.setCountry("Country");
+        ti.setAddress(ta);
+        tp.setInstitution(ti);
+        return tp;
+    }
+    
     @Override
     public TPerson findOne(String id) throws Exception {
         TPerson person = personRepository.findOne(PersonRepository.makeXpathQueryById(id));

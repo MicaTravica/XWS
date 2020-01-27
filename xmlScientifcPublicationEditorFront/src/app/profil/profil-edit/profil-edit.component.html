@@ -1,14 +1,18 @@
-<!-- <div>
-    <form [formGroup]="registerForm" (ngSubmit)="onSubmit(registerForm.value)" method="POST">
+<div>
+    <form [formGroup]="profilForm" (ngSubmit)="onSubmit(profilForm.value)">
         <div>
-            <input id="name" type="text" formControlName="name">
-            <div *ngIf="submitted && form.name.errors">
+            <mat-form-field>
+                <input matInput placeholder="Name" type="text" formControlName="name">
+            </mat-form-field>
+            <div class="error" *ngIf="submitted && form.name.errors">
                 <div *ngIf="form.name.errors.required">Name is required</div>
             </div>
         </div>
         <div>
-            <input id="surname" type="text" formControlName="surname">
-            <div *ngIf="submitted && form.surname.errors">
+            <mat-form-field>
+                <input matInput placeholder="Surname" type="text" formControlName="surname">
+            </mat-form-field>
+            <div class="error" *ngIf="submitted && form.surname.errors">
                 <div *ngIf="form.surname.errors.required">Surname is required</div>
             </div>
         </div>
@@ -21,49 +25,57 @@
             </div>
         </div>
         <div>
-            <input id="phone" type="text" formControlName="phone">
-            <div *ngIf="submitted && form.phone.errors">
+            <mat-form-field>
+                <input matInput placeholder="Phone" type="text" formControlName="phone">
+            </mat-form-field>
+            <div class="error" *ngIf="submitted && form.phone.errors">
                 <div *ngIf="form.phone.errors.required">Phone is required</div>
             </div>
         </div>
         <div>
-            <input type="text" formControlName="institutionName">
-            <div *ngIf="submitted && form.name.errors">
-                <div *ngIf="form.name.errors.required">Name is required</div>
+            <mat-form-field>
+                <input matInput placeholder="Institution name" type="text" formControlName="iName">
+            </mat-form-field>
+            <div class="error" *ngIf="submitted && form.iName.errors">
+                <div *ngIf="form.iName.errors.required">Institution name is required</div>
             </div>
         </div>
         <div>
-            <input id="surname" type="text" formControlName="surname">
-            <div *ngIf="submitted && form.surname.errors">
-                <div *ngIf="form.surname.errors.required">Surname is required</div>
+            <mat-form-field>
+                <input matInput placeholder="City"  type="text" formControlName="city">
+            </mat-form-field>
+            <div class="error" *ngIf="submitted && form.city.errors">
+                <div *ngIf="form.city.errors.required">City is required</div>
             </div>
         </div>
         <div>
-            <input id="phone" type="text" formControlName="phone">
-            <div *ngIf="submitted && form.phone.errors">
-                <div *ngIf="form.phone.errors.required">Phone is required</div>
+            <mat-form-field>
+                <input matInput placeholder="Street number" type="number" formControlName="streetNumber">
+            </mat-form-field>
+        </div>
+        <div>
+            <mat-form-field>
+                <input matInput placeholder="Floor number" type="number" formControlName="floorNumber">
+            </mat-form-field>
+        </div>
+        <div>
+            <mat-form-field>
+                <input matInput placeholder="Street" type="text" formControlName="street">
+            </mat-form-field>
+            <div class="error" *ngIf="submitted && form.street.errors">
+                <div *ngIf="form.street.errors.required">Street is required</div>
             </div>
         </div>
         <div>
-            <input id="inname" type="text" formControlName="institutionName">
-            <div *ngIf="submitted && form.name.errors">
-                <div *ngIf="form.name.errors.required">Name is required</div>
-            </div>
-        </div>
-        <div>
-            <input id="surname" type="text" formControlName="surname">
-            <div *ngIf="submitted && form.surname.errors">
-                <div *ngIf="form.surname.errors.required">Surname is required</div>
-            </div>
-        </div>
-        <div>
-            <input id="phone" type="text" formControlName="phone">
-            <div *ngIf="submitted && form.phone.errors">
-                <div *ngIf="form.phone.errors.required">Phone is required</div>
+            <mat-form-field>
+                <input matInput placeholder="Country" type="text" formControlName="country">
+            </mat-form-field>
+            <div class="error" *ngIf="submitted && form.country.errors">
+                <div *ngIf="form.country.errors.required">Country is required</div>
             </div>
         </div>
         <p>
-            <button mat-raised-button color="accent" type="submit" [disabled]="registerForm.invalid">Register</button>
+            <button mat-raised-button color="accent" type="submit" [disabled]="profilForm.invalid">Save</button>
         </p>
     </form>
-</div> -->
+</div>
