@@ -29,7 +29,15 @@
                 <xs:element name="authors">
                     <xs:complexType>
                         <xs:sequence>
-                            <xs:element name="author" type="TPerson" maxOccurs="unbounded"/>
+                            <xs:element name="author" maxOccurs="unbounded">
+                                <xs:complexType>
+                                    <xs:complexContent>
+                                        <xs:extension base="TPerson">
+                                            <xs:anyAttribute processContents="lax"/>
+                                        </xs:extension>
+                                    </xs:complexContent>
+                                </xs:complexType>
+                            </xs:element>
                         </xs:sequence>
                     </xs:complexType>
                 </xs:element>
