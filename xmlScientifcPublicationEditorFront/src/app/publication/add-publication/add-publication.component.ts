@@ -13,6 +13,7 @@ declare const Xonomy: any;
 export class AddPublicationComponent implements OnInit {
 
   publicationXml = '';
+  file: File = null;
 
   constructor(private publicationService: PublicationService) { }
 
@@ -20,7 +21,7 @@ export class AddPublicationComponent implements OnInit {
     this.publicationService.getPublicationTemplate().subscribe(
       (data: string) => {
         this.publicationXml = data;
-        // this.publicationXml = this.publicationXml.split('ns1:anyAttr="anyValue"').join('');
+        this.publicationXml = this.publicationXml.split('ns1:anyAttr="anyValue"').join('');
         const editor = document.getElementById('editor');
         // tslint:disable-next-line: no-unused-expression
         new Xonomy.render(this.publicationXml, editor, docSpec);
@@ -36,5 +37,13 @@ export class AddPublicationComponent implements OnInit {
       }, (error: HttpErrorResponse) => {
         console.log(error.error);
       });
+  }
+
+  onFileSelected(event: any) {
+    this.file = event.target.files[0];
+  }
+
+  onUpload() {
+    this.publicationService.upload(this.file).subscribe(res => {console.log(res); });
   }
 }

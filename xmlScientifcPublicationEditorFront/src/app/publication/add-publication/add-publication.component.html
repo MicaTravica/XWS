@@ -1,4 +1,13 @@
-<div>
-    <div id="editor"></div>
-    <button mat-raised-button color="accent" (click)="addPublication()">Add</button>
-</div>
+<mat-tab-group>
+    <mat-tab label="Editor">
+        <div id="editor"></div>
+        <button mat-raised-button color="accent" (click)="addPublication()">Add</button>
+        
+    </mat-tab>
+    <mat-tab label="Upload">
+        <label for="singleFile">Choose file</label>
+        <input id="singleFile" type="file" (change)="onFileSelected($event)"/>
+
+        <button mat-button (click)="onUpload()">Upload</button>
+    </mat-tab>
+</mat-tab-group>

@@ -12,3 +12,9 @@ export const authHttpOptions = (token) => {
             .append('Accept', 'application/xml')
             .append('Authorization', 'Bearer' + token);
 };
+
+export const uploadAuthHttpOptions = (token) => {
+    return new HttpHeaders()
+            .append('Accept', 'application/xml')
+            .append('Authorization', 'Bearer' + token);
+};
