@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { RevisionService } from 'src/app/services/revision-service/revision.service';
 import { docSpec} from 'src/app/util/xonomy-editor-doc-spec/doc-spec-questionnaire';
+import { HttpClient } from '@angular/common/http';
 declare const Xonomy: any;
 
 @Component({
@@ -11,6 +12,7 @@ declare const Xonomy: any;
 export class AddRevisionComponent implements OnInit {
 
   revisionXml = '';
+  file: File = null;
 
   constructor(private revisionService: RevisionService) { }
 
@@ -34,6 +36,14 @@ export class AddRevisionComponent implements OnInit {
           console.log(res);
         }
       );
+  }
+
+  onFileSelected(event: any) {
+    this.file = event.target.files[0];
+  }
+
+  onUpload() {
+    this.revisionService.upload(this.file).subscribe(res => {console.log(res); });
   }
 
 }

@@ -1,17 +1,14 @@
-<div id="editor">
+<mat-tab-group>
+    <mat-tab label="Editor">
+        <div id="editor"></div>
+        <button (click)="addRevision()">Add</button>
+    </mat-tab>
+    <mat-tab label="Upload">
+        <label for="singleFile">Choose file</label>
+        <input id="singleFile" type="file" (change)="onFileSelected($event)"/>
 
-</div>
+        <button mat-button (click)="onUpload()">Upload</button>
+    </mat-tab>
+</mat-tab-group>
 
-<button (click)="addRevision()">Add</button>
 
-
-<label for="singleFile">Upload file</label>
-<input id="singleFile" type="file" [fileUploadInputFor]= "fileUploadQueue"/>
-<br>
- 
-<mat-file-upload-queue #fileUploadQueue
-    [fileAlias]="'file'"
-    [httpUrl]="revisionService.revisionUrl">
- 
-    <mat-file-upload [file]="file" [id]="i" *ngFor="let file of fileUploadQueue.files; let i = index"></mat-file-upload>
-</mat-file-upload-queue>

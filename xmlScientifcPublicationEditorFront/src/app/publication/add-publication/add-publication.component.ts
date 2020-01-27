@@ -10,6 +10,7 @@ declare const Xonomy: any;
 export class AddPublicationComponent implements OnInit {
 
   publicationXml = '';
+  file: File = null;
 
   constructor(private publicationService: PublicationService) { }
 
@@ -1044,5 +1045,13 @@ export class AddPublicationComponent implements OnInit {
       .subscribe(res => {
         console.log(res);
       });
+  }
+
+  onFileSelected(event: any) {
+    this.file = event.target.files[0];
+  }
+
+  onUpload() {
+    this.publicationService.upload(this.file).subscribe(res => {console.log(res); });
   }
 }

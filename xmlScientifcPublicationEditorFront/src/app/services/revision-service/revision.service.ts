@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../auth-service/auth.service';
 import { environment } from 'src/environments/environment';
-import { authHttpOptions } from 'src/app/util/http-util';
+import { authHttpOptions, uploadAuthHttpOptions } from 'src/app/util/http-util';
+import { UploadDocumentsService } from '../upload-service/upload-documents.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,8 @@ export class RevisionService {
 
   constructor(
     private http: HttpClient,
-    private authService: AuthService) {
+    private authService: AuthService,
+    private uploadService: UploadDocumentsService) {
       this.revisionUrl = environment.restPath + '/questionnaire';
   }
 
@@ -30,5 +32,9 @@ export class RevisionService {
       headers: authHttpOptions(this.authService.getToken()),
       responseType: 'text'
     });
+  }
+
+  upload(data: File) {
+    return this.uploadService.upload(data, this.revisionUrl + 'upload');
   }
 }
