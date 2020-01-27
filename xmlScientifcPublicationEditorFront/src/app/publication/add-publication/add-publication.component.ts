@@ -828,6 +828,9 @@ export class AddPublicationComponent implements OnInit {
                   origElement.addText(txt);
                   return origElement;
                 }
+              },
+              hideIf: function (jsElement) {
+                return jsElement.getText() !== '';
               }
             }
           ]

@@ -625,7 +625,7 @@ export class AddCoverLetterComponent implements OnInit {
       });
   }
 
-  addPublication() {
+  addCL() {
     this.clXml = Xonomy.harvest() as string;
     this.clService.addCL(this.clXml)
       .subscribe(res => {
