@@ -15,5 +15,7 @@ public interface ProcessPSPService {
 
     String setReview(String questionnaireId) throws Exception;
 
-	void delete(String processId) throws Exception;
+    void delete(String processId) throws Exception;
+    
+    public String generateProcessXMLTemplate() throws Exception;
 }

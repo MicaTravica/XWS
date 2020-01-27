@@ -2,6 +2,8 @@ package com.example.xmlScientificPublicationEditor.repository.person;
 
 import static com.example.xmlScientificPublicationEditor.util.template.XUpdateTemplate.TARGET_NAMESPACE;
 
+import java.util.ArrayList;
+
 import org.exist.xmldb.EXistResource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -42,7 +44,7 @@ public class PersonRepository {
 	}
 
 	public TAuthPerson save(TAuthPerson person) throws Exception {
-		String id = "person" + idGeneratorService.getId("person");
+		String id = "auth" + idGeneratorService.getId("auth");
 		person.setId(id);
 		String xmlPerson = PersonMarshalling.marshalAuthPerson(person);
 		if (xmlPerson == null) {
@@ -106,6 +108,35 @@ public class PersonRepository {
 		return null;
 	}
 
+	public ArrayList<TAuthPerson> findByRole(String xpathExp) throws Exception {
+		ArrayList<TAuthPerson> retVal = new ArrayList<>();
+		ResourceSet resultSet = RetriveFromDB.executeXPathExpression(authCollectionId, xpathExp, TARGET_NAMESPACE);
+		// treba isprolaziti kroz
+		if (resultSet == null) {
+			return retVal;
+		}
+		ResourceIterator i = resultSet.getIterator();
+		XMLResource res = null;
+		while (i.hasMoreResources()) {
+			try {
+				res = (XMLResource) i.nextResource();
+				// pretvori ga u TPerson
+				retVal.add(PersonUnmarshalling.unmarshallingAuth(res));
+			} finally {
+				// don't forget to cleanup resources
+				try {
+					((EXistResource) res).freeResources();
+				} catch (XMLDBException xe) {
+					xe.printStackTrace();
+				}
+			}
+		}
+		return retVal;
+	}
+
+
+
+
 	public TPerson update(TPerson person) throws Exception {
 		String personId = person.getId();
 		TPerson oldPersonData = this.findOne(PersonRepository.makeXpathQueryById(personId));
@@ -140,6 +171,10 @@ public class PersonRepository {
 
 	public static String makeXpathQueryById(String parameter) {
 		return String.format("//person[@id=\"%s\"]", parameter);
+	}
+
+	public static String makeXpathQueryByRole(String parameter) {
+		return String.format("//auth[roles/role=(\"%s\")]", parameter);
 	}
 
 }

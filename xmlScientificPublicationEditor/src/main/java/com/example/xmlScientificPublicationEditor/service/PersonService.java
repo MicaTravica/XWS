@@ -1,8 +1,10 @@
 package com.example.xmlScientificPublicationEditor.service;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import com.example.xmlScientificPublicationEditor.model.authPerson.TAuthPerson;
+import com.example.xmlScientificPublicationEditor.model.authPerson.TRole;
 import com.example.xmlScientificPublicationEditor.model.person.TPerson;
 
 
@@ -23,6 +25,8 @@ public interface PersonService {
 	String generatePersonXMLTemplate() throws Exception;
 
 	String generateAuthXMLTemplate() throws Exception;
+
+	public ArrayList<String> findUsersByRole(TRole role) throws Exception;
 
 	// void changeUserPassword(PasswordChangeDTO pcDto, String username) throws Exception;
 

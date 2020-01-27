@@ -1,6 +1,7 @@
 package com.example.xmlScientificPublicationEditor.serviceImpl;
 
 import java.io.StringWriter;
+import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.xml.namespace.QName;
@@ -31,7 +32,7 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public TAuthPerson registration(TAuthPerson person) throws Exception {
-        TAuthPerson foundPerson = personRepository.findOneAuth(PersonRepository.makeXpathQueryByEmail(person.getEmail()));
+        TAuthPerson foundPerson = personRepository.findOneAuth(PersonRepository.makeXpathQueryByEmailAuthPerson(person.getEmail()));
         if (foundPerson != null) {
             throw new ResourceExistsException(String.format("Person with email: %s", person.getEmail()));
         }
@@ -60,6 +61,18 @@ public class PersonServiceImpl implements PersonService {
             throw new ResourceNotFoundException(String.format("Person with email %s", email));
         }
         return person;
+    }
+
+    @Override
+    public ArrayList<String> findUsersByRole(TRole roleRedactor) throws Exception {
+        ArrayList<String> retVal = new ArrayList<>();
+        ArrayList<TAuthPerson> persons = personRepository.findByRole(
+                PersonRepository.makeXpathQueryByRole(roleRedactor.toString()));
+
+        for(TAuthPerson p: persons) {
+            retVal.add(p.getId());
+        }
+        return retVal;
     }
 
     @Override
@@ -105,7 +118,5 @@ public class PersonServiceImpl implements PersonService {
         xsInstance.generate(xsModel, rootElement, sampleXml);
         return sw.toString();
     }
-
-    
-
+  
 }
