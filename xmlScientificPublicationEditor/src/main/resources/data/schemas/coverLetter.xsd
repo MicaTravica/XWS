@@ -29,23 +29,7 @@
                     </xs:complexType>
                 </xs:element>
                 <xs:element name="content" type="TParagraph" maxOccurs="unbounded"/>
-                <xs:element name="contactInformation">
-                    <xs:complexType>
-                        <xs:sequence>
-                            <xs:element name="organisationName" type="xs:string"/>
-                            <xs:element name="organisationAddress" type="TAddress"/>
-                            <xs:element name="contactPerson">
-                                <xs:complexType>
-                                    <xs:complexContent>
-                                        <xs:extension base="TPerson">
-                                            <xs:anyAttribute processContents="lax"/>
-                                        </xs:extension>
-                                    </xs:complexContent>
-                                </xs:complexType>
-                            </xs:element>
-                        </xs:sequence>
-                    </xs:complexType>
-                </xs:element>
+                <xs:element name="contactPerson" type="TPerson"> </xs:element>
                 <xs:element name="authorSignature" type="xs:string"/>
             </xs:sequence>
             <xs:attribute name="id" type="xs:string" use="required"/>
