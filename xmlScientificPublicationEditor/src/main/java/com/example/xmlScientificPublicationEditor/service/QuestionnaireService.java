@@ -21,4 +21,6 @@ public interface QuestionnaireService {
 	String findOneHTML(String id) throws Exception;
 
 	ByteArrayOutputStream findOnePDF(String id) throws Exception;
+
+	String generateQuestionnaireXMLTemplate() throws Exception;
 }

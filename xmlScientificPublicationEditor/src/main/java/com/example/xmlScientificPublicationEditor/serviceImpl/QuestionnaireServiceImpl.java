@@ -4,6 +4,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
 
+import javax.xml.namespace.QName;
+import javax.xml.transform.stream.StreamResult;
+
+import org.apache.xerces.xs.XSModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +16,10 @@ import com.example.xmlScientificPublicationEditor.repository.QuestionnaireReposi
 import com.example.xmlScientificPublicationEditor.service.QuestionnaireService;
 import com.example.xmlScientificPublicationEditor.util.RDF.MetadataExtractor;
 import com.example.xmlScientificPublicationEditor.util.XSLFOTransformer.XSLFOTransformer;
+
+import jlibs.xml.sax.XMLDocument;
+import jlibs.xml.xsd.XSInstance;
+import jlibs.xml.xsd.XSParser;
 
 /**
  * QuestionnaireServiceImpl
@@ -83,5 +91,22 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
 		StringReader in = new StringReader(questionnaire);
 		metadataExtractor.extractMetadata(in, out);
 		return out;
+	}
+	
+	@Override
+	public String generateQuestionnaireXMLTemplate() throws Exception {
+		StringWriter sw = new StringWriter();
+		XSModel xsModel = new XSParser().parse(QuestionnaireRepository.QuestionnaireSchemaPath);
+		XSInstance xsInstance = new XSInstance();
+		xsInstance.maximumElementsGenerated = 0;
+		xsInstance.maximumListItemsGenerated = 0;
+		xsInstance.maximumRecursionDepth = 0;
+		xsInstance.generateOptionalAttributes = Boolean.FALSE;
+		xsInstance.generateDefaultAttributes = Boolean.TRUE;
+		xsInstance.generateOptionalElements = Boolean.FALSE; // null means rando
+		QName rootElement = new QName("http://www.uns.ac.rs/Tim1", "questionnaire");
+		XMLDocument sampleXml = new XMLDocument(new StreamResult(sw), true, 4, null);
+		xsInstance.generate(xsModel, rootElement, sampleXml);
+		return sw.toString();
 	}
 }

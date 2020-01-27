@@ -19,4 +19,6 @@ public interface CoverLetterService {
 
 	StringWriter extractMetadata(String cl) throws Exception;
 
+	String generateCoverLetterXMLTemplate() throws Exception;
+
 }

@@ -4,6 +4,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
 
+import javax.xml.namespace.QName;
+import javax.xml.transform.stream.StreamResult;
+
+import org.apache.xerces.xs.XSModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
@@ -16,6 +20,10 @@ import com.example.xmlScientificPublicationEditor.service.ProcessPSPService;
 import com.example.xmlScientificPublicationEditor.util.DOMParser.DOMParser;
 import com.example.xmlScientificPublicationEditor.util.RDF.MetadataExtractor;
 import com.example.xmlScientificPublicationEditor.util.XSLFOTransformer.XSLFOTransformer;
+
+import jlibs.xml.sax.XMLDocument;
+import jlibs.xml.xsd.XSInstance;
+import jlibs.xml.xsd.XSParser;
 
 @Service
 public class CoverLetterServiceImpl implements CoverLetterService {
@@ -101,6 +109,23 @@ public class CoverLetterServiceImpl implements CoverLetterService {
 		}
 		return null;
 		
+	}
+	
+	@Override
+	public String generateCoverLetterXMLTemplate() throws Exception {
+		StringWriter sw = new StringWriter();
+		XSModel xsModel = new XSParser().parse(CoverLetterRepository.coverLetterSchemaPath);
+		XSInstance xsInstance = new XSInstance();
+		xsInstance.maximumElementsGenerated = 0;
+		xsInstance.maximumListItemsGenerated = 0;
+		xsInstance.maximumRecursionDepth = 0;
+		xsInstance.generateOptionalAttributes = Boolean.FALSE;
+		xsInstance.generateDefaultAttributes = Boolean.TRUE;
+		xsInstance.generateOptionalElements = Boolean.FALSE; // null means rando
+		QName rootElement = new QName("http://www.uns.ac.rs/Tim1", "coverLetter");
+		XMLDocument sampleXml = new XMLDocument(new StreamResult(sw), true, 4, null);
+		xsInstance.generate(xsModel, rootElement, sampleXml);
+		return sw.toString();
 	}
 
 }

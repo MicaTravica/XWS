@@ -1,9 +1,12 @@
 package com.example.xmlScientificPublicationEditor.controller;
 
+import java.io.ByteArrayOutputStream;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,8 +15,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.io.ByteArrayOutputStream;
 
 import com.example.xmlScientificPublicationEditor.service.CoverLetterService;
 
@@ -63,4 +64,10 @@ public class CoverLetterController extends BaseController {
 		return new ResponseEntity<>(HttpStatus.ACCEPTED);
 	}
 
+	@GetMapping(value = "/coverLetter/getCoverLetterTemplate", produces = MediaType.APPLICATION_XML_VALUE)
+	@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_REVIEWER') or hasRole('ROLE_REDACTOR')")
+	public ResponseEntity<String> getCoverLetterTemplate() throws Exception {
+		String coverLetter = coverLetterService.generateCoverLetterXMLTemplate();
+        return new ResponseEntity<>(coverLetter, HttpStatus.OK);
+	}
 }

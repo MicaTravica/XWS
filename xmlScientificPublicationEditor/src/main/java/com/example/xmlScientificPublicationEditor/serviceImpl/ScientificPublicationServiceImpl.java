@@ -84,8 +84,11 @@ public class ScientificPublicationServiceImpl implements ScientificPublicationSe
 		StringWriter sw = new StringWriter();
 		XSModel xsModel = new XSParser().parse(ScientificPublicationRepository.scientificPublicationSchemaPath);
 		XSInstance xsInstance = new XSInstance();
-		xsInstance.minimumElementsGenerated = 1;
-		xsInstance.maximumElementsGenerated = 1;
+		xsInstance.maximumElementsGenerated = 0;
+		xsInstance.maximumListItemsGenerated = 0;
+		xsInstance.maximumRecursionDepth = 0;
+		xsInstance.generateOptionalAttributes = Boolean.FALSE;
+		xsInstance.generateDefaultAttributes = Boolean.TRUE;
 		xsInstance.generateOptionalElements = Boolean.FALSE; // null means rando
 		QName rootElement = new QName("http://www.uns.ac.rs/Tim1", "scientificPublication");
 		XMLDocument sampleXml = new XMLDocument(new StreamResult(sw), true, 4, null);
