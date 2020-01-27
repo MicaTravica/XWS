@@ -42,7 +42,7 @@ public class PersonRepository {
 	}
 
 	public TAuthPerson save(TAuthPerson person) throws Exception {
-		String id = "person" + idGeneratorService.getId("person");
+		String id = "auth" + idGeneratorService.getId("auth");
 		person.setId(id);
 		String xmlPerson = PersonMarshalling.marshalAuthPerson(person);
 		if (xmlPerson == null) {
