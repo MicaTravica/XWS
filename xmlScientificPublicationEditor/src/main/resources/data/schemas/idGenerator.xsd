@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
-    targetNamespace="http://www.uns.ac.rs/Tim1"
-    xmlns="http://www.uns.ac.rs/Tim1"
-    xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" elementFormDefault="qualified"
-    vc:minVersion="1.1">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.uns.ac.rs/Tim1"
+    xmlns="http://www.uns.ac.rs/Tim1" xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning"
+    elementFormDefault="qualified" vc:minVersion="1.1">
     <xs:element name="idGenerator">
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="scientificPublication" type="xs:positiveInteger"/>
-                <xs:element name="coverLetter" type="xs:positiveInteger"/>
-                <xs:element name="questionnaire" type="xs:positiveInteger"/>
-                <xs:element name="notification" type="xs:positiveInteger"/>
-                <xs:element name="person" type="xs:positiveInteger"/>
-                <xs:element name="process" type="xs:positiveInteger"/>
+                <xs:element name="scientificPublication" type="xs:positiveInteger" default="1"/>
+                <xs:element name="coverLetter" type="xs:positiveInteger" default="1"/>
+                <xs:element name="questionnaire" type="xs:positiveInteger" default="1"/>
+                <xs:element name="notification" type="xs:positiveInteger" default="1"/>
+                <xs:element name="person" type="xs:positiveInteger" default="1"/>
+                <xs:element default="1" name="auth" type="xs:positiveInteger"/>
+                <xs:element name="process" type="xs:positiveInteger" default="1"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>

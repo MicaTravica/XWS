@@ -32,7 +32,7 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public TAuthPerson registration(TAuthPerson person) throws Exception {
-        TAuthPerson foundPerson = personRepository.findOneAuth(PersonRepository.makeXpathQueryByEmail(person.getEmail()));
+        TAuthPerson foundPerson = personRepository.findOneAuth(PersonRepository.makeXpathQueryByEmailAuthPerson(person.getEmail()));
         if (foundPerson != null) {
             throw new ResourceExistsException(String.format("Person with email: %s", person.getEmail()));
         }
