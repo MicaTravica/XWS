@@ -26,6 +26,7 @@ import { AddRevisionComponent } from './revisions/add-revision/add-revision.comp
 import { ForRevisionComponent } from './revisions/for-revision/for-revision.component';
 import { ProcessPublicationComponent } from './publication/process-publication/process-publication.component';
 import { AddCoverLetterComponent } from './add-cover-letter/add-cover-letter.component';
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   declarations: [
@@ -50,7 +51,8 @@ import { AddCoverLetterComponent } from './add-cover-letter/add-cover-letter.com
     AppRoutingModule,
     BrowserAnimationsModule,
     MaterialModule,
-    HttpClientModule
+    HttpClientModule,
+    ToastrModule.forRoot()
   ],
   providers: [
     UserService,

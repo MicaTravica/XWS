@@ -1,6 +1,10 @@
 package com.example.xmlScientificPublicationEditor.controller;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,7 +18,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.xmlScientificPublicationEditor.service.CoverLetterService;
 
@@ -51,7 +57,26 @@ public class CoverLetterController extends BaseController {
 		String id = coverLetterService.save(cl);
 		return new ResponseEntity<>(String.format("You succesfully add cover letter with id %s", id), HttpStatus.OK);
 	}
-	
+
+	@PostMapping(value = "/coverLetter/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_XML_VALUE)
+	public ResponseEntity<String> uploadCoverLetter(@RequestParam(("file")) MultipartFile q) throws Exception {
+		BufferedReader br;
+		StringBuilder sb = new StringBuilder();
+		try {
+			String line;
+			InputStream is = q.getInputStream();
+			br = new BufferedReader(new InputStreamReader(is));
+			while ((line = br.readLine()) != null) {
+				sb.append(line);
+				sb.append("\n");
+			}
+		} catch (IOException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.OK);
+		}
+		String id = coverLetterService.save(sb.toString());
+		return new ResponseEntity<>(String.format("You succesfully add cover letter with id %s", id), HttpStatus.OK);
+	}
+
 	@PutMapping(value="/coverLetter", consumes = MediaType.APPLICATION_XML_VALUE,produces = MediaType.APPLICATION_XML_VALUE)
 	public ResponseEntity<String> updateCoverLetter(@RequestBody String coverLetter) throws Exception {
 		String cl = coverLetterService.update(coverLetter);

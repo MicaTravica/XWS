@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { PublicationService } from 'src/app/services/publication-service/publication.service';
 import { docSpec } from '../../util/xonomy-editor-doc-spec/doc-spec-publication';
 import { HttpErrorResponse } from '@angular/common/http';
+import { ToastrService } from 'ngx-toastr';
 
 declare const Xonomy: any;
 
@@ -13,9 +14,12 @@ declare const Xonomy: any;
 export class AddPublicationComponent implements OnInit {
 
   publicationXml = '';
-  file: File = null;
+  file: File;
 
-  constructor(private publicationService: PublicationService) { }
+  constructor(
+    private publicationService: PublicationService,
+    private toastr: ToastrService
+  ) { }
 
   ngOnInit() {
     this.publicationService.getPublicationTemplate().subscribe(
@@ -33,9 +37,9 @@ export class AddPublicationComponent implements OnInit {
     this.publicationXml = Xonomy.harvest() as string;
     this.publicationService.addPublication(this.publicationXml).subscribe(
       (data: string) => {
-        console.log(data);
+        this.toastr.success(data);
       }, (error: HttpErrorResponse) => {
-        console.log(error.error);
+        this.toastr.error(error.error);
       });
   }
 
@@ -44,6 +48,11 @@ export class AddPublicationComponent implements OnInit {
   }
 
   onUpload() {
-    this.publicationService.upload(this.file).subscribe(res => {console.log(res); });
+    this.publicationService.upload(this.file).subscribe(
+      (data: string) => {
+        this.toastr.success(data);
+      }, (error: HttpErrorResponse) => {
+        this.toastr.error(error.error);
+      });
   }
 }

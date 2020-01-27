@@ -14,7 +14,6 @@ import { ForRevisionComponent } from './revisions/for-revision/for-revision.comp
 import { ForPublicationComponent } from './publication/for-publication/for-publication.component';
 import { AddRevisionComponent } from './revisions/add-revision/add-revision.component';
 import { ProcessPublicationComponent } from './publication/process-publication/process-publication.component';
-import { ROLE_USER, ROLE_REVIEWER, ROLE_REDACTOR } from './services/auth-service/constants';
 import { AddCoverLetterComponent } from './add-cover-letter/add-cover-letter.component';
 
 const routes: Routes = [
