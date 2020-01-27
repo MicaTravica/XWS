@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { RevisionService } from 'src/app/services/revision-service/revision.service';
 import { docSpec} from 'src/app/util/xonomy-editor-doc-spec/doc-spec-questionnaire';
-import { HttpClient } from '@angular/common/http';
+import { ToastrService } from 'ngx-toastr';
+import { HttpErrorResponse } from '@angular/common/http';
 declare const Xonomy: any;
 
 @Component({
@@ -12,9 +13,12 @@ declare const Xonomy: any;
 export class AddRevisionComponent implements OnInit {
 
   revisionXml = '';
-  file: File = null;
+  file: File;
 
-  constructor(private revisionService: RevisionService) { }
+  constructor(
+    private revisionService: RevisionService,
+    private toastr: ToastrService
+  ) { }
 
   ngOnInit() {
     this.revisionService.getQuestionnaireTemplate()
@@ -27,15 +31,14 @@ export class AddRevisionComponent implements OnInit {
       });
   }
 
-
   addRevision() {
     this.revisionXml = Xonomy.harvest() as string;
-    console.log(this.revisionXml);
-    this.revisionService.addRevision(this.revisionXml)
-      .subscribe( res => {
-          console.log(res);
-        }
-      );
+    this.revisionService.addRevision(this.revisionXml).subscribe(
+      (data: string) => {
+        this.toastr.success(data);
+      }, (error: HttpErrorResponse) => {
+        this.toastr.error(error.error);
+      });
   }
 
   onFileSelected(event: any) {
@@ -43,7 +46,12 @@ export class AddRevisionComponent implements OnInit {
   }
 
   onUpload() {
-    this.revisionService.upload(this.file).subscribe(res => {console.log(res); });
+    this.revisionService.upload(this.file).subscribe(
+      (data: string) => {
+        this.toastr.success(data);
+      }, (error: HttpErrorResponse) => {
+        this.toastr.error(error.error);
+      });
   }
 
 }

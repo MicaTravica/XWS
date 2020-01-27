@@ -78,7 +78,7 @@ public class ScientificPublicationController extends BaseController {
 	@PostMapping(value="/scientificPublication/upload", 
 			consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
 			produces = MediaType.APPLICATION_XML_VALUE)
-	public ResponseEntity<String> uploadQuestionnaire(@RequestParam(("file")) MultipartFile q) throws Exception {
+	public ResponseEntity<String> uploadScientificPublication(@RequestParam(("file")) MultipartFile q) throws Exception {
 		BufferedReader br;
 		StringBuilder sb = new StringBuilder();
 		try {
@@ -92,7 +92,6 @@ public class ScientificPublicationController extends BaseController {
 		} catch (IOException e) {
 			return new ResponseEntity<>(e.getMessage(),HttpStatus.OK);
 		}
-		System.out.println(sb.toString());
 		String id = scientificPublicationService.save(sb.toString());
 		return new ResponseEntity<>(String.format("You succesfully add scientific publication with id %s",id), HttpStatus.OK);
 	}
