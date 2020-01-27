@@ -14,7 +14,6 @@ export class AddRevisionComponent implements OnInit {
 
   constructor(private revisionService: RevisionService) { }
 
-
   ngOnInit() {
     this.revisionService.getQuestionnaireTemplate()
       .subscribe( (template: string) => {

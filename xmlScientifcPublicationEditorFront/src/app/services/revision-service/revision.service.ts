@@ -9,7 +9,7 @@ import { authHttpOptions } from 'src/app/util/http-util';
 })
 export class RevisionService {
 
-  private revisionUrl: string;
+  public revisionUrl: string;
 
   constructor(
     private http: HttpClient,
