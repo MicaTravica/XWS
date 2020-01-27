@@ -1,6 +1,7 @@
 package com.example.xmlScientificPublicationEditor.serviceImpl;
 
 import java.io.StringWriter;
+import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.xml.namespace.QName;
@@ -63,6 +64,18 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
+    public ArrayList<String> findUsersByRole(TRole roleRedactor) throws Exception {
+        ArrayList<String> retVal = new ArrayList<>();
+        ArrayList<TAuthPerson> persons = personRepository.findByRole(
+                PersonRepository.makeXpathQueryByRole(roleRedactor.toString()));
+
+        for(TAuthPerson p: persons) {
+            retVal.add(p.getId());
+        }
+        return retVal;
+    }
+
+    @Override
     public void delete(String personId) throws Exception {
         personRepository.deletePerson(personId);
     }
@@ -105,7 +118,5 @@ public class PersonServiceImpl implements PersonService {
         xsInstance.generate(xsModel, rootElement, sampleXml);
         return sw.toString();
     }
-
-    
-
+  
 }

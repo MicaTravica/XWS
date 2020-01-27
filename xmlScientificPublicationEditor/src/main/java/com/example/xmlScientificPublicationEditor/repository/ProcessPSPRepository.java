@@ -2,10 +2,6 @@ package com.example.xmlScientificPublicationEditor.repository;
 
 import static com.example.xmlScientificPublicationEditor.util.template.XUpdateTemplate.TARGET_NAMESPACE;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-
 import org.exist.xmldb.EXistResource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -29,18 +25,19 @@ public class ProcessPSPRepository {
 	@Autowired
 	private IdGeneratorService idGeneratorService;
 
-	public static String ScientificPublicationFiled = "scientificPublication";
-	public static String CoverLetterFiled = "coverLetter";
+	public static String ScientificPublicationFiled = "ns:scientificPublication";
+	public static String RedactorFiled = "ns:idRedactor";
+	public static String CoverLetterFiled = "ns:coverLetter";
 	public static String PROCESS_ID = "id";
-	public static String PROCESS_ROOT = "processPSP";
+	public static String PROCESS_ROOT = "ns:processPSP";
 
     public static String ProcessPSPTemplatePath = "src/main/resources/data/xml/processPSPTemplate.xml";
 	public static String ProcessPSPCollectionId = "/db/sample/processPSP";
-	public static String NotificationSchemaPath = "src/main/resources/data/schemas/processPSP.xsd";
+	public static String ProcessPSPSchemaPath = "src/main/resources/data/schemas/processPSP.xsd";
 
 	public String findOneByScientificPublicationID(String id) throws Exception {
 		String retVal = null;
-		String xpathExp = "//processPSP[scientificPublication=\"" + id + "\"]";
+		String xpathExp = "//ns:processPSP[ns:scientificPublication=\"" + id + "\"]";
 		ResourceSet resultSet = RetriveFromDB.executeXPathExpression(ProcessPSPCollectionId, xpathExp,
 				TARGET_NAMESPACE);
 		if (resultSet == null) {
@@ -65,27 +62,10 @@ public class ProcessPSPRepository {
 		return null;
 	}
 
-    public Document initProcess() throws Exception
-    {
-        BufferedReader br = null;
-        try{
-            StringBuilder sb = new StringBuilder();
-            File file = new File(ProcessPSPTemplatePath);
-            br = new BufferedReader(new FileReader(file)); 
-            String st; 
-            while ((st = br.readLine()) != null){
-                sb.append(st); 
-            }    
-            Document newProcess = DOMParser.buildDocumentWithOutSchema(sb.toString());
-            //TODO: add processs ID
-            return newProcess;
-        }
-        finally
-        {
-            if(br != null){
-                br.close();
-            }
-        }
+    public Document setRedactor(Document process, String redactorId) {
+		process.getElementsByTagName(RedactorFiled).
+			item(0).setTextContent(redactorId);
+		return process;
 	}
 	
 	public String getProceesId(Document process)
@@ -118,7 +98,7 @@ public class ProcessPSPRepository {
 	}
 
 	public void delete(String id) throws Exception {
-		String xpathExp = "/processPSP";
+		String xpathExp = "/ns:processPSP";
 		long mods = UpdateDB.delete(ProcessPSPCollectionId, id, xpathExp);
 		if (mods == 0) {
 			throw new ResourceNotDeleted(String.format("processPSP with documentId %s", id));

@@ -92,7 +92,6 @@ public class ScientificPublicationController extends BaseController {
 		} catch (IOException e) {
 			return new ResponseEntity<>(e.getMessage(),HttpStatus.OK);
 		}
-		System.out.println(sb.toString());
 		String id = scientificPublicationService.save(sb.toString());
 		return new ResponseEntity<>(String.format("You succesfully add scientific publication with id %s",id), HttpStatus.OK);
 	}

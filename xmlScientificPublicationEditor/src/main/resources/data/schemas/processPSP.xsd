@@ -6,9 +6,9 @@
     <xs:element name="processPSP">
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="scientificPublication" type="xs:string"/>
-                <xs:element minOccurs="0" name="coverLetter" type="xs:string"/>
-                <xs:element name="idRedactor" type="xs:string"/>
+                <xs:element minOccurs="1" maxOccurs="unbounded" name="scientificPublication" type="xs:string"/>
+                <xs:element minOccurs="0" maxOccurs="unbounded" name="coverLetter" type="xs:string"/>
+                <xs:element minOccurs="1" maxOccurs="1" name="idRedactor" type="xs:string"/>
                 <xs:element name="reviewAssignment" type="TReviewAssignment" minOccurs="0"/>
             </xs:sequence>
             <xs:attribute default="forReview" name="state">
@@ -25,7 +25,7 @@
                     </xs:restriction>
                 </xs:simpleType>
             </xs:attribute>
-            <xs:attribute name="id" type="xs:ID" use="required"/>
+            <xs:attribute name="id" type="xs:string" use="required"/>
         </xs:complexType>
     </xs:element>
 </xs:schema>
