@@ -15,17 +15,17 @@
         <xs:anyAttribute processContents="lax"/>
     </xs:complexType>
     <xs:complexType name="TFormula">
-        <xs:sequence>
+        <xs:choice>
             <xs:element name="description" type="TCursive"/>
             <xs:element name="content" type="TSymbol"/>
-        </xs:sequence>
-        <xs:attribute name="id" type="xs:ID" use="required"/>
+        </xs:choice>
+        <xs:attribute name="id" type="xs:string" use="required"/>
     </xs:complexType>
     <xs:complexType name="TText">
         <xs:sequence>
             <xs:element name="cursive" type="TCursive"/>
         </xs:sequence>
-        <xs:attribute name="id" type="xs:ID" use="required"/>
+        <xs:attribute name="id" type="xs:string" use="required"/>
     </xs:complexType>
     <xs:complexType mixed="true" name="TCursive">
         <xs:choice maxOccurs="unbounded">
@@ -37,9 +37,9 @@
 
     <xs:complexType name="TList">
         <xs:sequence>
-            <xs:element name="listItem" maxOccurs="unbounded" type="TListItem"> </xs:element>
+            <xs:element name="listitem" maxOccurs="unbounded" type="TListItem"> </xs:element>
         </xs:sequence>
-        <xs:attribute name="id" type="xs:ID" use="required"/>
+        <xs:attribute name="id" type="xs:string" use="required"/>
         <xs:attribute default="unordered" name="type" use="optional">
             <xs:simpleType>
                 <xs:restriction base="xs:string">
@@ -58,8 +58,8 @@
         <xs:sequence>
             <xs:element name="cursive" type="TCursive"/>
         </xs:sequence>
-        <xs:attribute name="ref" type="xs:IDREF" use="required"/>
-        <xs:attribute name="id" type="xs:ID" use="required"/>
+        <xs:attribute name="ref" type="xs:string" use="required"/>
+        <xs:attribute name="id" type="xs:string" use="required"/>
     </xs:complexType>
 
     <xs:complexType name="TSymbol" mixed="true">

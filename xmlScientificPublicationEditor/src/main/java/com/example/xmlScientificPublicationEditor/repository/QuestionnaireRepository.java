@@ -8,6 +8,8 @@ import org.exist.xmldb.EXistResource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.xmldb.api.base.ResourceIterator;
 import org.xmldb.api.base.ResourceSet;
 import org.xmldb.api.base.XMLDBException;
@@ -16,6 +18,7 @@ import org.xmldb.api.modules.XMLResource;
 import com.example.xmlScientificPublicationEditor.exception.ResourceNotDeleted;
 import com.example.xmlScientificPublicationEditor.exception.ResourceNotFoundException;
 import com.example.xmlScientificPublicationEditor.service.IdGeneratorService;
+import com.example.xmlScientificPublicationEditor.serviceImpl.IdGeneratorServiceImpl;
 import com.example.xmlScientificPublicationEditor.util.DOMParser.DOMParser;
 import com.example.xmlScientificPublicationEditor.util.RDF.StoreToRDF;
 import com.example.xmlScientificPublicationEditor.util.RDF.UpdateRDF;
@@ -66,9 +69,33 @@ public class QuestionnaireRepository {
 		Document document = DOMParser.buildDocument(questionnaire, QuestionnaireSchemaPath);
 		String id = "que" + idGeneratorService.getId("questionnaire");
 		document.getDocumentElement().getAttributes().getNamedItem("id").setTextContent(id);
+
+		generateIDs(document, id);
+		
 		String toSave = DOMParser.parseDocument(document, QuestionnaireSchemaPath);
 		StoreToDB.store(QuestionnaireCollectionId, id, toSave);
 		return id;
+	}
+
+	private void generateIDs(Document document, String id) throws Exception {
+		Node reviewer = document.getElementsByTagName(IdGeneratorServiceImpl.REVIEWER).item(0);
+		idGeneratorService.generateElementId(reviewer, id + "_reviewer", IdGeneratorServiceImpl.REVIEWER);
+
+		Node institution = document.getElementsByTagName(IdGeneratorServiceImpl.INSTITUTION).item(0);
+		idGeneratorService.generateElementId(institution, id + "_institution", IdGeneratorServiceImpl.INSTITUTION);
+
+		Node address = document.getElementsByTagName(IdGeneratorServiceImpl.ADDRESS).item(0);
+		idGeneratorService.generateElementId(address, id + "_address", IdGeneratorServiceImpl.ADDRESS);
+
+		NodeList question = document.getElementsByTagName(IdGeneratorServiceImpl.QUESTION);
+		for (int i = 0; i < question.getLength(); ++i) {
+			idGeneratorService.generateElementId(question.item(i), id + "_question" + (i + 1), IdGeneratorServiceImpl.QUESTION);
+		}
+		
+		NodeList answer = document.getElementsByTagName(IdGeneratorServiceImpl.ANSWER);
+		for (int i = 0; i < answer.getLength(); ++i) {
+			idGeneratorService.generateParagraphId(answer.item(i), id + "_answer" + (i + 1));
+		}
 	}
 
 	public String update(String questionnaire) throws Exception {
