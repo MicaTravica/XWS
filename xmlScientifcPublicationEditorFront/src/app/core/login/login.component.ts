@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { UserService } from 'src/app/services/user-service/user.service';
 import { Auth } from 'src/app/models/auth-model/auth.model';
+import { Person } from 'src/app/models/user-model/user.model';
 
 declare var require: any;
 const convert = require('xml-js');
@@ -47,6 +48,11 @@ export class LoginComponent implements OnInit {
         this.authService.login(retVal).subscribe(
           result => {
             localStorage.setItem('token', JSON.stringify(result));
+            this.userService.me().subscribe(
+              (data: any) => {
+                localStorage.setItem('user', data);
+              }
+            );
             this.router.navigate(['/publications']);
           },
           error => {

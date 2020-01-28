@@ -96,7 +96,8 @@ export class ProfilEditComponent implements OnInit {
         obj['ns:person'] = person;
         const retVal = convert.js2xml(obj, { compact: true, spaces: 4 });
         this.userService.savePerson(retVal).subscribe(
-          () => {
+          (data: any) => {
+            localStorage.setItem('user', data);
             this.toastr.success('You change your data!');
           },
           () => {

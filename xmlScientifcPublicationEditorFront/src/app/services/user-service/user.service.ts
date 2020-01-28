@@ -60,6 +60,6 @@ export class UserService {
       {
         headers: authHttpOptions(token),
         responseType: 'text'
-      })
+      });
   }
 }
