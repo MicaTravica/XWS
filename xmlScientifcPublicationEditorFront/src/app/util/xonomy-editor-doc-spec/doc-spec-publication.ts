@@ -88,15 +88,22 @@ export const docSpec = {
             mustBeAfter: ['ns:caption', 'ns:authors', 'ns:abstract'],
             mustBeBefore: ['ns:references', 'ns:comments'],
             canDropTo: ['ns:scientificPublication'],
-            menu: [{
-                caption: 'Append an <ns:paragraph>',
-                action: Xonomy.newElementChild,
-                actionParameter: '<ns:paragraph id="paragraph" xmlns:ns="http://www.uns.ac.rs/Tim1"/>'
-            }, {
-                caption: 'Append an <ns:subchapter>',
-                action: Xonomy.newElementChild,
-                actionParameter: '<ns:subchapter id="subchapter" title="some title" xmlns:ns="http://www.uns.ac.rs/Tim1"><ns:paragraph id="paragraph"/></ns:subchapter>'
-            }],
+            menu: [
+                {
+                    caption: 'Append an <ns:paragraph>',
+                    action: Xonomy.newElementChild,
+                    actionParameter: '<ns:paragraph id="paragraph" xmlns:ns="http://www.uns.ac.rs/Tim1"/>'
+                },
+                {
+                    caption: 'Append an <ns:subchapter>',
+                    action: Xonomy.newElementChild,
+                    actionParameter: '<ns:subchapter id="subchapter" title="some title" xmlns:ns="http://www.uns.ac.rs/Tim1"><ns:paragraph id="paragraph"/></ns:subchapter>'
+                },
+                {
+                    caption: 'Delete this chapter',
+                    action: Xonomy.deleteElement
+                }
+            ],
             attributes: {
                 'title': {
                     asker: Xonomy.askString,
@@ -113,6 +120,10 @@ export const docSpec = {
                     action: Xonomy.newElementChild,
                     actionParameter: '<ns:reference id="reference" xmlns:ns="http://www.uns.ac.rs/Tim1"/>'
                 },
+                {
+                    caption: 'Delete this references',
+                    action: Xonomy.deleteElement
+                }
             ]
         },
         'ns:comments': {
@@ -452,7 +463,7 @@ export const docSpec = {
                 {
                     caption: 'Append an <ns:formula>',
                     action: Xonomy.newElementChild,
-                    actionParameter: '<ns:formula xmlns:ns="http://www.uns.ac.rs/Tim1"/>'
+                    actionParameter: '<ns:formula id="formula" xmlns:ns="http://www.uns.ac.rs/Tim1"/>'
                 },
                 {
                     caption: 'Append an <ns:list>',
@@ -707,6 +718,13 @@ export const docSpec = {
         },
         'ns:formula': {
             canDropTo: ['ns:paragraph', 'ns:content'],
+            menu: [
+                {
+                    caption: 'Delete this list',
+                    action: Xonomy.deleteElement
+                }
+            ],
+
         },
         'ns:list': {
             canDropTo: ['ns:paragraph', 'ns:content'],
