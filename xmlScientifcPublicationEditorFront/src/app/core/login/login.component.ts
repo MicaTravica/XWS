@@ -39,18 +39,19 @@ export class LoginComponent implements OnInit {
   onSubmit() {
     this.userService.getAuthTemplate().subscribe(
       (template: any) => {
-        const obj = JSON.parse(convert.xml2json(template, {compact: true, spaces: 4}));
+        const obj = JSON.parse(convert.xml2json(template, { compact: true, spaces: 4 }));
         const auth: Auth = obj['ns:auth'] as Auth;
         auth['ns:password'] = this.loginForm.value.Password;
         auth['ns:email'] = this.loginForm.value.email;
         obj['ns:auth'] = auth;
-        const retVal = convert.js2xml(obj, {compact: true, spaces: 4});
+        const retVal = convert.js2xml(obj, { compact: true, spaces: 4 });
         this.authService.login(retVal).subscribe(
           result => {
             localStorage.setItem('token', JSON.stringify(result));
             this.userService.me().subscribe(
               (data: any) => {
                 localStorage.setItem('user', data);
+                console.log(localStorage.getItem('user'));
               }
             );
             this.router.navigate(['/publications']);

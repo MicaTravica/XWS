@@ -43,9 +43,9 @@ export const docSpec = {
       }]
     },
     'ns:questions': {
+      canDropTo: ['ns:questions'],
       menu: [
         {
-          canDropTo: ['ns:questions'],
           caption: 'Append an <ns:question>',
           action: Xonomy.newElementChild,
           actionParameter: '<ns:question id="q1" xmlns:ns="http://www.uns.ac.rs/Tim1"/>'
@@ -63,6 +63,13 @@ export const docSpec = {
           caption: 'Append an <ns:answer>',
           action: Xonomy.newElementChild,
           actionParameter: '<ns:answer id="a1" xmlns:ns="http://www.uns.ac.rs/Tim1"/>'
+        },
+        {
+          caption: 'Delete this question',
+          action: Xonomy.deleteElement,
+          hideIf: function (jsElement) {
+            return jsElement.parent().getChildElements('ns:question').length < 2;
+          }
         }
       ]
     },
@@ -109,7 +116,7 @@ export const docSpec = {
     'ns:name': {
       oneliner: true,
       mustBeBefore: ['ns:surname', 'ns:email', 'ns:phone', 'ns:institution', 'ns:address'],
-      canDropTo: ['ns:reviewer', 'ns:institution'],
+      canDropTo: ['ns:reviwer', 'ns:institution'],
       menu: [
         {
           caption: 'Edit',
@@ -133,7 +140,7 @@ export const docSpec = {
       oneliner: true,
       mustBeAfter: ['ns:name'],
       mustBeBefore: ['ns:email', 'ns:phone', 'ns:institution'],
-      canDropTo: ['ns:reviewer'],
+      canDropTo: ['ns:reviwer'],
       menu: [
         {
           caption: 'Edit',
@@ -157,7 +164,7 @@ export const docSpec = {
       oneliner: true,
       mustBeAfter: ['ns:name', 'ns:surname'],
       mustBeBefore: ['ns:phone', 'ns:institution'],
-      canDropTo: ['ns:reviewer'], menu: [
+      canDropTo: ['ns:reviwer'], menu: [
         {
           caption: 'Edit',
           action: Xonomy.editRaw,
@@ -180,7 +187,7 @@ export const docSpec = {
       oneliner: true,
       mustBeAfter: ['ns:name', 'ns:surname', 'ns:email'],
       mustBeBefore: ['ns:institution'],
-      canDropTo: ['ns:reviewer'],
+      canDropTo: ['ns:reviwer'],
       menu: [
         {
           caption: 'Edit',
@@ -202,7 +209,7 @@ export const docSpec = {
     },
     'ns:institution': {
       mustBeAfter: ['ns:name', 'ns:surname', 'ns:email', 'ns:phone'],
-      canDropTo: ['ns:reviewer'],
+      canDropTo: ['ns:reviwer'],
     },
     'ns:address': {
       mustBeAfter: ['ns:name'],
@@ -360,11 +367,6 @@ export const docSpec = {
           actionParameter: '<ns:text id="text" xmlns:ns="http://www.uns.ac.rs/Tim1"><ns:cursive/></ns:text>'
         },
         {
-          caption: 'Append an <ns:quote>',
-          action: Xonomy.newElementChild,
-          actionParameter: '<ns:quote id="quote" ref="" xmlns:ns="http://www.uns.ac.rs/Tim1"><ns:cursive/></ns:quote>'
-        },
-        {
           caption: 'Append an <ns:formula>',
           action: Xonomy.newElementChild,
           actionParameter: '<ns:formula xmlns:ns="http://www.uns.ac.rs/Tim1"/>'
@@ -373,15 +375,6 @@ export const docSpec = {
           caption: 'Append an <ns:list>',
           action: Xonomy.newElementChild,
           actionParameter: '<ns:list id="list" type="ordered" xmlns:ns="http://www.uns.ac.rs/Tim1"><ns:listitem><ns:cursive/></ns:listitem></ns:list>'
-        },
-        {
-          caption: 'Append an <ns:image>',
-          action: Xonomy.newElementChild,
-          actionParameter: '<ns:image id="image" xmlns:ns="http://www.uns.ac.rs/Tim1"><ns:description/><ns:source/></ns:image>'
-        }, {
-          caption: 'Append an <ns:table>',
-          action: Xonomy.newElementChild,
-          actionParameter: '<ns:table id="table" border="true" xmlns:ns="http://www.uns.ac.rs/Tim1"><ns:table_row><ns:table_cell/></ns:table_row></ns:table>'
         },
         {
           caption: 'Delete this paragraph',
@@ -606,22 +599,13 @@ export const docSpec = {
         }
       ]
     },
-    'ns:quote': {
-      canDropTo: ['ns:answer', 'ns:content'],
-      menu: [
+    'ns:formula': {
+      canDropTo: ['ns:answer', 'ns:content'], menu: [
         {
-          caption: 'Delete this quote',
+          caption: 'Delete this list',
           action: Xonomy.deleteElement
         }
       ],
-      attributes: {
-        'ref': {
-          asker: Xonomy.askString,
-        }
-      }
-    },
-    'ns:formula': {
-      canDropTo: ['ns:answer', 'ns:content'],
     },
     'ns:list': {
       canDropTo: ['ns:answer', 'ns:content'],
@@ -657,38 +641,6 @@ export const docSpec = {
         }
       ]
     },
-    'ns:image': {
-      canDropTo: ['ns:answer'],
-      menu: [
-        {
-          caption: 'Delete this image',
-          action: Xonomy.deleteElement,
-        },
-        {
-          caption: 'Add @height="100"',
-          action: Xonomy.newAttribute,
-          actionParameter: { name: 'nheight', value: '100' },
-          hideIf: function (jsElement) {
-            return jsElement.hasAttribute('height');
-          }
-        }, {
-          caption: 'Add @width="100"',
-          action: Xonomy.newAttribute,
-          actionParameter: { name: 'width', value: '100' },
-          hideIf: function (jsElement) {
-            return jsElement.hasAttribute('width');
-          }
-        },
-      ],
-      attributes: {
-        'height': {
-          asker: Xonomy.askString,
-        },
-        'width': {
-          asker: Xonomy.askString,
-        }
-      }
-    },
     'ns:content': {
       mustBeAfter: ['ns:date', 'ns:reviewer'],
       mustBeBefore: ['ns:questions', 'ns:mark'],
@@ -699,11 +651,6 @@ export const docSpec = {
           actionParameter: '<ns:text id="text" xmlns:ns="http://www.uns.ac.rs/Tim1"><ns:cursive/></ns:text>'
         },
         {
-          caption: 'Append an <ns:quote>',
-          action: Xonomy.newElementChild,
-          actionParameter: '<ns:quote id="quote" ref="" xmlns:ns="http://www.uns.ac.rs/Tim1"><ns:cursive/></ns:quote>'
-        },
-        {
           caption: 'Append an <ns:formula>',
           action: Xonomy.newElementChild,
           actionParameter: '<ns:formula xmlns:ns="http://www.uns.ac.rs/Tim1"/>'
@@ -712,15 +659,6 @@ export const docSpec = {
           caption: 'Append an <ns:list>',
           action: Xonomy.newElementChild,
           actionParameter: '<ns:list id="list" type="ordered" xmlns:ns="http://www.uns.ac.rs/Tim1"><ns:listitem><ns:cursive/></ns:listitem></ns:list>'
-        },
-        {
-          caption: 'Append an <ns:image>',
-          action: Xonomy.newElementChild,
-          actionParameter: '<ns:image id="image" xmlns:ns="http://www.uns.ac.rs/Tim1"><ns:description/><ns:source/></ns:image>'
-        }, {
-          caption: 'Append an <ns:table>',
-          action: Xonomy.newElementChild,
-          actionParameter: '<ns:table id="table" border="true" xmlns:ns="http://www.uns.ac.rs/Tim1"><ns:table_row><ns:table_cell/></ns:table_row></ns:table>'
         },
         {
           caption: 'Delete this content',

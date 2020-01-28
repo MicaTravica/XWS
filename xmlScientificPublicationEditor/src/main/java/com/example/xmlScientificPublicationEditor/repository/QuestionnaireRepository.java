@@ -96,6 +96,11 @@ public class QuestionnaireRepository {
 		for (int i = 0; i < answer.getLength(); ++i) {
 			idGeneratorService.generateParagraphId(answer.item(i), id + "_answer" + (i + 1));
 		}
+		
+		NodeList content = document.getElementsByTagName(IdGeneratorServiceImpl.CONTENT);
+		for (int i = 0; i < content.getLength(); ++i) {
+			idGeneratorService.generateParagraphId(content.item(i), id + "_content" + (i + 1));
+		}
 	}
 
 	public String update(String questionnaire) throws Exception {
