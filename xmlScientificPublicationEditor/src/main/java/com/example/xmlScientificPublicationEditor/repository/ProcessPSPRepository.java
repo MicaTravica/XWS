@@ -203,4 +203,31 @@ public class ProcessPSPRepository {
 		return retVal;
 	}
 
+	public ArrayList<String> findByOwnerEmail(String email) throws Exception{
+		ArrayList<String> retVal = new ArrayList<>();
+		String xpathExp = "//processPSP[@authorEmail=\"" + email + "\"]";
+		ResourceSet resultSet = RetriveFromDB.executeXPathExpression(ProcessPSPCollectionId, xpathExp,
+				TARGET_NAMESPACE);
+		if (resultSet == null) {
+			return retVal;
+		}
+		ResourceIterator i = resultSet.getIterator();
+		XMLResource res = null;
+		while (i.hasMoreResources()) {
+			try {
+				res = (XMLResource) i.nextResource();
+				retVal.add(res.getContent().toString());
+			} finally {
+				// don't forget to cleanup resources
+				try {
+					((EXistResource) res).freeResources();
+				} catch (XMLDBException xe) {
+					xe.printStackTrace();
+				}
+			}
+		}
+		return retVal;
+
+    }
+
 }

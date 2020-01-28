@@ -36,6 +36,8 @@ public interface ProcessPSPService {
 
 	String findForPublishing() throws Exception;
 
+	String findMyPublications(String name) throws Exception;
+
 
 
 

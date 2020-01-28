@@ -1,5 +1,7 @@
 package com.example.xmlScientificPublicationEditor.controller;
 
+import java.security.Principal;
+
 import com.example.xmlScientificPublicationEditor.service.ProcessPSPService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,12 @@ public class ProcessPSPController {
     @GetMapping(value="/processPSP/getForPublishing", produces = MediaType.APPLICATION_XML_VALUE)
 	public ResponseEntity<String> getProcessPSPForPublishing() throws Exception{
 		String sp = processPSPService.findForPublishing();
+		return new ResponseEntity<>(sp, HttpStatus.OK);
+	}
+
+	@GetMapping(value="/processPSP/getMyPublication", produces = MediaType.APPLICATION_XML_VALUE)
+	public ResponseEntity<String> getMyPublication(Principal principal) throws Exception{
+		String sp = processPSPService.findMyPublications(principal.getName());
 		return new ResponseEntity<>(sp, HttpStatus.OK);
 	}
     

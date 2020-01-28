@@ -33,6 +33,13 @@
                 </xs:simpleType>
             </xs:attribute>
             <xs:attribute name="lastVersion" type="xs:integer" default="1"/>
+            <xs:attribute name="authorEmail" use="required">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:minLength value="1"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:attribute>
             <xs:attribute name="id" type="xs:string" use="required"/>
         </xs:complexType>
     </xs:element>

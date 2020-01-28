@@ -65,6 +65,7 @@ public class ProcessPSPServiceImpl implements ProcessPSPService {
         return procesStr;
     }
 
+    
     @Override
     public String setCoverLetter(String scientificPublicationId, String coverLetterId) throws Exception {
         String processStr = this.findOneByScientificPublicationID(scientificPublicationId);
@@ -172,6 +173,32 @@ public class ProcessPSPServiceImpl implements ProcessPSPService {
         retVal.append("</processes>");
         return retVal.toString();
     }
+
+    @Override
+    public String findMyPublications(String email) throws Exception {
+        StringBuilder retVal = new StringBuilder();
+        retVal.append("<processes>");
+        ArrayList<String> myPublications = this.processPSPRepo.findByOwnerEmail(email);
+        for(String p: myPublications) {
+
+            String lastSPId =  xslFoTransformer.applyTemplate(p, ProcessPSPRepository.ProcessPSPXSLSPId );
+            String sp = scService.findOne(lastSPId);
+
+            String spData = xslFoTransformer.applyTemplate(sp, ScientificPublicationRepository.DATA_PROCESS_XSL );
+
+            String transformed_p =
+                xslFoTransformer.applyTemplate(p, ProcessPSPRepository.ProcessPSPXSLForReview );
+            
+            String[] s = transformed_p.split("</processPSP>");
+            transformed_p =  s[0] + spData + "\n</processPSP>";
+            
+            retVal.append(transformed_p);
+            retVal.append("\n");
+        }
+        retVal.append("</processes>");
+        return retVal.toString();
+    }
+
 
     
 }

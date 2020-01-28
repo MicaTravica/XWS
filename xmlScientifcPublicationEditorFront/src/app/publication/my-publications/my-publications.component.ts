@@ -15,6 +15,7 @@ export class MyPublicationsComponent implements OnInit {
   ngOnInit() {
     this.processPSPService.getMyPublications()
       .subscribe( res => {
+        console.log(res);
       });
   }
 
