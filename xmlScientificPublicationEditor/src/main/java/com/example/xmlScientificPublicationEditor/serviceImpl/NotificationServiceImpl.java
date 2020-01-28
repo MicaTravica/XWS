@@ -87,7 +87,8 @@ public class NotificationServiceImpl implements NotificationService {
 
 	@Override
 	public void sendEmailNotification(String[] emails, Document document) throws Exception {
-		String notification = DOMParser.parseDocument(document);
+		String notification = DOMParser.parseDocument(
+				document, NotificationRepository.NotificationSchemaPath);
 		String notifHTML = xslFoTransformer.generateHTML(notification, NotificationRepository.NotificationXSLPath);
 		mailService.sendEmail(emails, notifHTML);
 	}

@@ -69,7 +69,7 @@ public class IdGeneratorRepository {
 		Document document = DOMParser.buildDocument(glt, idGeneratorSchemaPath);
 		String id = document.getElementsByTagName("ns:" + element).item(0).getTextContent().trim();
 		document.getElementsByTagName("ns:" + element).item(0).setTextContent((Integer.parseInt(id) + 1) + "");
-		String toSave = DOMParser.parseDocument(document);
+		String toSave = DOMParser.parseDocument(document, idGeneratorSchemaPath);
 		StoreToDB.store(idGeneratorPath, idGeneratorId, toSave);
 		return id;
 	}

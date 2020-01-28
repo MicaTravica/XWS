@@ -6,26 +6,54 @@
     <xs:element name="processPSP">
         <xs:complexType>
             <xs:sequence>
-                <xs:element minOccurs="1" maxOccurs="unbounded" name="scientificPublication" type="xs:string"/>
-                <xs:element minOccurs="0" maxOccurs="unbounded" name="coverLetter" type="xs:string"/>
                 <xs:element minOccurs="1" maxOccurs="1" name="idRedactor" type="xs:string"/>
-                <xs:element name="reviewAssignment" type="TReviewAssignment" minOccurs="0"/>
+                <xs:element minOccurs="0" maxOccurs="1" name="coverLetter" type="xs:string"/>
+                <xs:element maxOccurs="1" name="versions">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element maxOccurs="unbounded" minOccurs="1" name="version"
+                                type="TVersion"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
             </xs:sequence>
-            <xs:attribute default="forReview" name="state">
+            <xs:attribute default="inProgress" name="state">
                 <xs:simpleType>
                     <xs:restriction base="xs:string">
                         <xs:enumeration value="forReview"/>
-                        <xs:enumeration value="reviewdAndScored"/>
-                        <xs:enumeration value="scoredAndAceppted"/>
-                        <xs:enumeration value="scoredAndRejected"/>
-                        <xs:enumeration value="scoredAndRevised"/>
+                        <xs:enumeration value="waitningForReviewers"/>
+                        <xs:enumeration value="scored"/>
+                        <xs:enumeration value="revised"/>
                         <xs:enumeration value="published"/>
                         <xs:enumeration value="retracted"/>
                         <xs:enumeration value="deleted"/>
+                        <xs:enumeration value="inProgress"/>
+                        <xs:enumeration value="rejected"/>
                     </xs:restriction>
                 </xs:simpleType>
             </xs:attribute>
+            <xs:attribute name="lastVersion" type="xs:integer" default="1"/>
             <xs:attribute name="id" type="xs:string" use="required"/>
         </xs:complexType>
     </xs:element>
+    <xs:complexType name="TVersion">
+        <xs:sequence>
+            <xs:element name="scientificPublication">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:minLength value="1"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="reviewAssignments">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element maxOccurs="unbounded" minOccurs="0" name="reviewAssigment"
+                            type="TReviewAssignment"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+        <xs:attribute name="version" type="xs:integer" default="1"/>
+    </xs:complexType>
 </xs:schema>

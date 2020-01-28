@@ -62,7 +62,7 @@ public class ScientificPublicationRepository {
 		String id = "sp" + idGeneratorService.getId("scientificPublication");
 		document.getDocumentElement().getAttributes()
 					.getNamedItem("id").setTextContent(id);
-		String toSave = DOMParser.parseDocument(document);
+		String toSave = DOMParser.parseDocument(document, scientificPublicationSchemaPath);
 		StoreToDB.store(scientificPublicationCollectionId, id, toSave);
 		return id;
 	}

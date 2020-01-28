@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.xmldb.api.base.ResourceIterator;
 import org.xmldb.api.base.ResourceSet;
 import org.xmldb.api.base.XMLDBException;
@@ -22,6 +24,8 @@ import com.example.xmlScientificPublicationEditor.util.existAPI.UpdateDB;
 @Repository
 public class ProcessPSPRepository {
 
+	
+
 	@Autowired
 	private IdGeneratorService idGeneratorService;
 
@@ -30,6 +34,8 @@ public class ProcessPSPRepository {
 	public static String CoverLetterFiled = "ns:coverLetter";
 	public static String PROCESS_ID = "id";
 	public static String PROCESS_ROOT = "ns:processPSP";
+	public static final String PROCESS_LAST_VERSION = "lastVersion";
+	public static final String PROCESS_STATE = "state";
 
     public static String ProcessPSPTemplatePath = "src/main/resources/data/xml/processPSPTemplate.xml";
 	public static String ProcessPSPCollectionId = "/db/sample/processPSP";
@@ -83,7 +89,7 @@ public class ProcessPSPRepository {
 	public Document save(Document process) throws Exception {
 		String id = idGeneratorService.getId("process");
 		this.setProceesId(process, id);
-		String processS = DOMParser.parseDocument(process);
+		String processS = DOMParser.parseDocument(process,ProcessPSPSchemaPath);
 		StoreToDB.store(ProcessPSPCollectionId, id, processS);
 		return process;
 	}
@@ -92,7 +98,7 @@ public class ProcessPSPRepository {
 	{
 		String processId = this.getProceesId(process);
 		this.delete(processId);
-		String processS = DOMParser.parseDocument(process);
+		String processS = DOMParser.parseDocument(process, ProcessPSPSchemaPath);
 		StoreToDB.store(ProcessPSPCollectionId, processId, processS);
 		return process;
 	}
@@ -109,8 +115,14 @@ public class ProcessPSPRepository {
 	// SET METHODS
     public Document setScientificPublicationId(Document process, String scientificPublciationID) throws Exception
     {
-		process.getElementsByTagName(ScientificPublicationFiled).
-				item(0).setTextContent(scientificPublciationID);
+		Node lastVersion = this.getLastVersion(process);
+		NodeList list = lastVersion.getChildNodes();
+		for(int i=0; i < list.getLength(); i++){
+			Node n = list.item(i);
+			if(n.getNodeName().equals(ScientificPublicationFiled)){
+				n.setTextContent(scientificPublciationID);
+			}
+		}
         return process;
 	}
 	
@@ -118,6 +130,35 @@ public class ProcessPSPRepository {
 		process.getElementsByTagName(CoverLetterFiled).
 				item(0).setTextContent(coverLetterId);
         return process;
+	}
+
+	// vrati deo dokumenta process tj vrati deo koji cini poslednja verzija
+	public Node getLastVersion(Document process) {
+		
+		String lastVersionNumber = process.getElementsByTagName(PROCESS_ROOT).item(0).
+			getAttributes().getNamedItem(PROCESS_LAST_VERSION).getTextContent();
+		
+		NodeList l = process.getElementsByTagName(PROCESS_ROOT).item(0).getChildNodes();
+		for(int i = 0; i < l.getLength(); i++){
+			Node n = l.item(i);
+			if( n.getNodeName().equals("ns:versions")) {
+				NodeList versions =  n.getChildNodes();
+				if(versions.getLength() == 1)
+				{
+					return versions.item(0);
+				}
+				for(int j=0; j < versions.getLength();j++){
+					Node version = versions.item(j);
+					if( version.getNodeName().equals("ns:version")) {
+						String versionNumber = version.getAttributes().getNamedItem("version").getTextContent();
+						if(versionNumber.equals(lastVersionNumber)) {
+							return version;
+						}
+					}
+				}
+			}
+		}
+		return null;
 	}
 
 }

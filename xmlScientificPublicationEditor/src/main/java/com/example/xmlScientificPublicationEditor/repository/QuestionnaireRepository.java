@@ -66,7 +66,7 @@ public class QuestionnaireRepository {
 		Document document = DOMParser.buildDocument(questionnaire, QuestionnaireSchemaPath);
 		String id = "que" + idGeneratorService.getId("questionnaire");
 		document.getDocumentElement().getAttributes().getNamedItem("id").setTextContent(id);
-		String toSave = DOMParser.parseDocument(document);
+		String toSave = DOMParser.parseDocument(document, QuestionnaireSchemaPath);
 		StoreToDB.store(QuestionnaireCollectionId, id, toSave);
 		return id;
 	}
