@@ -21,10 +21,8 @@ export class ForPublicationComponent implements OnInit {
   ngOnInit() {
     this.processPSPService.getPublicationsForPublishing()
       .subscribe( res => {
-        console.log(res);
         const obj = JSON.parse(convert.xml2json(res, {compact: true, spaces: 4}));
-        const processPSPList = obj.processes.processPSP as any[];
-        console.log(processPSPList);
+        const processPSPList = obj.processes.processPSP as any[]; 
         processPSPList.forEach( p => {
           this.publications.push({
             id: p.sp.scientificPublicationId._text,
