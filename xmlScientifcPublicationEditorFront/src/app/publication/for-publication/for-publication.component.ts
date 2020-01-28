@@ -27,7 +27,7 @@ export class ForPublicationComponent implements OnInit {
           this.publications.push({
             id: p.sp.scientificPublicationId._text,
             name: p.sp.scientificPublicationName._text,
-            authors: p.sp.authors,
+            authors: (p.sp.authors.author.length) ? p.sp.authors.author : [p.sp.authors.author],
             processState: p.processState._text,
             lastVersion: p.lastVersion._text,
             processId: p.processId._text
