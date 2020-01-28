@@ -4,6 +4,9 @@ export class Person {
   public 'ns:email': string;
   public 'ns:phone': string;
   public 'ns:institution': Institution;
+  public '_attributes': {
+    id: string;
+  };
 }
 
 export class Institution {

@@ -20,8 +20,9 @@ export class UserService {
     this.usersUrl = environment.restPath + '/person';
   }
 
-  public me(token: string) {
-    return this.http.get(this.usersUrl + '/userme',
+  public me() {
+    const token = this.authService.getToken();
+    return this.http.get(this.usersUrl,
       {
         headers: authHttpOptions(token),
         responseType: 'text'
@@ -50,15 +51,12 @@ export class UserService {
       {
         headers: httpOptions(),
         responseType: 'text'
-      })
-    .subscribe(() => {
-      this.router.navigate(['/login']);
-    });
+      });
   }
 
   public savePerson(personXML: string) {
     const token = this.authService.getToken();
-    return this.http.put(environment.restPath, personXML,
+    return this.http.put(this.usersUrl, personXML,
       {
         headers: authHttpOptions(token),
         responseType: 'text'

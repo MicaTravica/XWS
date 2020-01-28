@@ -144,5 +144,12 @@ public class PersonServiceImpl implements PersonService {
         xsInstance.generate(xsModel, rootElement, sampleXml);
         return sw.toString();
     }
+
+	@Override
+	public TPerson findMe(String email) throws Exception {
+		TAuthPerson auth = findOneAuth(email);
+		TPerson person = findOne(auth.getPerson());
+		return person;
+	}
   
 }

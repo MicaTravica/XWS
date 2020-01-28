@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { UserService } from 'src/app/services/user-service/user.service';
 import { Validators, FormBuilder } from '@angular/forms';
 import { Person } from 'src/app/models/user-model/user.model';
+import { ToastrService } from 'ngx-toastr';
 
 declare var require: any;
 const convert = require('xml-js');
@@ -15,10 +16,12 @@ export class ProfilEditComponent implements OnInit {
 
   profilForm;
   submitted;
+  id: string;
 
   constructor(
     private userService: UserService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private toastr: ToastrService,
   ) {
     this.profilForm = this.formBuilder.group({
       name: ['', Validators.required],
@@ -40,6 +43,26 @@ export class ProfilEditComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.userService.me().subscribe(
+      (data: any) => {
+        const obj = JSON.parse(convert.xml2json(data, { compact: true, spaces: 4 }));
+        const person: Person = obj['ns:person'] as Person;
+        this.id = person._attributes.id;
+        this.profilForm = this.formBuilder.group({
+          name: [person['ns:name']['_text'], Validators.required],
+          surname: [person['ns:surname']['_text'], Validators.required],
+          email: [person['ns:email']['_text'], Validators.required],
+          phone: [person['ns:phone']['_text'], Validators.required],
+          iName: [person['ns:institution']['ns:name']['_text'], Validators.required],
+          city: [person['ns:institution']['ns:address']['ns:city']['_text'], Validators.required],
+          streetNumber: [person['ns:institution']['ns:address']['ns:streetNumber']['_text']],
+          floorNumber: [(person['ns:institution']['ns:address']['ns:floorNumber']) ? person['ns:institution']['ns:address']['ns:floorNumber']['_text'] : 0],
+          street: [person['ns:institution']['ns:address']['ns:street']['_text'], Validators.required],
+          country: [person['ns:institution']['ns:address']['ns:country']['_text'], Validators.required],
+
+        });
+      }
+    );
   }
 
   onSubmit() {
@@ -47,7 +70,6 @@ export class ProfilEditComponent implements OnInit {
     if (this.profilForm.invalid) {
       return;
     }
-    console.log('cao');
     this.userService.getPersonTemplate().subscribe(
       (template: any) => {
         const obj = JSON.parse(convert.xml2json(template, { compact: true, spaces: 4 }));
@@ -70,9 +92,17 @@ export class ProfilEditComponent implements OnInit {
         }
         person['ns:institution']['ns:address']['ns:street'] = this.profilForm.value.street;
         person['ns:institution']['ns:address']['ns:country'] = this.profilForm.value.country;
+        person._attributes.id = this.id;
         obj['ns:person'] = person;
         const retVal = convert.js2xml(obj, { compact: true, spaces: 4 });
-        this.userService.savePerson(retVal);
+        this.userService.savePerson(retVal).subscribe(
+          () => {
+            this.toastr.success('You change your data!');
+          },
+          () => {
+            this.toastr.error('Something went wrong, check your data!');
+          }
+        );
       });
   }
 

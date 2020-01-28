@@ -23,8 +23,8 @@ export class LoginComponent implements OnInit {
     private authService: AuthService,
     private userService: UserService,
     private formBuilder: FormBuilder,
-    private router: Router
-    // private toastr: ToastrService
+    private router: Router,
+    private toastr: ToastrService
   ) {
     this.loginForm = this.formBuilder.group({
       email: ['', Validators.required],
@@ -46,12 +46,11 @@ export class LoginComponent implements OnInit {
         const retVal = convert.js2xml(obj, {compact: true, spaces: 4});
         this.authService.login(retVal).subscribe(
           result => {
-            console.log(result);
             localStorage.setItem('token', JSON.stringify(result));
             this.router.navigate(['/publications']);
           },
           error => {
-            // this.toastr.error(error.error);
+            this.toastr.error(error.error);
           }
         );
       });
