@@ -27,6 +27,8 @@ public class IdGeneratorServiceImpl implements IdGeneratorService {
 	public static String TABLE = "ns:table";
 	public static String IMAGE = "ns:image";
 	public static String REFERENCE = "ns:reference";
+	public static String CP = "ns:contactPerson";
+	public static String CONTENT = "ns:content";
 	
 	@Autowired
 	private IdGeneratorRepository idGeneratorRepository;
@@ -79,8 +81,8 @@ public class IdGeneratorServiceImpl implements IdGeneratorService {
 	@Override
     public void generateParagraphId(Node node, String id) throws Exception {
         if (node instanceof Element) {
-            if (!node.getNodeName().equals(PARAGRAPH)) {
-                throw new Exception("Expected paragraph, instead got " + node.getNodeName());
+            if (!node.getNodeName().equals(PARAGRAPH) && !node.getNodeName().equals(CONTENT)) {
+                throw new Exception("Expected paragraph/content, instead got " + node.getNodeName());
             }
             Element paragraph = (Element) node;
 

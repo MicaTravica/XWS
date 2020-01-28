@@ -8,6 +8,8 @@ import org.exist.xmldb.EXistResource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.xmldb.api.base.ResourceIterator;
 import org.xmldb.api.base.ResourceSet;
 import org.xmldb.api.base.XMLDBException;
@@ -16,6 +18,7 @@ import org.xmldb.api.modules.XMLResource;
 import com.example.xmlScientificPublicationEditor.exception.ResourceNotDeleted;
 import com.example.xmlScientificPublicationEditor.exception.ResourceNotFoundException;
 import com.example.xmlScientificPublicationEditor.service.IdGeneratorService;
+import com.example.xmlScientificPublicationEditor.serviceImpl.IdGeneratorServiceImpl;
 import com.example.xmlScientificPublicationEditor.util.DOMParser.DOMParser;
 import com.example.xmlScientificPublicationEditor.util.RDF.StoreToRDF;
 import com.example.xmlScientificPublicationEditor.util.RDF.UpdateRDF;
@@ -66,10 +69,38 @@ public class CoverLetterRepository {
 	public String save(String coverLetter) throws Exception {
 		Document document = DOMParser.buildDocument(coverLetter, coverLetterSchemaPath);
 		String id = "cl" + idGeneratorService.getId("coverLetter");
+
+		generateIDs(document, id);
+		
 		document.getDocumentElement().getAttributes().getNamedItem("id").setTextContent(id);
 		String toSave = DOMParser.parseDocument(document, CoverLetterRepository.coverLetterSchemaPath);
 		StoreToDB.store(coverLetterCollectionId, id, toSave);
 		return id;
+	}
+
+	private void generateIDs(Document document, String id) throws Exception {
+		Node author = document.getElementsByTagName(IdGeneratorServiceImpl.AUTHOR).item(0);
+		idGeneratorService.generateElementId(author, id + "_author", IdGeneratorServiceImpl.AUTHOR);
+		
+		Node cp = document.getElementsByTagName(IdGeneratorServiceImpl.CP).item(0);
+		idGeneratorService.generateElementId(cp, id + "_cp", IdGeneratorServiceImpl.CP);
+
+		NodeList institutions = document.getElementsByTagName(IdGeneratorServiceImpl.INSTITUTION);
+		for (int i = 0; i < institutions.getLength(); ++i) {
+			idGeneratorService.generateElementId(institutions.item(i), id + "_institution" + (i + 1),
+					IdGeneratorServiceImpl.INSTITUTION);
+		}
+
+		NodeList address = document.getElementsByTagName(IdGeneratorServiceImpl.ADDRESS);
+		for (int i = 0; i < address.getLength(); ++i) {
+			idGeneratorService.generateElementId(address.item(i), id + "_address" + (i + 1),
+					IdGeneratorServiceImpl.ADDRESS);
+		}
+
+		NodeList content = document.getElementsByTagName(IdGeneratorServiceImpl.CONTENT);
+		for (int i = 0; i < content.getLength(); ++i) {
+			idGeneratorService.generateParagraphId(content.item(i), id + "_content" + (i + 1));
+		}
 	}
 
 	public String update(String coverLetter) throws Exception {
