@@ -61,8 +61,6 @@ public class DOMParser {
         SchemaFactory xsdFactory = SchemaFactory.newInstance(constant);
         Schema schema = null;
 		schema = xsdFactory.newSchema(file);
-		
-		
 		factory.setSchema(schema);
 			
 		DocumentBuilder builder = factory.newDocumentBuilder();
@@ -108,13 +106,21 @@ public class DOMParser {
 		return document;
 	}
 
-	public static String parseDocument(Document document) throws Exception{
+	public static String parseDocument(Document document, String schemaPath) throws Exception{
 
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		factory.setValidating(false);
 		factory.setNamespaceAware(true);
 		factory.setIgnoringComments(true);
 		factory.setIgnoringElementContentWhitespace(true);
+
+		// create schema
+		File file = new File(schemaPath);
+        String constant = XMLConstants.W3C_XML_SCHEMA_NS_URI;
+        SchemaFactory xsdFactory = SchemaFactory.newInstance(constant);
+        Schema schema = null;
+		schema = xsdFactory.newSchema(file);
+		factory.setSchema(schema);
 
 		DocumentBuilder builder = factory.newDocumentBuilder();
 		builder.setErrorHandler(new ErrorHandlerImpl());

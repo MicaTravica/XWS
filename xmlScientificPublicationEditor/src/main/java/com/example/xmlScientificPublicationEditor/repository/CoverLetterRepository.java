@@ -67,7 +67,7 @@ public class CoverLetterRepository {
 		Document document = DOMParser.buildDocument(coverLetter, coverLetterSchemaPath);
 		String id = "cl" + idGeneratorService.getId("coverLetter");
 		document.getDocumentElement().getAttributes().getNamedItem("id").setTextContent(id);
-		String toSave = DOMParser.parseDocument(document);
+		String toSave = DOMParser.parseDocument(document, CoverLetterRepository.coverLetterSchemaPath);
 		StoreToDB.store(coverLetterCollectionId, id, toSave);
 		return id;
 	}
