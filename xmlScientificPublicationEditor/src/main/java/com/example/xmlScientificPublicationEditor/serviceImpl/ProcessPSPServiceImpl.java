@@ -1,20 +1,23 @@
 package com.example.xmlScientificPublicationEditor.serviceImpl;
 
 import java.io.StringWriter;
+import java.util.ArrayList;
 
 import javax.xml.namespace.QName;
 import javax.xml.transform.stream.StreamResult;
 
 import com.example.xmlScientificPublicationEditor.exception.ResourceNotFoundException;
 import com.example.xmlScientificPublicationEditor.model.ProcessState;
-import com.example.xmlScientificPublicationEditor.model.authPerson.TAuthPerson;
 import com.example.xmlScientificPublicationEditor.model.authPerson.TRole;
-import com.example.xmlScientificPublicationEditor.repository.CoverLetterRepository;
 import com.example.xmlScientificPublicationEditor.repository.ProcessPSPRepository;
+import com.example.xmlScientificPublicationEditor.repository.ScientificPublicationRepository;
 import com.example.xmlScientificPublicationEditor.service.PersonService;
 import com.example.xmlScientificPublicationEditor.service.ProcessPSPService;
+import com.example.xmlScientificPublicationEditor.service.ScientificPublicationService;
 import com.example.xmlScientificPublicationEditor.util.DOMParser.DOMParser;
+import com.example.xmlScientificPublicationEditor.util.XSLFOTransformer.XSLFOTransformer;
 
+import org.apache.logging.log4j.util.StringBuilders;
 import org.apache.xerces.xs.XSModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,10 +32,16 @@ import jlibs.xml.xsd.XSParser;
 public class ProcessPSPServiceImpl implements ProcessPSPService {
 
     @Autowired
+    private ScientificPublicationService scService;
+
+    @Autowired
     private ProcessPSPRepository processPSPRepo;
 
     @Autowired
     private PersonService personService;
+
+    @Autowired
+	private XSLFOTransformer xslFoTransformer;
 
     @Override
     public String create(String scientificPublicationId) throws Exception {
@@ -41,7 +50,6 @@ public class ProcessPSPServiceImpl implements ProcessPSPService {
         String redactorId = this.personService.findUsersByRole(TRole.ROLE_REDACTOR).get(0);
         newProcess = processPSPRepo.setRedactor(newProcess, redactorId);
         processPSPRepo.setScientificPublicationId(newProcess, scientificPublicationId);
-
         this.setProcessPSPState(newProcess, ProcessState.IN_PROGRESS);
         processPSPRepo.save(newProcess);
         return newProcess.getDocumentElement().getAttribute("id");
@@ -134,6 +142,35 @@ public class ProcessPSPServiceImpl implements ProcessPSPService {
     public String getLastVersionNumber(String processId) throws Exception {
         // TODO Auto-generated method stub
         return null;
+    }
+
+
+
+
+
+    @Override
+    public String findForPublishing() throws Exception{
+        StringBuilder retVal = new StringBuilder();
+        retVal.append("<processes>");
+        ArrayList<String> forPublishing = this.processPSPRepo.findForPublishing();
+        for(String p: forPublishing) {
+
+            String lastSPId =  xslFoTransformer.applyTemplate(p, ProcessPSPRepository.ProcessPSPXSLSPId );
+            String sp = scService.findOne(lastSPId);
+
+            String spData = xslFoTransformer.applyTemplate(sp, ScientificPublicationRepository.DATA_PROCESS_XSL );
+
+            String transformed_p =
+                xslFoTransformer.applyTemplate(p, ProcessPSPRepository.ProcessPSPXSLForReview );
+            
+            String[] s = transformed_p.split("</processPSP>");
+            transformed_p =  s[0] + spData + "\n</processPSP>";
+            
+            retVal.append(transformed_p);
+            retVal.append("\n");
+        }
+        retVal.append("</processes>");
+        return retVal.toString();
     }
 
     

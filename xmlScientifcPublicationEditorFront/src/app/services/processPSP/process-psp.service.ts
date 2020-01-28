@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { AuthService } from '../auth-service/auth.service';
 import { environment } from 'src/environments/environment';
 import { authHttpOptions } from 'src/app/util/http-util';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -23,5 +24,9 @@ export class ProcessPSPService {
         headers: authHttpOptions(this.authService.getToken()),
         responseType: 'text'
       });
+  }
+
+  getMyPublications() {
+    return new Observable();
   }
 }
