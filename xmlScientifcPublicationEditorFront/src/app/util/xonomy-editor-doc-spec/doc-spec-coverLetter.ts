@@ -11,6 +11,17 @@ export const docSpec = {
                 }
             ]
         },
+        'ns:author': {
+            mustBeAfter: ['ns:date'],
+            mustBeBefore: ['ns:content'],
+            menu: [
+                {
+                    caption: 'Add my data',
+                    action: myData,
+                    actionParameter: localStorage.getItem('user').split('ns:person').join('ns:author')
+                }
+            ]
+        },
         'ns:name': {
             oneliner: true,
             mustBeBefore: ['ns:surname', 'ns:email', 'ns:phone', 'ns:institution', 'ns:address'],
@@ -594,3 +605,8 @@ export const docSpec = {
         }
     }
 };
+function myData(htmlID, param) {
+    const jsElement = Xonomy.harvestElement(document.getElementById(htmlID)).parent();
+    Xonomy.deleteElement(htmlID);
+    Xonomy.newElementChild(jsElement.htmlID, param);
+}

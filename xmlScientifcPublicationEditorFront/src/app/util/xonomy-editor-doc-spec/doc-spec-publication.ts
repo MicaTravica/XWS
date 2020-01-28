@@ -1,5 +1,9 @@
-declare const Xonomy: any;
+import { Person } from 'src/app/models/user-model/user.model';
+import { UserService } from 'src/app/services/user-service/user.service';
 
+declare const Xonomy: any;
+declare var require: any;
+const convert = require('xml-js');
 export const docSpec = {
     elements: {
         'ns:scientificPublication': {
@@ -62,7 +66,12 @@ export const docSpec = {
                     caption: 'Append an <ns:author>',
                     action: Xonomy.newElementChild,
                     actionParameter: '<ns:author id="author" xmlns:ns="http://www.uns.ac.rs/Tim1"><ns:name/><ns:surname/><ns:email/><ns:phone/><ns:institution id="institution"><ns:name/><ns:address><ns:city/><ns:street/><ns:country/></ns:address></ns:institution></ns:author>'
-                }]
+                }, {
+                    caption: 'Append my data',
+                    action: Xonomy.newElementChild,
+                    actionParameter: localStorage.getItem('user').split('ns:person').join('ns:author')
+                }
+            ]
         },
         'ns:abstract': {
             mustBeAfter: ['ns:caption', 'ns:authors'],

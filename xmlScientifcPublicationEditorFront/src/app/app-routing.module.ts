@@ -15,6 +15,7 @@ import { ForPublicationComponent } from './publication/for-publication/for-publi
 import { AddRevisionComponent } from './revisions/add-revision/add-revision.component';
 import { ProcessPublicationComponent } from './publication/process-publication/process-publication.component';
 import { AddCoverLetterComponent } from './add-cover-letter/add-cover-letter.component';
+import { ProfilEditComponent } from './profil/profil-edit/profil-edit.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent, canActivate: [LoginGuard] },
@@ -33,7 +34,7 @@ const routes: Routes = [
     data: { expectedRoles: 'ROLE_REVIEWER|ROLE_REDACTOR|ROLE_USER' }
   },
   {
-    path: 'profile', component: ProfilDetailsComponent, canActivate: [RoleGuard],
+    path: 'profil', component: ProfilEditComponent, canActivate: [RoleGuard],
     data: { expectedRoles: 'ROLE_REVIEWER|ROLE_REDACTOR|ROLE_USER' }
   },
   {
