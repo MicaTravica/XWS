@@ -42,6 +42,20 @@ public class XSLFOTransformer {
 		transformerFactory = new TransformerFactoryImpl();
 	}
 
+	public String applyTemplate(String source, String xsltTemplatePath) throws Exception
+	{
+		File tf = new File(xsltTemplatePath); // template file
+		StringWriter out = new StringWriter(); // result
+		StringReader src = new StringReader(source); // source string
+
+		Transformer t = transformerFactory.newTransformer(new StreamSource(tf));
+
+		Source s = new StreamSource(src);
+		Result r = new StreamResult(out);
+		t.transform(s,r);
+		return out.toString();
+	}
+
 	public String generateHTML(String source, String xsltTemplatePath) throws Exception
 	{
 
