@@ -3,6 +3,8 @@ import { FormBuilder, Validators } from '@angular/forms';
 
 import { UserService } from '../../services/user-service/user.service';
 import { Auth } from 'src/app/models/auth-model/auth.model';
+import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 declare var require: any;
 const convert = require('xml-js');
@@ -18,7 +20,9 @@ export class RegisterComponent implements OnInit {
   submitted;
   constructor(
     private userService: UserService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private router: Router,
+    private toastr: ToastrService,
   ) {
     this.registerForm = this.formBuilder.group({
       email: ['', Validators.required],
@@ -40,13 +44,18 @@ export class RegisterComponent implements OnInit {
     }
     this.userService.getAuthTemplate().subscribe(
       (template: any) => {
-        const obj = JSON.parse(convert.xml2json(template, {compact: true, spaces: 4}));
+        const obj = JSON.parse(convert.xml2json(template, { compact: true, spaces: 4 }));
         const auth: Auth = obj['ns:auth'] as Auth;
         auth['ns:password'] = this.registerForm.value.password;
         auth['ns:email'] = this.registerForm.value.email;
         obj['ns:auth'] = auth;
-        const retVal = convert.js2xml(obj, {compact: true, spaces: 4});
-        this.userService.save(retVal);
+        const retVal = convert.js2xml(obj, { compact: true, spaces: 4 });
+        this.userService.save(retVal)
+          .subscribe(() => {
+            this.router.navigate(['/login']);
+          }, () => {
+            this.toastr.error('Something went wrong, check your data!');
+          });
       });
   }
 }

@@ -13,6 +13,17 @@ export const docSpec = {
       attributes: {
       }
     },
+    'ns:reviewer': {
+      mustBeAfter: ['ns:date'],
+      mustBeBefore: ['ns:questions'],
+      menu: [
+        {
+          caption: 'Add my data',
+          action: myData,
+          actionParameter: localStorage.getItem('user').split('ns:person').join('ns:reviewer')
+        }
+      ]
+    },
     'ns:date': {
       menu: [{
         caption: 'Edit',
@@ -98,7 +109,7 @@ export const docSpec = {
     'ns:name': {
       oneliner: true,
       mustBeBefore: ['ns:surname', 'ns:email', 'ns:phone', 'ns:institution', 'ns:address'],
-      canDropTo: ['ns:reviwer', 'ns:institution'],
+      canDropTo: ['ns:reviewer', 'ns:institution'],
       menu: [
         {
           caption: 'Edit',
@@ -122,7 +133,7 @@ export const docSpec = {
       oneliner: true,
       mustBeAfter: ['ns:name'],
       mustBeBefore: ['ns:email', 'ns:phone', 'ns:institution'],
-      canDropTo: ['ns:reviwer'],
+      canDropTo: ['ns:reviewer'],
       menu: [
         {
           caption: 'Edit',
@@ -146,7 +157,7 @@ export const docSpec = {
       oneliner: true,
       mustBeAfter: ['ns:name', 'ns:surname'],
       mustBeBefore: ['ns:phone', 'ns:institution'],
-      canDropTo: ['ns:reviwer'], menu: [
+      canDropTo: ['ns:reviewer'], menu: [
         {
           caption: 'Edit',
           action: Xonomy.editRaw,
@@ -169,7 +180,7 @@ export const docSpec = {
       oneliner: true,
       mustBeAfter: ['ns:name', 'ns:surname', 'ns:email'],
       mustBeBefore: ['ns:institution'],
-      canDropTo: ['ns:reviwer'],
+      canDropTo: ['ns:reviewer'],
       menu: [
         {
           caption: 'Edit',
@@ -191,7 +202,7 @@ export const docSpec = {
     },
     'ns:institution': {
       mustBeAfter: ['ns:name', 'ns:surname', 'ns:email', 'ns:phone'],
-      canDropTo: ['ns:reviwer'],
+      canDropTo: ['ns:reviewer'],
     },
     'ns:address': {
       mustBeAfter: ['ns:name'],
@@ -719,3 +730,8 @@ export const docSpec = {
     }
   }
 };
+function myData(htmlID, param) {
+    const jsElement = Xonomy.harvestElement(document.getElementById(htmlID)).parent();
+    Xonomy.deleteElement(htmlID);
+    Xonomy.newElementChild(jsElement.htmlID, param);
+}

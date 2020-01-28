@@ -5,6 +5,10 @@
 // Generated on: 2020.01.27 at 07:19:29 PM CET 
 //
 
-@javax.xml.bind.annotation.XmlSchema(namespace = "http://www.uns.ac.rs/Tim1", elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED)
+@javax.xml.bind.annotation.XmlSchema(namespace = "http://www.uns.ac.rs/Tim1", elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED, xmlns = {
+        @XmlNs(prefix="ns", namespaceURI="http://www.uns.ac.rs/Tim1")
+    })
 
 package com.example.xmlScientificPublicationEditor.model.authPerson;
+
+import javax.xml.bind.annotation.XmlNs;

@@ -71,6 +71,7 @@ public class ScientificPublicationController extends BaseController {
 	@PostMapping(value="/scientificPublication", 
 			consumes = MediaType.APPLICATION_XML_VALUE,
 			produces = MediaType.APPLICATION_XML_VALUE)
+	@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_REVIEWER') or hasRole('ROLE_REDACTOR')")
 	public ResponseEntity<String> addScientificPublication(@RequestBody String scientificPublication) throws Exception {
 		String id = scientificPublicationService.save(scientificPublication);
 		return new ResponseEntity<>(String.format("You succesfully add scientific publication with id %s", id), HttpStatus.OK);
@@ -78,6 +79,7 @@ public class ScientificPublicationController extends BaseController {
 	@PostMapping(value="/scientificPublication/upload", 
 			consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
 			produces = MediaType.APPLICATION_XML_VALUE)
+	@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_REVIEWER') or hasRole('ROLE_REDACTOR')")
 	public ResponseEntity<String> uploadScientificPublication(@RequestParam(("file")) MultipartFile q) throws Exception {
 		BufferedReader br;
 		StringBuilder sb = new StringBuilder();
