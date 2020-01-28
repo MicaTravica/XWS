@@ -27,6 +27,7 @@ export class PublicationService {
         responseType: 'text'
       });
   }
+
   addPublication(publication: string) {
     return this.http.post(this.url, publication,
       {
