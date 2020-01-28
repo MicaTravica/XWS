@@ -69,7 +69,7 @@ export const docSpec = {
                 }, {
                     caption: 'Append my data',
                     action: Xonomy.newElementChild,
-                    actionParameter: localStorage.getItem('user').split('ns:person').join('ns:author')
+                    actionParameter: localStorage.getItem('user') ? localStorage.getItem('user').split('ns:person').join('ns:author') : ''
                 }
             ]
         },

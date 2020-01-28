@@ -1,5 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { ProcessPSPService } from 'src/app/services/processPSP/process-psp.service';
+
+declare var require: any;
+const convert = require('xml-js');
+
 
 @Component({
   selector: 'app-for-publication',
@@ -8,11 +13,27 @@ import { Router } from '@angular/router';
 })
 export class ForPublicationComponent implements OnInit {
 
-  publications = [{ id: 'aaaaaaaa', name: 'aaaaaaaa', authors: 'aaaaaaaaaaaaaa' }];
+  publications = [];
 
-  constructor(private router: Router) { }
+  constructor(private router: Router,
+              private processPSPService: ProcessPSPService) { }
 
   ngOnInit() {
+    this.processPSPService.getPublicationsForPublishing()
+      .subscribe( res => {
+        const obj = JSON.parse(convert.xml2json(res, {compact: true, spaces: 4}));
+        const processPSPList = obj.processes.processPSP as any[]; 
+        processPSPList.forEach( p => {
+          this.publications.push({
+            id: p.sp.scientificPublicationId._text,
+            name: p.sp.scientificPublicationName._text,
+            authors: p.sp.authors,
+            processState: p.processState._text,
+            lastVersion: p.lastVersion._text,
+            processId: p.processId._text
+          });
+        });
+      });
   }
 
   process(id: number) {

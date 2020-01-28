@@ -18,7 +18,7 @@ export const docSpec = {
                 {
                     caption: 'Add my data',
                     action: myData,
-                    actionParameter: localStorage.getItem('user').split('ns:person').join('ns:author')
+                    actionParameter: localStorage.getItem('user') ? localStorage.getItem('user').split('ns:person').join('ns:author') : ''
                 }
             ]
         },
