@@ -2,6 +2,9 @@ package com.example.xmlScientificPublicationEditor.repository;
 
 import static com.example.xmlScientificPublicationEditor.util.template.XUpdateTemplate.TARGET_NAMESPACE;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import org.exist.xmldb.EXistResource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -59,9 +62,17 @@ public class ScientificPublicationRepository {
 
 	public String save(String scientificPublication) throws Exception {
 		Document document = DOMParser.buildDocument(scientificPublication, scientificPublicationSchemaPath);
+
+//        setIDs(id, document);
+
+        String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date()) + "Z";
+        document.getDocumentElement().getAttributes().getNamedItem("revisited_at").setTextContent(date);
+
+        document.getDocumentElement().getAttributes().getNamedItem("version").setTextContent("1");
+
 		String id = "sp" + idGeneratorService.getId("scientificPublication");
-		document.getDocumentElement().getAttributes()
-					.getNamedItem("id").setTextContent(id);
+		document.getDocumentElement().getAttributes().getNamedItem("id").setTextContent(id);
+		
 		String toSave = DOMParser.parseDocument(document);
 		StoreToDB.store(scientificPublicationCollectionId, id, toSave);
 		return id;
