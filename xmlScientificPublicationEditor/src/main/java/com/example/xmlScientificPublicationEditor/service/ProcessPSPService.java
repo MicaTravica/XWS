@@ -34,6 +34,8 @@ public interface ProcessPSPService {
 
     String getProcessPSPState(String processId) throws Exception;
 
+	String findForPublishing() throws Exception;
+
 
 
 

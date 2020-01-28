@@ -2,6 +2,8 @@ package com.example.xmlScientificPublicationEditor.repository;
 
 import static com.example.xmlScientificPublicationEditor.util.template.XUpdateTemplate.TARGET_NAMESPACE;
 
+import java.util.ArrayList;
+
 import org.exist.xmldb.EXistResource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -15,6 +17,7 @@ import org.xmldb.api.base.XMLDBException;
 import org.xmldb.api.modules.XMLResource;
 
 import com.example.xmlScientificPublicationEditor.exception.ResourceNotDeleted;
+import com.example.xmlScientificPublicationEditor.model.ProcessState;
 import com.example.xmlScientificPublicationEditor.service.IdGeneratorService;
 import com.example.xmlScientificPublicationEditor.util.DOMParser.DOMParser;
 import com.example.xmlScientificPublicationEditor.util.existAPI.RetriveFromDB;
@@ -37,9 +40,14 @@ public class ProcessPSPRepository {
 	public static final String PROCESS_LAST_VERSION = "lastVersion";
 	public static final String PROCESS_STATE = "state";
 
+	public static final String ProcessPSPXSLSPId = "src/main/resources/data/xslt/processPSPgetLastSCId.xsl";
+
     public static String ProcessPSPTemplatePath = "src/main/resources/data/xml/processPSPTemplate.xml";
 	public static String ProcessPSPCollectionId = "/db/sample/processPSP";
 	public static String ProcessPSPSchemaPath = "src/main/resources/data/schemas/processPSP.xsd";
+
+	public static String ProcessPSPXSLForReview = "src/main/resources/data/xslt/processforRevision.xsl";
+
 
 	public String findOneByScientificPublicationID(String id) throws Exception {
 		String retVal = null;
@@ -159,6 +167,40 @@ public class ProcessPSPRepository {
 			}
 		}
 		return null;
+	}
+
+	public ArrayList<String> findProcessByState(ProcessState state) throws Exception
+	{
+		ArrayList<String> retVal = new ArrayList<>();
+		String xpathExp = "//processPSP[@state=\"" + state.getAction() + "\"]";
+		ResourceSet resultSet = RetriveFromDB.executeXPathExpression(ProcessPSPCollectionId, xpathExp,
+				TARGET_NAMESPACE);
+		if (resultSet == null) {
+			return retVal;
+		}
+		ResourceIterator i = resultSet.getIterator();
+		XMLResource res = null;
+		while (i.hasMoreResources()) {
+			try {
+				res = (XMLResource) i.nextResource();
+				retVal.add(res.getContent().toString());
+			} finally {
+				// don't forget to cleanup resources
+				try {
+					((EXistResource) res).freeResources();
+				} catch (XMLDBException xe) {
+					xe.printStackTrace();
+				}
+			}
+		}
+		return retVal;
+	}
+
+	public ArrayList<String> findForPublishing()  throws Exception {
+		ArrayList<String> retVal = findProcessByState(ProcessState.FOR_REVIEW);
+		findProcessByState(ProcessState.SCORED)
+			.forEach(p -> { retVal.add(p);} );
+		return retVal;
 	}
 
 }

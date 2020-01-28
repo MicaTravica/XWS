@@ -22,6 +22,8 @@ import com.example.xmlScientificPublicationEditor.util.existAPI.UpdateDB;
 @Repository
 public class ScientificPublicationRepository {
 
+	public static final String DATA_PROCESS_XSL = "src/main/resources/data/xslt/scientificPublicationIdName.xsl";
+
 	@Autowired
 	private IdGeneratorService idGeneratorService;
 
