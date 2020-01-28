@@ -28,6 +28,8 @@ public interface PersonService {
 
 	public ArrayList<String> findUsersByRole(TRole role) throws Exception;
 
+	TPerson findMe(String email) throws Exception;
+
 	// void changeUserPassword(PasswordChangeDTO pcDto, String username) throws Exception;
 
 	// Person findOneByUsername(String name) throws Exception;

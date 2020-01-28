@@ -143,11 +143,11 @@ public class PersonRepository {
 		if (oldPersonData == null) {
 			throw new ResourceNotFoundException("Person with id: " + personId);
 		}
-		this.deletePerson(personId);
 		String xmlPerson = PersonMarshalling.marshalPerson(person);
 		if (xmlPerson == null) {
 			throw new MarshallerException("Person");
 		}
+		this.deletePerson(personId);
 		StoreToDB.store(personCollectionId, personId, xmlPerson);
 		return person;
 	}

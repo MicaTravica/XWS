@@ -14,7 +14,7 @@ public class PersonUnmarshalling {
     public static String JAXBContextPathAuthPerson = "com.example.xmlScientificPublicationEditor.model.authPerson";
 
     public static TPerson unmarshalling(XMLResource res) throws Exception {
-        JAXBContext context = JAXBContext.newInstance(JAXBContextPath);        
+        JAXBContext context = JAXBContext.newInstance(JAXBContextPath);     
     	Unmarshaller unmarshaller = context.createUnmarshaller();
     	TPerson person = (TPerson) unmarshaller.unmarshal(res.getContentAsDOM());
     	return person;
@@ -27,3 +27,4 @@ public class PersonUnmarshalling {
     	return person;
     }
 }
+
