@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { ProcessPSPService } from 'src/app/services/processPSP/process-psp.service';
 
 @Component({
   selector: 'app-process-publication',
@@ -14,26 +16,21 @@ export class ProcessPublicationComponent implements OnInit {
   chosenReviewers = [];
   review = [{ author: 'neki autor' }];
 
-  constructor() { }
+  constructor(
+    private route: ActivatedRoute,
+    private processService: ProcessPSPService
+  ) { }
 
   ngOnInit() {
+    // tslint:disable-next-line: no-string-literal
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id) {
+      
+    }
     // ucitati rad
     // ako radu nisu dodeljeni recezenti, tek je stavljen pod recenziju ucitati recenzente i preporuke
-    // ako se ceka na odgovor od recenzenata nista ne ucitavati
     // ako su recenzenti odgovorili ucitati recenzije, prihvatiti odbiti rad...
   }
-
-  addReviwer() {
-    this.chosenReviewers.push(this.reviewers[this.selected]);
-    this.reviewers.splice(this.selected, 1);
-    this.selected = 0;
-  }
-
-  finish() {
-    // dodati recenzente i
-    // promeniti stanje publikacije u to da se ceka odgovor od recezenata
-  }
-
   accept() {
 
   }
@@ -45,4 +42,5 @@ export class ProcessPublicationComponent implements OnInit {
   revise() {
 
   }
+  
 }

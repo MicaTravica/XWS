@@ -6,7 +6,6 @@ import { LoginComponent } from './core/login/login.component';
 import { RegisterComponent } from './core/register/register.component';
 import { LoginGuard } from './guards/login.service';
 import { RoleGuard } from './guards/role.service';
-import { ProfilDetailsComponent } from './profil/profil-details/profil-details.component';
 import { SearchPublicationsComponent } from './publication/search-publications/search-publications.component';
 import { AddPublicationComponent } from './publication/add-publication/add-publication.component';
 import { MyPublicationsComponent } from './publication/my-publications/my-publications.component';
@@ -16,6 +15,7 @@ import { AddRevisionComponent } from './revisions/add-revision/add-revision.comp
 import { ProcessPublicationComponent } from './publication/process-publication/process-publication.component';
 import { AddCoverLetterComponent } from './add-cover-letter/add-cover-letter.component';
 import { ProfilEditComponent } from './profil/profil-edit/profil-edit.component';
+import { AddReviewersComponent } from './revisions/add-reviewers/add-reviewers.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent, canActivate: [LoginGuard] },
@@ -47,6 +47,7 @@ const routes: Routes = [
   },
   { path: 'for_publication', component: ForPublicationComponent, canActivate: [RoleGuard], data: { expectedRoles: 'ROLE_REDACTOR' } },
   { path: 'process/:id', component: ProcessPublicationComponent, canActivate: [RoleGuard], data: { expectedRoles: 'ROLE_REDACTOR' } },
+  { path: 'add_rev/:id', component: AddReviewersComponent, canActivate: [RoleGuard], data: { expectedRoles: 'ROLE_REDACTOR' } },
   { path: '', redirectTo: 'publications', pathMatch: 'full' },
 
 ];

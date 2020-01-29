@@ -20,10 +20,22 @@ export class ForPublicationComponent implements OnInit {
 
   ngOnInit() {
     this.processPSPService.getPublicationsForPublishing()
-      .subscribe( res => {
-        const obj = JSON.parse(convert.xml2json(res, {compact: true, spaces: 4}));
+      .subscribe(res => {
+        const obj = JSON.parse(convert.xml2json(res, { compact: true, spaces: 4 }));
         const processPSPList = obj.processes.processPSP as any[];
-        processPSPList.forEach( p => {
+        if (processPSPList.length) {
+          processPSPList.forEach(p => {
+            this.publications.push({
+              id: p.sp.scientificPublicationId._text,
+              name: p.sp.scientificPublicationName._text,
+              authors: (p.sp.authors.author.length) ? p.sp.authors.author : [p.sp.authors.author],
+              processState: p.processState._text,
+              lastVersion: p.lastVersion._text,
+              processId: p.processId._text
+            });
+          });
+        } else {
+          const p = processPSPList;
           this.publications.push({
             id: p.sp.scientificPublicationId._text,
             name: p.sp.scientificPublicationName._text,
@@ -32,11 +44,15 @@ export class ForPublicationComponent implements OnInit {
             lastVersion: p.lastVersion._text,
             processId: p.processId._text
           });
-        });
+        }
       });
   }
 
-  process(id: number) {
+  reviewers(id: number) {
+    this.router.navigate(['/add_rev/' + id]);
+  }
+
+  evaluate(id: number) {
     this.router.navigate(['/process/' + id]);
   }
 }

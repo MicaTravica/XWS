@@ -1,31 +1,4 @@
 <div>
-    <mat-form-field>
-    <mat-label>Choose reviewer</mat-label>
-    <mat-select [(ngModel)]="selected">
-        <mat-option *ngFor="let r of reviewers; let i = index" [attr.data-index]="i" [value]="i">
-        {{r.name}} {{r.surname}}
-        </mat-option>
-    </mat-select>
-    </mat-form-field>
-    <button mat-raised-button color="accent" (click)="addReviwer()">Add</button>
-    <div>
-        Recommended reviewers:
-        <p *ngFor="let r of recommendedReviewers">
-            {{r.name}} {{r.surname}}
-        </p>
-    </div>
-    <div>
-        Chosen reviewers
-        <p *ngFor="let r of chosenReviewers">
-            {{r.name}} {{r.surname}}
-        </p>
-    </div>
-    <button mat-raised-button color="accent" (click)="finish()">Finish</button>
-</div>
-<div>
-    Awaiting reviews
-</div>
-<div>
      <mat-card *ngFor="let r of review">
         <mat-card-header>
             <mat-card-title>{{r.author}}</mat-card-title>

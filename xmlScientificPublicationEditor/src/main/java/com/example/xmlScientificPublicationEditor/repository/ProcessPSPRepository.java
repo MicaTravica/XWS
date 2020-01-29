@@ -19,7 +19,10 @@ import org.xmldb.api.modules.XMLResource;
 
 import com.example.xmlScientificPublicationEditor.exception.ResourceNotDeleted;
 import com.example.xmlScientificPublicationEditor.model.ProcessState;
+import com.example.xmlScientificPublicationEditor.model.person.TPerson;
+import com.example.xmlScientificPublicationEditor.model.person.TPersons;
 import com.example.xmlScientificPublicationEditor.service.IdGeneratorService;
+import com.example.xmlScientificPublicationEditor.service.PersonService;
 import com.example.xmlScientificPublicationEditor.util.DOMParser.DOMParser;
 import com.example.xmlScientificPublicationEditor.util.existAPI.RetriveFromDB;
 import com.example.xmlScientificPublicationEditor.util.existAPI.StoreToDB;
@@ -33,15 +36,24 @@ public class ProcessPSPRepository {
 	@Autowired
 	private IdGeneratorService idGeneratorService;
 
+	@Autowired
+	private PersonService personService;
+	
 	public static String ScientificPublicationFiled = "ns:scientificPublication";
 	public static String ScientificPublicationNameFiled = "ns:scientificPublicationName";
 	public static String RedactorFiled = "ns:idRedactor";
 	public static String CoverLetterFiled = "ns:coverLetter";
 	public static String PROCESS_ID = "id";
 	public static String PROCESS_ROOT = "ns:processPSP";
+	public static String ReviewAssignments = "ns:reviewAssignments";
+	public static String ReviewAssigment = "ns:reviewAssigment";
+	public static String Review = "ns:review";
+	public static String IdReviewer = "ns:idReviewer";
 	public static final String PROCESS_LAST_VERSION = "lastVersion";
 	public static final String PROCESS_STATE = "state";
 	public static final String PROCESS_AUTHOR_SP = "authorEmail";
+	public static String IN_PROGRESS = "inProgress";
+	public static String PENDING = "pending";
 	
 
 	public static final String ProcessPSPXSLSPId = "src/main/resources/data/xslt/processPSPgetLastSCId.xsl";
@@ -304,6 +316,32 @@ public class ProcessPSPRepository {
 			}
 		}
 		return retVal;
+    }
+	
+	public void addReviewAssigment(Document document, TPersons persons) throws Exception {
+		Node lastVersion = getLastVersion(document);
+		Element lv = (Element) lastVersion;
+		NodeList ra = lv.getElementsByTagName(ReviewAssignments);
+		if (ra.getLength() > 0) {
+			lv.removeChild(ra.item(0));
+		}
+		Element reviewAssignments = document.createElement(ReviewAssignments);
+		for (TPerson p : persons.getPersons()) {
+			Element reviewAssigment = document.createElement(ReviewAssigment);
+			reviewAssigment.setAttribute(PROCESS_STATE, PENDING);
+
+			Element review = document.createElement(Review);
+			review.setAttribute(PROCESS_STATE, IN_PROGRESS);
+
+			Element idReviewer = document.createElement(IdReviewer);
+			idReviewer.appendChild(document.createTextNode(personService.findOneAuthByPersonId(p.getId()).getEmail()));
+
+			review.appendChild(idReviewer);
+			reviewAssigment.appendChild(review);
+			reviewAssignments.appendChild(reviewAssigment);
+		}
+		lv.appendChild(reviewAssignments);
+		update(document);
 	}
 
 }

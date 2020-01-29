@@ -8,6 +8,11 @@ import java.util.Collection;
 import javax.xml.namespace.QName;
 import javax.xml.transform.stream.StreamResult;
 
+import org.apache.xerces.xs.XSModel;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
+
 import com.example.xmlScientificPublicationEditor.exception.ResourceExistsException;
 import com.example.xmlScientificPublicationEditor.exception.ResourceNotFoundException;
 import com.example.xmlScientificPublicationEditor.model.authPerson.TAuthPerson;
@@ -15,13 +20,9 @@ import com.example.xmlScientificPublicationEditor.model.authPerson.TRole;
 import com.example.xmlScientificPublicationEditor.model.person.TAddress;
 import com.example.xmlScientificPublicationEditor.model.person.TInstitution;
 import com.example.xmlScientificPublicationEditor.model.person.TPerson;
+import com.example.xmlScientificPublicationEditor.model.person.TPersons;
 import com.example.xmlScientificPublicationEditor.repository.person.PersonRepository;
 import com.example.xmlScientificPublicationEditor.service.PersonService;
-
-import org.apache.xerces.xs.XSModel;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Service;
 
 import jlibs.xml.sax.XMLDocument;
 import jlibs.xml.xsd.XSInstance;
@@ -88,6 +89,16 @@ public class PersonServiceImpl implements PersonService {
         }
         return person;
     }
+    
+    @Override
+    public TAuthPerson findOneAuthByPersonId(String id) throws Exception {
+        TAuthPerson person = personRepository.findOneAuth(
+                PersonRepository.makeXpathQueryByPersonIdAuthPerson(id));
+        if (person == null) {
+            throw new ResourceNotFoundException(String.format("Person with email %s", id));
+        }
+        return person;
+    }
 
     @Override
     public ArrayList<String> findUsersByRole(TRole roleRedactor) throws Exception {
@@ -150,6 +161,20 @@ public class PersonServiceImpl implements PersonService {
 		TAuthPerson auth = findOneAuth(email);
 		TPerson person = findOne(auth.getPerson());
 		return person;
+	}
+
+	@Override
+	public TPersons findReviewers() throws Exception {
+		ArrayList<TAuthPerson> reviewers = personRepository.findByRole(
+                PersonRepository.makeXpathQueryByRole(TRole.ROLE_REVIEWER.toString()));
+		ArrayList<TAuthPerson> redactors = personRepository.findByRole(
+                PersonRepository.makeXpathQueryByRole(TRole.ROLE_REDACTOR.toString()));
+		reviewers.addAll(redactors);
+		TPersons result = new TPersons();
+		for (TAuthPerson tAuthPerson : reviewers) {
+			result.getPersons().add(findOne(tAuthPerson.getPerson()));
+		}
+		return result;
 	}
   
 }
