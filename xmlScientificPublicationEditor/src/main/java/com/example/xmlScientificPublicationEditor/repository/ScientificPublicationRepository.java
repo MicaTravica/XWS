@@ -40,6 +40,10 @@ public class ScientificPublicationRepository {
 	public static String scientificPublicationSchemaPath = "src/main/resources/data/schemas/scientificPublication.xsd";
 	public static String ScientificPublicationXSLPath = "src/main/resources/data/xslt/scientificPublication.xsl";
 	public static String ScientificPublicationXSL_FO_PATH = "src/main/resources/data/xsl-fo/scientificPublication_fo.xsl";
+	public static String ScientificPublicationXSL_PATH_NO_AUTHOR = "src/main/resources/data/xslt/scientificPublicationIDName.xsl";
+
+	public static String EL_ROOT = "ns:scientificPublication";
+
 
 	public String findOne(String id) throws Exception {
 		String retVal = null;
@@ -68,7 +72,7 @@ public class ScientificPublicationRepository {
 		return null;
 	}
 
-	public String save(String scientificPublication) throws Exception {
+	public Document save(String scientificPublication) throws Exception {
 		Document document = DOMParser.buildDocument(scientificPublication, scientificPublicationSchemaPath);
 
 		String id = "sp" + idGeneratorService.getId("scientificPublication");
@@ -82,7 +86,7 @@ public class ScientificPublicationRepository {
 
 		String toSave = DOMParser.parseDocument(document, scientificPublicationSchemaPath);
 		StoreToDB.store(scientificPublicationCollectionId, id, toSave);
-		return id;
+		return document;
 	}
 
 	private void generateIDs(Document document, String id) throws Exception {

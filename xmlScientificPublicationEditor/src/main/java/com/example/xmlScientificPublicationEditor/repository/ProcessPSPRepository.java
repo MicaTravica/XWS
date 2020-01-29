@@ -3,6 +3,7 @@ package com.example.xmlScientificPublicationEditor.repository;
 import static com.example.xmlScientificPublicationEditor.util.template.XUpdateTemplate.TARGET_NAMESPACE;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.exist.xmldb.EXistResource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,7 @@ public class ProcessPSPRepository {
 	private IdGeneratorService idGeneratorService;
 
 	public static String ScientificPublicationFiled = "ns:scientificPublication";
+	public static String ScientificPublicationNameFiled = "ns:scientificPublicationName";
 	public static String RedactorFiled = "ns:idRedactor";
 	public static String CoverLetterFiled = "ns:coverLetter";
 	public static String PROCESS_ID = "id";
@@ -49,7 +51,6 @@ public class ProcessPSPRepository {
 	public static String ProcessPSPSchemaPath = "src/main/resources/data/schemas/processPSP.xsd";
 
 	public static String ProcessPSPXSLForReview = "src/main/resources/data/xslt/processforRevision.xsl";
-
 
 	public String findOneByScientificPublicationID(String id) throws Exception {
 		String retVal = null;
@@ -160,6 +161,24 @@ public class ProcessPSPRepository {
 		}
         return process;
 	}
+
+
+	public Document setScientificPublicationName(Document process, String scientificPublciationName) throws Exception
+    {
+		Node lastVersion = this.getLastVersion(process);
+		NodeList list = lastVersion.getChildNodes();
+		for(int i=0; i < list.getLength(); i++){
+			Node n = list.item(i);
+			if(n.getNodeName().equals(ScientificPublicationNameFiled)){
+				n.setTextContent(scientificPublciationName);
+			}
+		}
+        return process;
+	}
+
+
+
+
 	
 	public Document setCoverLetter(Document process, String coverLetterId) {
 		process.getElementsByTagName(CoverLetterFiled).
@@ -254,7 +273,37 @@ public class ProcessPSPRepository {
 			}
 		}
 		return retVal;
+	}
+	
 
-    }
+	public ArrayList<String> findMyReviewAssigments(String email) throws Exception{
+		ArrayList<String> retVal = new ArrayList<>();
+		String xQueryPath = "src/main/resources/data/xQuery/findMyReviewAssigments.txt";
+
+		HashMap<String, String> params = new HashMap<>();
+		params.put("REVIWER_ID", email);  // params for XQuery
+
+		ResourceSet resultSet = RetriveFromDB.executeXQuery(
+			ProcessPSPCollectionId, xQueryPath, params, TARGET_NAMESPACE);
+		if (resultSet == null) {
+			return retVal;
+		}
+		ResourceIterator i = resultSet.getIterator();
+		XMLResource res = null;
+		while (i.hasMoreResources()) {
+			try {
+				res = (XMLResource) i.nextResource();
+				retVal.add(res.getContent().toString());
+			} finally {
+				// don't forget to cleanup resources
+				try {
+					((EXistResource) res).freeResources();
+				} catch (XMLDBException xe) {
+					xe.printStackTrace();
+				}
+			}
+		}
+		return retVal;
+	}
 
 }

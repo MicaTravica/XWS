@@ -9,6 +9,9 @@ import javax.xml.transform.stream.StreamResult;
 import org.apache.xerces.xs.XSModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import com.example.xmlScientificPublicationEditor.exception.ResourceNotFoundException;
 import com.example.xmlScientificPublicationEditor.repository.ScientificPublicationRepository;
@@ -64,11 +67,17 @@ public class ScientificPublicationServiceImpl implements ScientificPublicationSe
 
 	@Override
 	public String save(String scientificPublication, String authorEmail) throws Exception {
-		String scID = scientificPublicationRepository.save(scientificPublication);
-		
-		processPSPService.create(scID, authorEmail );
+		Document sc = scientificPublicationRepository.save(scientificPublication);
+		String scName = this.getScientificPublicationName(sc);
+		String scID = this.getScientificPublicationID(sc);
+		processPSPService.create(scID, authorEmail, scName);
 		return scID;
 	}
+
+
+
+
+
 
 	@Override
 	public String update(String scientificPublication) throws Exception {
@@ -95,5 +104,20 @@ public class ScientificPublicationServiceImpl implements ScientificPublicationSe
 		XMLDocument sampleXml = new XMLDocument(new StreamResult(sw), true, 4, null);
 		xsInstance.generate(xsModel, rootElement, sampleXml);
 		return sw.toString();
+	}
+
+
+	// GET/SET METODE
+
+	@Override
+	public String getScientificPublicationID(Document sc) {
+		return sc.getElementsByTagName(ScientificPublicationRepository.EL_ROOT).item(0)
+            .getAttributes().getNamedItem("id").getTextContent();
+	}
+
+	@Override
+	public String getScientificPublicationName(Document sc) {
+		String retVal = sc.getElementsByTagName("ns:value").item(0).getTextContent();
+		return retVal;
 	}
 }
