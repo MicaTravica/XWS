@@ -46,7 +46,7 @@ export class AddRevisionComponent implements OnInit {
   }
 
   onUpload() {
-    this.revisionService.upload(this.file).subscribe(
+    this.revisionService.upload(this.file, '').subscribe(
       (data: string) => {
         this.toastr.success(data);
       }, (error: HttpErrorResponse) => {

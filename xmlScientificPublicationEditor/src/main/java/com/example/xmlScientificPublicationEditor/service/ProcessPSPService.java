@@ -10,7 +10,9 @@ import org.w3c.dom.Node;
  */
 public interface ProcessPSPService {
 
-	String create(String scientificPublicationId) throws Exception;
+	String create(String scientificPublicationId, String authorEmail) throws Exception;
+
+    Document findOneById(String processId) throws Exception;
 
     String findOneByScientificPublicationID(String scientificPublicationId) throws Exception;
 
@@ -34,8 +36,14 @@ public interface ProcessPSPService {
 
     String getProcessPSPState(String processId) throws Exception;
 
+    Document setProcessPSPCSAuthor(Document process, String email);
+
+    String getProcessPSPCSAuthor(Document process);
+
 	String findForPublishing() throws Exception;
 
 	void addReviewers(String reviewers, String processId);
+
+	String findMyPublications(String name) throws Exception;
 
 }

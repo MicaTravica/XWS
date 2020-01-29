@@ -30,7 +30,7 @@ const routes: Routes = [
     data: { expectedRoles: 'ROLE_REVIEWER|ROLE_REDACTOR|ROLE_USER' }
   },
   {
-    path: 'add_cover_letter', component: AddCoverLetterComponent, canActivate: [RoleGuard],
+    path: 'add_cover_letter/:processId', component: AddCoverLetterComponent, canActivate: [RoleGuard],
     data: { expectedRoles: 'ROLE_REVIEWER|ROLE_REDACTOR|ROLE_USER' }
   },
   {

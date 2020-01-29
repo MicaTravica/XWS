@@ -39,6 +39,8 @@ public class ProcessPSPRepository {
 	public static String PROCESS_ROOT = "ns:processPSP";
 	public static final String PROCESS_LAST_VERSION = "lastVersion";
 	public static final String PROCESS_STATE = "state";
+	public static final String PROCESS_AUTHOR_SP = "authorEmail";
+	
 
 	public static final String ProcessPSPXSLSPId = "src/main/resources/data/xslt/processPSPgetLastSCId.xsl";
 
@@ -64,6 +66,31 @@ public class ProcessPSPRepository {
 				res = (XMLResource) i.nextResource();
 				retVal = res.getContent().toString();
 				return retVal;
+			} finally {
+				// don't forget to cleanup resources
+				try {
+					((EXistResource) res).freeResources();
+				} catch (XMLDBException xe) {
+					xe.printStackTrace();
+				}
+			}
+		}
+		return null;
+	}
+
+	public Document findOneById(String processId) throws Exception {
+		String xpathExp = "//processPSP[@id=\"" + processId + "\"]";
+		ResourceSet resultSet = RetriveFromDB.executeXPathExpression(ProcessPSPCollectionId, xpathExp,
+				TARGET_NAMESPACE);
+		if (resultSet == null) {
+			return null;
+		}
+		ResourceIterator i = resultSet.getIterator();
+		XMLResource res = null;
+		while (i.hasMoreResources()) {
+			try {
+				res = (XMLResource) i.nextResource();
+				return DOMParser.buildDocument(res.getContent().toString(), ProcessPSPSchemaPath);
 			} finally {
 				// don't forget to cleanup resources
 				try {
@@ -202,5 +229,32 @@ public class ProcessPSPRepository {
 			.forEach(p -> { retVal.add(p);} );
 		return retVal;
 	}
+
+	public ArrayList<String> findByOwnerEmail(String email) throws Exception{
+		ArrayList<String> retVal = new ArrayList<>();
+		String xpathExp = "//processPSP[@authorEmail=\"" + email + "\"]";
+		ResourceSet resultSet = RetriveFromDB.executeXPathExpression(ProcessPSPCollectionId, xpathExp,
+				TARGET_NAMESPACE);
+		if (resultSet == null) {
+			return retVal;
+		}
+		ResourceIterator i = resultSet.getIterator();
+		XMLResource res = null;
+		while (i.hasMoreResources()) {
+			try {
+				res = (XMLResource) i.nextResource();
+				retVal.add(res.getContent().toString());
+			} finally {
+				// don't forget to cleanup resources
+				try {
+					((EXistResource) res).freeResources();
+				} catch (XMLDBException xe) {
+					xe.printStackTrace();
+				}
+			}
+		}
+		return retVal;
+
+    }
 
 }

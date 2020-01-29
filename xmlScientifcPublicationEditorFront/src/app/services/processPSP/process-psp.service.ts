@@ -35,6 +35,10 @@ export class ProcessPSPService {
   }
 
   getMyPublications() {
-    return new Observable();
+    return this.http.get(this.url + '/getMyPublication',
+      {
+        headers: authHttpOptions(this.authService.getToken()),
+        responseType: 'text'
+      });
   }
 }
