@@ -51,7 +51,6 @@ export class LoginComponent implements OnInit {
             this.userService.me().subscribe(
               (data: any) => {
                 localStorage.setItem('user', data);
-                console.log(localStorage.getItem('user'));
               }
             );
             this.router.navigate(['/publications']);

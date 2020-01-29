@@ -1,6 +1,7 @@
 package com.example.xmlScientificPublicationEditor.service;
 
 import com.example.xmlScientificPublicationEditor.model.ProcessState;
+import com.example.xmlScientificPublicationEditor.model.person.TPersons;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -34,8 +35,6 @@ public interface ProcessPSPService {
     
     Document setProcessPSPState(Document process, ProcessState processState) throws Exception;
 
-    String getProcessPSPState(String processId) throws Exception;
-
     Document setProcessPSPCSAuthor(Document process, String email);
 
     String getProcessPSPCSAuthor(Document process);
@@ -44,8 +43,8 @@ public interface ProcessPSPService {
 
 	String findMyPublications(String name) throws Exception;
 
+	void addReviewers(TPersons reviewers, String processId) throws Exception;
 
-
-
+	String getProcessPSPState(Document document) throws Exception;
 
 }

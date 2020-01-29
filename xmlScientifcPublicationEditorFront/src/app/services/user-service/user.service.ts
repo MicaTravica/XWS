@@ -54,6 +54,15 @@ export class UserService {
       });
   }
 
+  public getReviewers() {
+    const token = this.authService.getToken();
+    return this.http.get(this.usersUrl + '/reviewer',
+      {
+        headers: authHttpOptions(token),
+        responseType: 'text'
+      });
+  }
+
   public savePerson(personXML: string) {
     const token = this.authService.getToken();
     return this.http.put(this.usersUrl, personXML,

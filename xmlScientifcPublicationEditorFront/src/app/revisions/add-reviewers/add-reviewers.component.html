@@ -1,0 +1,28 @@
+<div>
+    <div *ngIf="reviewers.length > 0">
+        <mat-form-field>
+        <mat-label>Choose reviewer</mat-label>
+        <mat-select [(ngModel)]="selected">
+            <mat-option *ngFor="let r of reviewers; let i = index" [attr.data-index]="i" [value]="i">
+            {{r['ns:name']._text}} {{r['ns:surname']._text}}
+            </mat-option>
+        </mat-select>
+        </mat-form-field>
+        <button mat-raised-button color="accent" (click)="addReviwer()">Add</button>
+    </div>
+    <div *ngIf="recommendedReviewers.length > 0">
+        Recommended reviewers:
+        <p *ngFor="let r of recommendedReviewers">
+            {{r['ns:name']._text}} {{r['ns:surname']._text}}
+        </p>
+    </div>
+    <div *ngIf="chosenReviewers.length > 0">
+        Chosen reviewers:
+        <p *ngFor="let r of chosenReviewers">
+           {{r['ns:name']._text}} {{r['ns:surname']._text}}
+        </p>
+    </div>
+    <div *ngIf="chosenReviewers.length > 0">
+        <button mat-raised-button color="accent" (click)="finish()">Finish</button>
+    </div>
+</div>

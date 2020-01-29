@@ -1,10 +1,5 @@
 package com.example.xmlScientificPublicationEditor.controller;
 
-import com.example.xmlScientificPublicationEditor.model.authPerson.TAuthPerson;
-import com.example.xmlScientificPublicationEditor.model.person.TPerson;
-import com.example.xmlScientificPublicationEditor.security.TokenUtils;
-import com.example.xmlScientificPublicationEditor.service.PersonService;
-
 import java.security.Principal;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +20,12 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.example.xmlScientificPublicationEditor.model.authPerson.TAuthPerson;
+import com.example.xmlScientificPublicationEditor.model.person.TPerson;
+import com.example.xmlScientificPublicationEditor.model.person.TPersons;
+import com.example.xmlScientificPublicationEditor.security.TokenUtils;
+import com.example.xmlScientificPublicationEditor.service.PersonService;
 
 @RestController
 @CrossOrigin(origins="*")
@@ -67,6 +68,13 @@ public class PersonController extends BaseController {
         return new ResponseEntity<>(person, HttpStatus.OK);
 	}
 
+	@GetMapping(value = "/person/reviewer", produces = MediaType.APPLICATION_XML_VALUE)
+	@PreAuthorize("hasRole('ROLE_REDACTOR')")
+	public ResponseEntity<TPersons> getReviewers() throws Exception {
+		TPersons reviewer = personService.findReviewers();
+        return new ResponseEntity<>(reviewer, HttpStatus.OK);
+	}
+
 	@PostMapping(value="/login", 
 				consumes = MediaType.APPLICATION_XML_VALUE,
 				produces = MediaType.APPLICATION_XML_VALUE)
@@ -98,6 +106,7 @@ public class PersonController extends BaseController {
 		return new ResponseEntity<>(HttpStatus.ACCEPTED);
 	}
 
+	
 }
 
 

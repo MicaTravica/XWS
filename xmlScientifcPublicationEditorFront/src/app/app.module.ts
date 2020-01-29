@@ -16,7 +16,6 @@ import { UserService } from './services/user-service/user.service';
 import { LoginGuard } from './guards/login.service';
 import { RoleGuard } from './guards/role.service';
 import { AuthService } from './services/auth-service/auth.service';
-import { ProfilDetailsComponent } from './profil/profil-details/profil-details.component';
 import { ProfilEditComponent } from './profil/profil-edit/profil-edit.component';
 import { SearchPublicationsComponent } from './publication/search-publications/search-publications.component';
 import { MyPublicationsComponent } from './publication/my-publications/my-publications.component';
@@ -27,6 +26,7 @@ import { ForRevisionComponent } from './revisions/for-revision/for-revision.comp
 import { ProcessPublicationComponent } from './publication/process-publication/process-publication.component';
 import { AddCoverLetterComponent } from './add-cover-letter/add-cover-letter.component';
 import { ToastrModule } from 'ngx-toastr';
+import { AddReviewersComponent } from './revisions/add-reviewers/add-reviewers.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +35,6 @@ import { ToastrModule } from 'ngx-toastr';
     MenuComponent,
     LoginComponent,
     RegisterComponent,
-    ProfilDetailsComponent,
     ProfilEditComponent,
     SearchPublicationsComponent,
     MyPublicationsComponent,
@@ -44,7 +43,8 @@ import { ToastrModule } from 'ngx-toastr';
     ForPublicationComponent,
     AddRevisionComponent,
     ProcessPublicationComponent,
-    AddCoverLetterComponent
+    AddCoverLetterComponent,
+    AddReviewersComponent
   ],
   imports: [
     BrowserModule,

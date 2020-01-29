@@ -6,9 +6,16 @@ import java.util.ArrayList;
 import javax.xml.namespace.QName;
 import javax.xml.transform.stream.StreamResult;
 
+import org.apache.xerces.xs.XSModel;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+
 import com.example.xmlScientificPublicationEditor.exception.ResourceNotFoundException;
 import com.example.xmlScientificPublicationEditor.model.ProcessState;
 import com.example.xmlScientificPublicationEditor.model.authPerson.TRole;
+import com.example.xmlScientificPublicationEditor.model.person.TPersons;
 import com.example.xmlScientificPublicationEditor.repository.ProcessPSPRepository;
 import com.example.xmlScientificPublicationEditor.repository.ScientificPublicationRepository;
 import com.example.xmlScientificPublicationEditor.service.PersonService;
@@ -16,13 +23,6 @@ import com.example.xmlScientificPublicationEditor.service.ProcessPSPService;
 import com.example.xmlScientificPublicationEditor.service.ScientificPublicationService;
 import com.example.xmlScientificPublicationEditor.util.DOMParser.DOMParser;
 import com.example.xmlScientificPublicationEditor.util.XSLFOTransformer.XSLFOTransformer;
-
-import org.apache.logging.log4j.util.StringBuilders;
-import org.apache.xerces.xs.XSModel;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
 
 import jlibs.xml.sax.XMLDocument;
 import jlibs.xml.xsd.XSInstance;
@@ -144,9 +144,9 @@ public class ProcessPSPServiceImpl implements ProcessPSPService {
     }
 
     @Override
-    public String getProcessPSPState(String processId) throws Exception {
-        // TODO Auto-generated method stub
-        return null;
+    public String getProcessPSPState(Document document) throws Exception {
+    	return document.getElementsByTagName(ProcessPSPRepository.PROCESS_ROOT).item(0)
+        .getAttributes().getNamedItem(ProcessPSPRepository.PROCESS_STATE).getTextContent();
     }
 
     @Override
@@ -198,6 +198,13 @@ public class ProcessPSPServiceImpl implements ProcessPSPService {
         return retVal.toString();
     }
 
+	@Override
+	public void addReviewers(TPersons reviewers, String processId) throws Exception {
+		Document document = findOneById(processId);
+		setProcessPSPState(document, ProcessState.WAITING_FOR_REVIEWERS);
+		processPSPRepo.addReviewAssigment(document, reviewers);
+	}
+    
     @Override
     public String findMyPublications(String email) throws Exception {
         StringBuilder retVal = new StringBuilder();

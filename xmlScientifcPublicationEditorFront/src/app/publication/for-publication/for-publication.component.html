@@ -2,11 +2,11 @@
     <mat-card *ngFor="let sp of publications">
         <mat-card-header>
             <mat-card-title>{{sp.name}}</mat-card-title>
-            <mat-card-subtitle>{{sp.processState}}</mat-card-subtitle>
             <mat-card-subtitle *ngFor="let a of sp.authors">{{a.name._text}} {{a.surname._text}}</mat-card-subtitle>
         </mat-card-header>
         <mat-card-actions>
-            <button mat-raised-button color="accent" (click)="process(sp.id)">Process</button>
+            <button *ngIf="sp.processState == 'forReview'" mat-raised-button color="accent" (click)="reviewers(sp.processId)">Add reviewers</button>
+            <button *ngIf="sp.processState == 'scored'" mat-raised-button color="accent" (click)="evaluate(sp.processId)">Evaluate</button>
             <a mat-raised-button routerLink=".">XML</a>
             <a mat-raised-button routerLink=".">HTML</a>
             <a mat-raised-button routerLink=".">PDF</a>
