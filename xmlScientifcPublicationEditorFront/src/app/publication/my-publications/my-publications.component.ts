@@ -1,5 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ProcessPSPService } from 'src/app/services/processPSP/process-psp.service';
+import { Router } from '@angular/router';
+
+declare var require: any;
+const convert = require('xml-js');
+
 
 @Component({
   selector: 'app-my-publications',
@@ -8,19 +13,36 @@ import { ProcessPSPService } from 'src/app/services/processPSP/process-psp.servi
 })
 export class MyPublicationsComponent implements OnInit {
 
-  publications = [{ id: 'aaaaaaaa', name: 'aaaaaaaa', authors: 'aaaaaaaaaaaaaa' }];
+  publications = [];
 
-  constructor(private processPSPService: ProcessPSPService) { }
+  constructor(private processPSPService: ProcessPSPService,
+              private router: Router ) { }
 
   ngOnInit() {
     this.processPSPService.getMyPublications()
-      .subscribe( res => {
-        console.log(res);
+        .subscribe( res => {
+          const obj = JSON.parse(convert.xml2json(res, {compact: true, spaces: 4}));
+          const processPSPList = obj.processes.processPSP as any[]; 
+          processPSPList.forEach( p => {
+            this.publications.push({
+              id: p.sp.scientificPublicationId._text,
+              name: p.sp.scientificPublicationName._text,
+              authors: (p.sp.authors.author.length) ? p.sp.authors.author : [p.sp.authors.author],
+              processState: p.processState._text,
+              lastVersion: p.lastVersion._text,
+              processId: p.processId._text
+            });
+          });
       });
   }
 
-  withdraw(id: number) {
-
+  addCoverLetter(sp: any) {
+    this.router.navigate(['add_cover_letter', sp.processId]);
   }
+
+  withdraw(id: number) {
+  }
+
+
 
 }
