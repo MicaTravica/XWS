@@ -44,6 +44,10 @@ public class ObjectFactory {
         return new TPerson();
     }
 
+    public TPersons createTPersons() {
+        return new TPersons();
+    }
+
     /**
      * Create an instance of {@link TAddress }
      * 

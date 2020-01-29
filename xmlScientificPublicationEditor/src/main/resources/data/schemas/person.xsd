@@ -4,6 +4,12 @@
     targetNamespace="http://www.uns.ac.rs/Tim1" elementFormDefault="qualified" vc:minVersion="1.1">
 
     <xs:element name="person" type="TPerson"/>
+    <xs:element name="persons" type="TPersons"/>
+    <xs:complexType name="TPersons">
+        <xs:sequence>
+            <xs:element maxOccurs="unbounded" name="persons" type="TPerson"/>
+        </xs:sequence>
+    </xs:complexType>
     <xs:complexType name="TPerson">
         <xs:sequence>
             <xs:element name="name">

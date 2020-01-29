@@ -169,6 +169,7 @@
             <xs:extension base="TParagraph">
                 <xs:choice maxOccurs="unbounded">
                     <xs:element maxOccurs="unbounded" minOccurs="0" name="image" type="TImage"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="quote" type="TQuote"/>
                     <xs:element maxOccurs="unbounded" minOccurs="0" name="table" type="TTable"/>
                 </xs:choice>
             </xs:extension>
