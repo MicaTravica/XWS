@@ -11,7 +11,7 @@ public interface CoverLetterService {
 
 	ByteArrayOutputStream findOnePDF(String id) throws Exception;
 	
-	String save(String cl) throws Exception;
+	String save(String cl, String processId) throws Exception;
 
 	String update(String coverLetter) throws Exception;
 

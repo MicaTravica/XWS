@@ -11,7 +11,6 @@
             <a mat-raised-button routerLink=".">HTML</a>
             <a mat-raised-button routerLink=".">PDF</a>
             <a *ngIf="sp.processState =='inProgress'" mat-raised-button (click)="addCoverLetter(sp)">Add CoverLetter</a>
-            <a *ngIf="sp.processState !='inProgress'" mat-raised-button (click)="addCoverLetter(sp)">Update CoverLetter</a>
         </mat-card-actions>
     </mat-card>
 </div>

@@ -34,7 +34,7 @@ export class RevisionService {
     });
   }
 
-  upload(data: File) {
-    return this.uploadService.upload(data, this.revisionUrl + 'upload');
+  upload(data: File, processId: string) {
+    return this.uploadService.upload(data, this.revisionUrl + 'upload', processId);
   }
 }

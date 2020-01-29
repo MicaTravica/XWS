@@ -36,7 +36,7 @@ export class PublicationService {
       });
   }
 
-  upload(data: File) {
-    return this.uploadService.upload(data, this.url + '/upload');
+  upload(data: File, processId: string) {
+    return this.uploadService.upload(data, this.url + '/upload', processId);
   }
 }

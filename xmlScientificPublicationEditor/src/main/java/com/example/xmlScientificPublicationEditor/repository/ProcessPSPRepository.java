@@ -78,6 +78,31 @@ public class ProcessPSPRepository {
 		return null;
 	}
 
+	public Document findOneById(String processId) throws Exception {
+		String xpathExp = "//processPSP[@id=\"" + processId + "\"]";
+		ResourceSet resultSet = RetriveFromDB.executeXPathExpression(ProcessPSPCollectionId, xpathExp,
+				TARGET_NAMESPACE);
+		if (resultSet == null) {
+			return null;
+		}
+		ResourceIterator i = resultSet.getIterator();
+		XMLResource res = null;
+		while (i.hasMoreResources()) {
+			try {
+				res = (XMLResource) i.nextResource();
+				return DOMParser.buildDocument(res.getContent().toString(), ProcessPSPSchemaPath);
+			} finally {
+				// don't forget to cleanup resources
+				try {
+					((EXistResource) res).freeResources();
+				} catch (XMLDBException xe) {
+					xe.printStackTrace();
+				}
+			}
+		}
+		return null;
+	}
+
     public Document setRedactor(Document process, String redactorId) {
 		process.getElementsByTagName(RedactorFiled).
 			item(0).setTextContent(redactorId);

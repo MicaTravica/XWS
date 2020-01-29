@@ -12,6 +12,8 @@ public interface ProcessPSPService {
 
 	String create(String scientificPublicationId, String authorEmail) throws Exception;
 
+    Document findOneById(String processId) throws Exception;
+
     String findOneByScientificPublicationID(String scientificPublicationId) throws Exception;
 
     void delete(String processId) throws Exception;

@@ -57,6 +57,15 @@ public class ProcessPSPServiceImpl implements ProcessPSPService {
     }
 
     @Override
+    public Document findOneById(String processId) throws Exception {
+        Document process = processPSPRepo.findOneById(processId);
+        if(process == null) {
+            throw new Exception("process not found with id");
+        }
+        return process;
+    }
+
+    @Override
     public String findOneByScientificPublicationID(String scientificPublicationId) throws Exception {
         String procesStr = processPSPRepo.findOneByScientificPublicationID(scientificPublicationId);
 
@@ -68,10 +77,10 @@ public class ProcessPSPServiceImpl implements ProcessPSPService {
 
     
     @Override
-    public String setCoverLetter(String scientificPublicationId, String coverLetterId) throws Exception {
-        String processStr = this.findOneByScientificPublicationID(scientificPublicationId);
-        Document process = DOMParser.buildDocumentWithOutSchema(processStr);
-        processPSPRepo.setCoverLetter(process, coverLetterId);
+    public String setCoverLetter(String processId, String coverLetterId) throws Exception {
+        Document process = this.findOneById(processId);
+        process = processPSPRepo.setCoverLetter(process, coverLetterId);
+        process = this.setProcessPSPState(process, ProcessState.FOR_REVIEW);
         processPSPRepo.update(process);
         return null;
     }
@@ -103,7 +112,7 @@ public class ProcessPSPServiceImpl implements ProcessPSPService {
         xsInstance.maximumRecursionDepth = 0;
         xsInstance.generateOptionalAttributes = Boolean.TRUE;
         xsInstance.generateDefaultAttributes = Boolean.TRUE;
-        xsInstance.generateOptionalElements = Boolean.FALSE; // null means rando
+        xsInstance.generateOptionalElements = Boolean.TRUE; // null means rando
         QName rootElement = new QName("http://www.uns.ac.rs/Tim1", "processPSP");
         XMLDocument sampleXml = new XMLDocument(new StreamResult(sw), true, 4, null);
         xsInstance.generate(xsModel, rootElement, sampleXml);
@@ -214,6 +223,4 @@ public class ProcessPSPServiceImpl implements ProcessPSPService {
         return retVal.toString();
     }
 
-
-    
 }

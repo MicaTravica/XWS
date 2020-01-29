@@ -48,7 +48,7 @@ export class AddPublicationComponent implements OnInit {
   }
 
   onUpload() {
-    this.publicationService.upload(this.file).subscribe(
+    this.publicationService.upload(this.file, '').subscribe(
       (data: string) => {
         this.toastr.success(data);
       }, (error: HttpErrorResponse) => {

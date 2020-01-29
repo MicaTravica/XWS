@@ -67,11 +67,11 @@ public class CoverLetterServiceImpl implements CoverLetterService {
 	}
 
 	@Override
-	public String save(String cl) throws Exception {
+	public String save(String cl, String processId) throws Exception {
 		String cvId = coverLetterRepository.save(cl);
 //		coverLetterRepository.saveMetadata(this.extractMetadata(cl), cvId);
 //		String scId = this.getScientificPublicationID(cl);
-//		processPSPService.setCoverLetter(scId, cvId);
+		processPSPService.setCoverLetter(processId, cvId);
 		return cvId;
 	}
 
