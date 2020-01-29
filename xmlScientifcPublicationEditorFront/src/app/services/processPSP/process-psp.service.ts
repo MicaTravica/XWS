@@ -26,6 +26,14 @@ export class ProcessPSPService {
       });
   }
 
+  addReviewers(reviewers: string, id: string) {
+    return this.http.post(this.url + '/addReviewers/' + id, reviewers,
+      {
+        headers: authHttpOptions(this.authService.getToken()),
+        responseType: 'text'
+      });
+  }
+
   getMyPublications() {
     return new Observable();
   }

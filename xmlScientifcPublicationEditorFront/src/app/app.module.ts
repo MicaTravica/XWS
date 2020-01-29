@@ -16,7 +16,6 @@ import { UserService } from './services/user-service/user.service';
 import { LoginGuard } from './guards/login.service';
 import { RoleGuard } from './guards/role.service';
 import { AuthService } from './services/auth-service/auth.service';
-import { ProfilDetailsComponent } from './profil/profil-details/profil-details.component';
 import { ProfilEditComponent } from './profil/profil-edit/profil-edit.component';
 import { SearchPublicationsComponent } from './publication/search-publications/search-publications.component';
 import { MyPublicationsComponent } from './publication/my-publications/my-publications.component';
@@ -36,7 +35,6 @@ import { AddReviewersComponent } from './revisions/add-reviewers/add-reviewers.c
     MenuComponent,
     LoginComponent,
     RegisterComponent,
-    ProfilDetailsComponent,
     ProfilEditComponent,
     SearchPublicationsComponent,
     MyPublicationsComponent,

@@ -36,8 +36,6 @@ public interface ProcessPSPService {
 
 	String findForPublishing() throws Exception;
 
-
-
-
+	void addReviewers(String reviewers, String processId);
 
 }

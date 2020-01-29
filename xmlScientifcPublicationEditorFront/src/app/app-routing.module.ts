@@ -6,7 +6,6 @@ import { LoginComponent } from './core/login/login.component';
 import { RegisterComponent } from './core/register/register.component';
 import { LoginGuard } from './guards/login.service';
 import { RoleGuard } from './guards/role.service';
-import { ProfilDetailsComponent } from './profil/profil-details/profil-details.component';
 import { SearchPublicationsComponent } from './publication/search-publications/search-publications.component';
 import { AddPublicationComponent } from './publication/add-publication/add-publication.component';
 import { MyPublicationsComponent } from './publication/my-publications/my-publications.component';

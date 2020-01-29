@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { UserService } from 'src/app/services/user-service/user.service';
 import { Person } from 'src/app/models/user-model/user.model';
+import { ProcessPSPService } from 'src/app/services/processPSP/process-psp.service';
 
 declare var require: any;
 const convert = require('xml-js');
@@ -17,16 +18,19 @@ export class AddReviewersComponent implements OnInit {
   recommendedReviewers = [];
   selected = 0;
   chosenReviewers = [];
+  id: string;
 
   constructor(
     private route: ActivatedRoute,
-    private userService: UserService
+    private userService: UserService,
+    private processService: ProcessPSPService
   ) { }
 
   ngOnInit() {
     // tslint:disable-next-line: no-string-literal
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
+      this.id = id;
       this.userService.getReviewers().subscribe(
         (data: any) => {
           const obj = JSON.parse(convert.xml2json(data, {compact: true, spaces: 4}));
@@ -44,8 +48,15 @@ export class AddReviewersComponent implements OnInit {
   }
 
   finish() {
-    // dodati recenzente i
-    // promeniti stanje publikacije u to da se ceka odgovor od recezenata
+    for (const iterator of this.chosenReviewers) {
+      console.log(iterator);
+    }
+    const value = '';
+    this.processService.addReviewers(value, this.id).subscribe(
+      (data: any) => {
+        console.log(data);
+      }
+    )
   }
 }
 
