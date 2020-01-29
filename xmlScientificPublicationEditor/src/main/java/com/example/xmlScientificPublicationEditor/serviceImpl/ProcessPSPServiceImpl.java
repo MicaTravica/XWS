@@ -15,6 +15,7 @@ import org.w3c.dom.Node;
 import com.example.xmlScientificPublicationEditor.exception.ResourceNotFoundException;
 import com.example.xmlScientificPublicationEditor.model.ProcessState;
 import com.example.xmlScientificPublicationEditor.model.authPerson.TRole;
+import com.example.xmlScientificPublicationEditor.model.person.TPersons;
 import com.example.xmlScientificPublicationEditor.repository.ProcessPSPRepository;
 import com.example.xmlScientificPublicationEditor.repository.ScientificPublicationRepository;
 import com.example.xmlScientificPublicationEditor.service.PersonService;
@@ -143,9 +144,9 @@ public class ProcessPSPServiceImpl implements ProcessPSPService {
     }
 
     @Override
-    public String getProcessPSPState(String processId) throws Exception {
-        // TODO Auto-generated method stub
-        return null;
+    public String getProcessPSPState(Document document) throws Exception {
+    	return document.getElementsByTagName(ProcessPSPRepository.PROCESS_ROOT).item(0)
+        .getAttributes().getNamedItem(ProcessPSPRepository.PROCESS_STATE).getTextContent();
     }
 
     @Override
@@ -198,12 +199,11 @@ public class ProcessPSPServiceImpl implements ProcessPSPService {
     }
 
 	@Override
-	public void addReviewers(String reviewers, String processId) {
-		System.out.println(reviewers);
-		System.out.println(processId);
-		
+	public void addReviewers(TPersons reviewers, String processId) throws Exception {
+		Document document = findOneById(processId);
+		setProcessPSPState(document, ProcessState.WAITING_FOR_REVIEWERS);
+		processPSPRepo.addReviewAssigment(document, reviewers);
 	}
-
     
     @Override
     public String findMyPublications(String email) throws Exception {

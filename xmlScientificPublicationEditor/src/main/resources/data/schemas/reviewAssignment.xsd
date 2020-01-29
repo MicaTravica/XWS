@@ -21,7 +21,7 @@
     <xs:complexType name="TReview">
         <xs:sequence>
             <xs:element name="idQuestionnaire" type="xs:string" minOccurs="0"/>
-            <xs:element name="idScientificPublication"/>
+            <xs:element name="idScientificPublication" minOccurs="0"/>
             <xs:element name="idReviewer" type="xs:string"/>
         </xs:sequence>
         <xs:attribute default="inProgress" name="state">

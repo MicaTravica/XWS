@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from 'src/app/services/user-service/user.service';
 import { Person } from 'src/app/models/user-model/user.model';
 import { ProcessPSPService } from 'src/app/services/processPSP/process-psp.service';
+import { ToastrService } from 'ngx-toastr';
 
 declare var require: any;
 const convert = require('xml-js');
@@ -19,11 +20,14 @@ export class AddReviewersComponent implements OnInit {
   selected = 0;
   chosenReviewers = [];
   id: string;
+  xml: any;
 
   constructor(
     private route: ActivatedRoute,
     private userService: UserService,
-    private processService: ProcessPSPService
+    private processService: ProcessPSPService,
+    private toastr: ToastrService,
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -33,12 +37,11 @@ export class AddReviewersComponent implements OnInit {
       this.id = id;
       this.userService.getReviewers().subscribe(
         (data: any) => {
-          const obj = JSON.parse(convert.xml2json(data, {compact: true, spaces: 4}));
-          this.reviewers = obj['ns:reviewers']['ns:person'] as Person[];
+          this.xml = JSON.parse(convert.xml2json(data, {compact: true, spaces: 4}));
+          this.reviewers = this.xml['ns:persons']['ns:persons'] as Person[];
         }
       );
     }
-    // ako radu nisu dodeljeni recezenti, tek je stavljen pod recenziju ucitati recenzente i preporuke
   }
 
   addReviwer() {
@@ -48,15 +51,14 @@ export class AddReviewersComponent implements OnInit {
   }
 
   finish() {
-    for (const iterator of this.chosenReviewers) {
-      console.log(iterator);
-    }
-    const value = '';
+    this.xml['ns:persons']['ns:persons'] = this.chosenReviewers;
+    const value = convert.js2xml(this.xml, { compact: true, spaces: 4 });
     this.processService.addReviewers(value, this.id).subscribe(
       (data: any) => {
-        console.log(data);
+        this.toastr.success(data);
+        this.router.navigate(['/publications']);
       }
-    )
+    );
   }
 }
 

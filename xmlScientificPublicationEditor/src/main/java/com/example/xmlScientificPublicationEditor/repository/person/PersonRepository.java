@@ -164,6 +164,10 @@ public class PersonRepository {
 	public static String makeXpathQueryByEmailAuthPerson(String parameter) {
 		return String.format("//auth[email=\"%s\"]", parameter);
 	}
+	
+	public static String makeXpathQueryByPersonIdAuthPerson(String parameter) {
+		return String.format("//auth[person=\"%s\"]", parameter);
+	}
 
 	public static String makeXpathQueryByEmail(String parameter) {
 		return String.format("//person[email=\"%s\"]", parameter);

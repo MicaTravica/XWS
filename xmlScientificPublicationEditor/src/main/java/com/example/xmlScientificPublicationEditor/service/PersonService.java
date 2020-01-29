@@ -6,6 +6,7 @@ import java.util.Collection;
 import com.example.xmlScientificPublicationEditor.model.authPerson.TAuthPerson;
 import com.example.xmlScientificPublicationEditor.model.authPerson.TRole;
 import com.example.xmlScientificPublicationEditor.model.person.TPerson;
+import com.example.xmlScientificPublicationEditor.model.person.TPersons;
 
 
 public interface PersonService {
@@ -30,7 +31,9 @@ public interface PersonService {
 
 	TPerson findMe(String email) throws Exception;
 
-	String findReviewers() throws Exception;
+	TPersons findReviewers() throws Exception;
+
+	TAuthPerson findOneAuthByPersonId(String id) throws Exception;
 
 	// void changeUserPassword(PasswordChangeDTO pcDto, String username) throws Exception;
 

@@ -1,7 +1,6 @@
 package com.example.xmlScientificPublicationEditor.controller;
 
 import java.security.Principal;
-import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.xmlScientificPublicationEditor.model.authPerson.TAuthPerson;
 import com.example.xmlScientificPublicationEditor.model.person.TPerson;
+import com.example.xmlScientificPublicationEditor.model.person.TPersons;
 import com.example.xmlScientificPublicationEditor.security.TokenUtils;
 import com.example.xmlScientificPublicationEditor.service.PersonService;
 
@@ -70,8 +70,8 @@ public class PersonController extends BaseController {
 
 	@GetMapping(value = "/person/reviewer", produces = MediaType.APPLICATION_XML_VALUE)
 	@PreAuthorize("hasRole('ROLE_REDACTOR')")
-	public ResponseEntity<String> getReviewers() throws Exception {
-		String reviewer = personService.findReviewers();
+	public ResponseEntity<TPersons> getReviewers() throws Exception {
+		TPersons reviewer = personService.findReviewers();
         return new ResponseEntity<>(reviewer, HttpStatus.OK);
 	}
 

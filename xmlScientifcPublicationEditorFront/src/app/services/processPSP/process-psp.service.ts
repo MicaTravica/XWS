@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AuthService } from '../auth-service/auth.service';
 import { environment } from 'src/environments/environment';
@@ -27,10 +27,12 @@ export class ProcessPSPService {
   }
 
   addReviewers(reviewers: string, id: string) {
-    return this.http.post(this.url + '/addReviewers/' + id, reviewers,
+    const param = new HttpParams().append('id', id);
+    return this.http.post(this.url + '/addReviewers', reviewers,
       {
         headers: authHttpOptions(this.authService.getToken()),
-        responseType: 'text'
+        responseType: 'text',
+        params: param
       });
   }
 
