@@ -15,6 +15,7 @@ import com.example.xmlScientificPublicationEditor.model.authPerson.TRole;
 import com.example.xmlScientificPublicationEditor.model.person.TAddress;
 import com.example.xmlScientificPublicationEditor.model.person.TInstitution;
 import com.example.xmlScientificPublicationEditor.model.person.TPerson;
+import com.example.xmlScientificPublicationEditor.repository.person.PersonMarshalling;
 import com.example.xmlScientificPublicationEditor.repository.person.PersonRepository;
 import com.example.xmlScientificPublicationEditor.service.PersonService;
 
@@ -150,6 +151,21 @@ public class PersonServiceImpl implements PersonService {
 		TAuthPerson auth = findOneAuth(email);
 		TPerson person = findOne(auth.getPerson());
 		return person;
+	}
+
+	@Override
+	public String findReviewers() throws Exception {
+		ArrayList<TAuthPerson> reviewers = personRepository.findByRole(
+                PersonRepository.makeXpathQueryByRole(TRole.ROLE_REVIEWER.toString()));
+		ArrayList<TAuthPerson> redactors = personRepository.findByRole(
+                PersonRepository.makeXpathQueryByRole(TRole.ROLE_REDACTOR.toString()));
+		reviewers.addAll(redactors);
+		String result = "<ns:reviewers>";
+		for (TAuthPerson tAuthPerson : reviewers) {
+			result += PersonMarshalling.marshalPerson(findOne(tAuthPerson.getPerson()));
+		}
+		result += "</ns:reviewers>";
+		return result;
 	}
   
 }

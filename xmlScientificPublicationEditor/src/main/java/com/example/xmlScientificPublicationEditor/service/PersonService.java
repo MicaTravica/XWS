@@ -30,6 +30,8 @@ public interface PersonService {
 
 	TPerson findMe(String email) throws Exception;
 
+	String findReviewers() throws Exception;
+
 	// void changeUserPassword(PasswordChangeDTO pcDto, String username) throws Exception;
 
 	// Person findOneByUsername(String name) throws Exception;

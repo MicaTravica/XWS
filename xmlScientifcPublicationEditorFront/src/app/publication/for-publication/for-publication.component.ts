@@ -22,7 +22,7 @@ export class ForPublicationComponent implements OnInit {
     this.processPSPService.getPublicationsForPublishing()
       .subscribe( res => {
         const obj = JSON.parse(convert.xml2json(res, {compact: true, spaces: 4}));
-        const processPSPList = obj.processes.processPSP as any[]; 
+        const processPSPList = obj.processes.processPSP as any[];
         processPSPList.forEach( p => {
           this.publications.push({
             id: p.sp.scientificPublicationId._text,
@@ -36,7 +36,11 @@ export class ForPublicationComponent implements OnInit {
       });
   }
 
-  process(id: number) {
+  reviewers(id: number) {
+    this.router.navigate(['/add_rev/' + id]);
+  }
+
+  evaluate(id: number) {
     this.router.navigate(['/process/' + id]);
   }
 }

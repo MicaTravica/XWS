@@ -27,6 +27,7 @@ import { ForRevisionComponent } from './revisions/for-revision/for-revision.comp
 import { ProcessPublicationComponent } from './publication/process-publication/process-publication.component';
 import { AddCoverLetterComponent } from './add-cover-letter/add-cover-letter.component';
 import { ToastrModule } from 'ngx-toastr';
+import { AddReviewersComponent } from './revisions/add-reviewers/add-reviewers.component';
 
 @NgModule({
   declarations: [
@@ -44,7 +45,8 @@ import { ToastrModule } from 'ngx-toastr';
     ForPublicationComponent,
     AddRevisionComponent,
     ProcessPublicationComponent,
-    AddCoverLetterComponent
+    AddCoverLetterComponent,
+    AddReviewersComponent
   ],
   imports: [
     BrowserModule,
