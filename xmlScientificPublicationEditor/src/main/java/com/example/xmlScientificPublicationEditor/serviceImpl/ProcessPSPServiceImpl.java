@@ -44,13 +44,14 @@ public class ProcessPSPServiceImpl implements ProcessPSPService {
 	private XSLFOTransformer xslFoTransformer;
 
     @Override
-    public String create(String scientificPublicationId) throws Exception {
+    public String create(String scientificPublicationId, String authorEmail) throws Exception {
         String doc = this.generateProcessXMLTemplate();
         Document newProcess = DOMParser.buildDocumentWithOutSchema(doc);
         String redactorId = this.personService.findUsersByRole(TRole.ROLE_REDACTOR).get(0);
         newProcess = processPSPRepo.setRedactor(newProcess, redactorId);
         processPSPRepo.setScientificPublicationId(newProcess, scientificPublicationId);
         this.setProcessPSPState(newProcess, ProcessState.IN_PROGRESS);
+        this.setProcessPSPCSAuthor(newProcess, authorEmail);
         processPSPRepo.save(newProcess);
         return newProcess.getDocumentElement().getAttribute("id");
     }
@@ -144,6 +145,20 @@ public class ProcessPSPServiceImpl implements ProcessPSPService {
         // TODO Auto-generated method stub
         return null;
     }
+
+    @Override
+    public Document setProcessPSPCSAuthor(Document process, String email) {
+        process.getElementsByTagName(ProcessPSPRepository.PROCESS_ROOT).item(0)
+        .getAttributes().getNamedItem(ProcessPSPRepository.PROCESS_AUTHOR_SP)
+            .setTextContent(email);
+    return process;
+    }
+
+    @Override
+    public String getProcessPSPCSAuthor(Document process) {
+        return null;
+    }
+
 
 
 

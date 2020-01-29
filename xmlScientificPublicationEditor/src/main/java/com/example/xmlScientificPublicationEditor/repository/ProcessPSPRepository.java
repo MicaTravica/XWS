@@ -39,6 +39,8 @@ public class ProcessPSPRepository {
 	public static String PROCESS_ROOT = "ns:processPSP";
 	public static final String PROCESS_LAST_VERSION = "lastVersion";
 	public static final String PROCESS_STATE = "state";
+	public static final String PROCESS_AUTHOR_SP = "authorEmail";
+	
 
 	public static final String ProcessPSPXSLSPId = "src/main/resources/data/xslt/processPSPgetLastSCId.xsl";
 
