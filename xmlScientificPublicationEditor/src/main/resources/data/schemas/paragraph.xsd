@@ -7,7 +7,6 @@
     <xs:complexType name="TParagraph">
         <xs:choice maxOccurs="unbounded">
             <xs:element maxOccurs="unbounded" minOccurs="0" name="text" type="TText"> </xs:element>
-            <xs:element maxOccurs="unbounded" minOccurs="0" name="quote" type="TQuote"/>
             <xs:element name="formula" type="TFormula" maxOccurs="unbounded" minOccurs="0"/>
             <xs:element maxOccurs="unbounded" minOccurs="0" name="list" type="TList"/>
         </xs:choice>

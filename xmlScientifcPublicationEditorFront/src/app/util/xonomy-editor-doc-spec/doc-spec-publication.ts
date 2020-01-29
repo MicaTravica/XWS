@@ -1,9 +1,5 @@
-import { Person } from 'src/app/models/user-model/user.model';
-import { UserService } from 'src/app/services/user-service/user.service';
-
 declare const Xonomy: any;
-declare var require: any;
-const convert = require('xml-js');
+
 export const docSpec = {
     elements: {
         'ns:scientificPublication': {

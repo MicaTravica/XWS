@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { AuthService } from '../auth-service/auth.service';
 import { authHttpOptions } from 'src/app/util/http-util';
 import { environment } from 'src/environments/environment';
@@ -28,15 +28,17 @@ export class CoverLetterService {
       });
   }
 
-  addCL(clXml: string) {
+  addCL(clXml: string, processId: string) {
+    const param = new HttpParams().append('processId', processId);
     return this.http.post(this.url, clXml,
       {
         headers: authHttpOptions(this.authService.getToken()),
-        responseType: 'text'
+        responseType: 'text',
+        params: param
       });
   }
 
-  upload(file: File) {
-    return this.uploadService.upload(file, this.url + '/upload');
+  upload(file: File, processId: string) {
+    return this.uploadService.upload(file, this.url + '/upload', processId);
   }
 }

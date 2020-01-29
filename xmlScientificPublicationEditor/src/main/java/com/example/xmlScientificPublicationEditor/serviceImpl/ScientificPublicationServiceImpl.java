@@ -63,10 +63,10 @@ public class ScientificPublicationServiceImpl implements ScientificPublicationSe
 	}
 
 	@Override
-	public String save(String scientificPublication) throws Exception {
+	public String save(String scientificPublication, String authorEmail) throws Exception {
 		String scID = scientificPublicationRepository.save(scientificPublication);
 		
-		processPSPService.create(scID);
+		processPSPService.create(scID, authorEmail );
 		return scID;
 	}
 

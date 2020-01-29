@@ -243,22 +243,14 @@ export const docSpec = {
                 }
             ]
         },
-        'ns:quote': {
+        'ns:formula': {
             canDropTo: ['ns:paragraph', 'ns:content'],
             menu: [
                 {
-                    caption: 'Delete this quote',
+                    caption: 'Delete this list',
                     action: Xonomy.deleteElement
                 }
             ],
-            attributes: {
-                'ref': {
-                    asker: Xonomy.askString,
-                }
-            }
-        },
-        'ns:formula': {
-            canDropTo: ['ns:paragraph', 'ns:content'],
         },
         'ns:list': {
             canDropTo: ['ns:paragraph', 'ns:content'],
@@ -317,11 +309,6 @@ export const docSpec = {
                     caption: 'Append an <ns:text>',
                     action: Xonomy.newElementChild,
                     actionParameter: '<ns:text id="text" xmlns:ns="http://www.uns.ac.rs/Tim1"><ns:cursive/></ns:text>'
-                },
-                {
-                    caption: 'Append an <ns:quote>',
-                    action: Xonomy.newElementChild,
-                    actionParameter: '<ns:quote id="quote" ref="" xmlns:ns="http://www.uns.ac.rs/Tim1"><ns:cursive/></ns:quote>'
                 },
                 {
                     caption: 'Append an <ns:formula>',

@@ -53,13 +53,14 @@ public class CoverLetterController extends BaseController {
 	@PostMapping(value="/coverLetter", 
 			consumes = MediaType.APPLICATION_XML_VALUE,
 			produces = MediaType.APPLICATION_XML_VALUE)
-	public ResponseEntity<String> addCoverLetter(@RequestBody String cl) throws Exception {
-		String id = coverLetterService.save(cl);
+	public ResponseEntity<String> addCoverLetter(@RequestParam(("processId")) String processId, @RequestBody String cl) throws Exception {
+		String id = coverLetterService.save(cl, processId);
 		return new ResponseEntity<>(String.format("You succesfully add cover letter with id %s", id), HttpStatus.OK);
 	}
 
 	@PostMapping(value = "/coverLetter/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_XML_VALUE)
-	public ResponseEntity<String> uploadCoverLetter(@RequestParam(("file")) MultipartFile q) throws Exception {
+	public ResponseEntity<String> uploadCoverLetter(
+		@RequestParam(("processId")) String processId, @RequestParam(("file")) MultipartFile q) throws Exception {
 		BufferedReader br;
 		StringBuilder sb = new StringBuilder();
 		try {
@@ -73,7 +74,7 @@ public class CoverLetterController extends BaseController {
 		} catch (IOException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.OK);
 		}
-		String id = coverLetterService.save(sb.toString());
+		String id = coverLetterService.save(sb.toString(), processId);
 		return new ResponseEntity<>(String.format("You succesfully add cover letter with id %s", id), HttpStatus.OK);
 	}
 

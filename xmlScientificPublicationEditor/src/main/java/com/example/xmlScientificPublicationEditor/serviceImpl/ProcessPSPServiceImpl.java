@@ -44,15 +44,25 @@ public class ProcessPSPServiceImpl implements ProcessPSPService {
 	private XSLFOTransformer xslFoTransformer;
 
     @Override
-    public String create(String scientificPublicationId) throws Exception {
+    public String create(String scientificPublicationId, String authorEmail) throws Exception {
         String doc = this.generateProcessXMLTemplate();
         Document newProcess = DOMParser.buildDocumentWithOutSchema(doc);
         String redactorId = this.personService.findUsersByRole(TRole.ROLE_REDACTOR).get(0);
         newProcess = processPSPRepo.setRedactor(newProcess, redactorId);
         processPSPRepo.setScientificPublicationId(newProcess, scientificPublicationId);
         this.setProcessPSPState(newProcess, ProcessState.IN_PROGRESS);
+        this.setProcessPSPCSAuthor(newProcess, authorEmail);
         processPSPRepo.save(newProcess);
         return newProcess.getDocumentElement().getAttribute("id");
+    }
+
+    @Override
+    public Document findOneById(String processId) throws Exception {
+        Document process = processPSPRepo.findOneById(processId);
+        if(process == null) {
+            throw new Exception("process not found with id");
+        }
+        return process;
     }
 
     @Override
@@ -65,11 +75,12 @@ public class ProcessPSPServiceImpl implements ProcessPSPService {
         return procesStr;
     }
 
+    
     @Override
-    public String setCoverLetter(String scientificPublicationId, String coverLetterId) throws Exception {
-        String processStr = this.findOneByScientificPublicationID(scientificPublicationId);
-        Document process = DOMParser.buildDocumentWithOutSchema(processStr);
-        processPSPRepo.setCoverLetter(process, coverLetterId);
+    public String setCoverLetter(String processId, String coverLetterId) throws Exception {
+        Document process = this.findOneById(processId);
+        process = processPSPRepo.setCoverLetter(process, coverLetterId);
+        process = this.setProcessPSPState(process, ProcessState.FOR_REVIEW);
         processPSPRepo.update(process);
         return null;
     }
@@ -101,7 +112,7 @@ public class ProcessPSPServiceImpl implements ProcessPSPService {
         xsInstance.maximumRecursionDepth = 0;
         xsInstance.generateOptionalAttributes = Boolean.TRUE;
         xsInstance.generateDefaultAttributes = Boolean.TRUE;
-        xsInstance.generateOptionalElements = Boolean.FALSE; // null means rando
+        xsInstance.generateOptionalElements = Boolean.TRUE; // null means rando
         QName rootElement = new QName("http://www.uns.ac.rs/Tim1", "processPSP");
         XMLDocument sampleXml = new XMLDocument(new StreamResult(sw), true, 4, null);
         xsInstance.generate(xsModel, rootElement, sampleXml);
@@ -144,6 +155,20 @@ public class ProcessPSPServiceImpl implements ProcessPSPService {
         return null;
     }
 
+    @Override
+    public Document setProcessPSPCSAuthor(Document process, String email) {
+        process.getElementsByTagName(ProcessPSPRepository.PROCESS_ROOT).item(0)
+        .getAttributes().getNamedItem(ProcessPSPRepository.PROCESS_AUTHOR_SP)
+            .setTextContent(email);
+    return process;
+    }
+
+    @Override
+    public String getProcessPSPCSAuthor(Document process) {
+        return null;
+    }
+
+
 
 
 
@@ -173,5 +198,29 @@ public class ProcessPSPServiceImpl implements ProcessPSPService {
         return retVal.toString();
     }
 
-    
+    @Override
+    public String findMyPublications(String email) throws Exception {
+        StringBuilder retVal = new StringBuilder();
+        retVal.append("<processes>");
+        ArrayList<String> myPublications = this.processPSPRepo.findByOwnerEmail(email);
+        for(String p: myPublications) {
+
+            String lastSPId =  xslFoTransformer.applyTemplate(p, ProcessPSPRepository.ProcessPSPXSLSPId );
+            String sp = scService.findOne(lastSPId);
+
+            String spData = xslFoTransformer.applyTemplate(sp, ScientificPublicationRepository.DATA_PROCESS_XSL );
+
+            String transformed_p =
+                xslFoTransformer.applyTemplate(p, ProcessPSPRepository.ProcessPSPXSLForReview );
+            
+            String[] s = transformed_p.split("</processPSP>");
+            transformed_p =  s[0] + spData + "\n</processPSP>";
+            
+            retVal.append(transformed_p);
+            retVal.append("\n");
+        }
+        retVal.append("</processes>");
+        return retVal.toString();
+    }
+
 }

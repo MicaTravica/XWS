@@ -6,7 +6,7 @@ public interface ScientificPublicationService {
 
 	String findOne(String id) throws Exception;
 
-	String save(String scientificPublication) throws Exception;
+	String save(String scientificPublication, String authorEmail) throws Exception;
 
 	String update(String scientificPublication) throws Exception;
 
