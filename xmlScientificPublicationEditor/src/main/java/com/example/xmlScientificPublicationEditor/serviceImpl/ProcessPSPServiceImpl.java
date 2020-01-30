@@ -44,12 +44,15 @@ public class ProcessPSPServiceImpl implements ProcessPSPService {
 	private XSLFOTransformer xslFoTransformer;
 
     @Override
-    public String create(String scientificPublicationId, String authorEmail) throws Exception {
+    public String create(
+            String scientificPublicationId, String authorEmail,
+            String scientificPublicationName) throws Exception {
         String doc = this.generateProcessXMLTemplate();
         Document newProcess = DOMParser.buildDocumentWithOutSchema(doc);
         String redactorId = this.personService.findUsersByRole(TRole.ROLE_REDACTOR).get(0);
         newProcess = processPSPRepo.setRedactor(newProcess, redactorId);
         processPSPRepo.setScientificPublicationId(newProcess, scientificPublicationId);
+        processPSPRepo.setScientificPublicationName(newProcess,scientificPublicationName);
         this.setProcessPSPState(newProcess, ProcessState.IN_PROGRESS);
         this.setProcessPSPCSAuthor(newProcess, authorEmail);
         processPSPRepo.save(newProcess);
@@ -224,6 +227,20 @@ public class ProcessPSPServiceImpl implements ProcessPSPService {
             transformed_p =  s[0] + spData + "\n</processPSP>";
             
             retVal.append(transformed_p);
+            retVal.append("\n");
+        }
+        retVal.append("</processes>");
+        return retVal.toString();
+    }
+
+
+    @Override
+    public String findMyReviewAssigments(String email) throws Exception {
+        StringBuilder retVal = new StringBuilder();
+        retVal.append("<processes>");
+        ArrayList<String> myPublications = this.processPSPRepo.findMyReviewAssigments(email);
+        for(String p: myPublications) {
+            retVal.append(p);
             retVal.append("\n");
         }
         retVal.append("</processes>");

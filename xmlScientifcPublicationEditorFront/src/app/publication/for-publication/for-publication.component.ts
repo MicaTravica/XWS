@@ -35,7 +35,7 @@ export class ForPublicationComponent implements OnInit {
             });
           });
         } else {
-          const p = processPSPList;
+          const p: any = processPSPList ;
           this.publications.push({
             id: p.sp.scientificPublicationId._text,
             name: p.sp.scientificPublicationName._text,

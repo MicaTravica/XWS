@@ -43,4 +43,12 @@ export class ProcessPSPService {
         responseType: 'text'
       });
   }
+
+  getMyReviewAssigments() {
+    return this.http.get(this.url + '/getMyReviewAssigments',
+      {
+        headers: authHttpOptions(this.authService.getToken()),
+        responseType: 'text'
+      });
+  }
 }

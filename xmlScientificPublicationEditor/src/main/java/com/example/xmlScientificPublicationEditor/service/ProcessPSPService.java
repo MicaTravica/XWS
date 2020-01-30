@@ -11,7 +11,8 @@ import org.w3c.dom.Node;
  */
 public interface ProcessPSPService {
 
-	String create(String scientificPublicationId, String authorEmail) throws Exception;
+    String create(String scientificPublicationId,
+        String authorEmail, String scientificPublicationName) throws Exception;
 
     Document findOneById(String processId) throws Exception;
 
@@ -41,8 +42,10 @@ public interface ProcessPSPService {
 
 	String findForPublishing() throws Exception;
 
-	String findMyPublications(String name) throws Exception;
-
+    String findMyReviewAssigments(String email) throws Exception;
+    
+    String findMyPublications(String name) throws Exception;
+    
 	void addReviewers(TPersons reviewers, String processId) throws Exception;
 
 	String getProcessPSPState(Document document) throws Exception;

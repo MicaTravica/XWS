@@ -1,0 +1,39 @@
+let $docs := collection("/db/sample/processPSP")
+for $doc in $docs
+let $processPSP := $doc/processPSP
+let $lastVersion := $doc/processPSP/@lastVersion
+let $processPSPState := $doc/processPSP/@state
+where $processPSPState = "waitningForReviewers"
+for $version in $processPSP/versions//version
+where $version/@version = $lastVersion
+let $lastVersionData := $version
+for $reviewAssigment in $lastVersionData/reviewAssignments//reviewAssigment
+let $review := $reviewAssigment/review
+where $review/idReviewer = $REVIWER_ID and $reviewAssigment/@state != "rejected" and $review/@state="inProgress"
+
+return
+    <processPSP>
+        <processId>
+            {data($processPSP/@id)}
+        </processId>
+        <processState>
+            {data($processPSPState)}
+        </processState>
+        <lastVersion>
+            {data($lastVersion)}
+        </lastVersion>
+        <sp>
+            <scientificPublicationId>
+                {data($lastVersionData/scientificPublication)}
+            </scientificPublicationId>
+            <scientificPublicationName>
+                {data($lastVersionData/scientificPublicationName)}
+            </scientificPublicationName>
+        </sp>
+        <reviewAssigmentState>
+            {data($reviewAssigment/@state)}
+        </reviewAssigmentState>
+    </processPSP>
+    
+
+

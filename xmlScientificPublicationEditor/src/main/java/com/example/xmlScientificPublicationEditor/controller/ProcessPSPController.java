@@ -38,6 +38,13 @@ public class ProcessPSPController {
 		String sp = processPSPService.findMyPublications(principal.getName());
 		return new ResponseEntity<>(sp, HttpStatus.OK);
 	}
+	
+	
+	@GetMapping(value="/processPSP/getMyReviewAssigments", produces = MediaType.APPLICATION_XML_VALUE)
+	public ResponseEntity<String> getMyReviewAssigments(Principal principal) throws Exception{
+		String sp = processPSPService.findMyReviewAssigments(principal.getName());
+		return new ResponseEntity<>(sp, HttpStatus.OK);
+	}
     
     @PostMapping(value="/processPSP/addReviewers", 
 			consumes = MediaType.APPLICATION_XML_VALUE,
