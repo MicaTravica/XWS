@@ -44,7 +44,7 @@ export class ProcessPSPService {
       });
   }
 
-  geProcess(id: string) {
+  getProcess(id: string) {
     return this.http.get(this.url + '/' + id,
       {
         headers: authHttpOptions(this.authService.getToken()),
@@ -54,6 +54,14 @@ export class ProcessPSPService {
 
   changeState(xml: string) {
     return this.http.post(this.url + '/changeState', xml,
+      {
+        headers: authHttpOptions(this.authService.getToken()),
+        responseType: 'text'
+      });
+  }
+
+  getMyReviewAssigments() {
+    return this.http.get(this.url + '/getMyReviewAssigments',
       {
         headers: authHttpOptions(this.authService.getToken()),
         responseType: 'text'
