@@ -43,4 +43,20 @@ export class ProcessPSPService {
         responseType: 'text'
       });
   }
+
+  geProcess(id: string) {
+    return this.http.get(this.url + '/' + id,
+      {
+        headers: authHttpOptions(this.authService.getToken()),
+        responseType: 'text'
+      });
+  }
+
+  changeState(xml: string) {
+    return this.http.post(this.url + '/changeState', xml,
+      {
+        headers: authHttpOptions(this.authService.getToken()),
+        responseType: 'text'
+      });
+  }
 }

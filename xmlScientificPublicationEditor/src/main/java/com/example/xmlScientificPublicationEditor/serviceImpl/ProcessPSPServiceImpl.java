@@ -24,6 +24,7 @@ import com.example.xmlScientificPublicationEditor.service.ScientificPublicationS
 import com.example.xmlScientificPublicationEditor.util.DOMParser.DOMParser;
 import com.example.xmlScientificPublicationEditor.util.XSLFOTransformer.XSLFOTransformer;
 
+import arq.update;
 import jlibs.xml.sax.XMLDocument;
 import jlibs.xml.xsd.XSInstance;
 import jlibs.xml.xsd.XSParser;
@@ -65,6 +66,13 @@ public class ProcessPSPServiceImpl implements ProcessPSPService {
         return process;
     }
 
+    @Override
+    public String findOne(String processId) throws Exception {
+    	Document document = findOneById(processId);
+    	Node lv = processPSPRepo.getLastVersion(document);
+    	return DOMParser.nodeToString(lv);
+    }
+   
     @Override
     public String findOneByScientificPublicationID(String scientificPublicationId) throws Exception {
         String procesStr = processPSPRepo.findOneByScientificPublicationID(scientificPublicationId);
@@ -168,11 +176,6 @@ public class ProcessPSPServiceImpl implements ProcessPSPService {
         return null;
     }
 
-
-
-
-
-
     @Override
     public String findForPublishing() throws Exception{
         StringBuilder retVal = new StringBuilder();
@@ -201,6 +204,9 @@ public class ProcessPSPServiceImpl implements ProcessPSPService {
 	@Override
 	public void addReviewers(TPersons reviewers, String processId) throws Exception {
 		Document document = findOneById(processId);
+		if(!getProcessPSPState(document).equals(ProcessState.FOR_REVIEW.getAction())) {
+			throw new Exception("You can not add reviewers");
+		}
 		setProcessPSPState(document, ProcessState.WAITING_FOR_REVIEWERS);
 		processPSPRepo.addReviewAssigment(document, reviewers);
 	}
@@ -229,5 +235,40 @@ public class ProcessPSPServiceImpl implements ProcessPSPService {
         retVal.append("</processes>");
         return retVal.toString();
     }
+
+	@Override
+	public void setProcessPSPStateFromScored(String xml) throws Exception {
+		Document doc = DOMParser.buildDocumentWithOutSchema(xml);
+		if(doc.getElementsByTagName("processId") == null || doc.getElementsByTagName("state") ==null ) {
+			throw new Exception("Bad xml document");
+		}
+
+		String id = doc.getElementsByTagName("processId").item(0).getTextContent();
+		String strState = doc.getElementsByTagName("state").item(0).getTextContent();
+		ProcessState processState;
+		switch (strState) {
+		case "published":
+			processState = ProcessState.PUBLISHED;
+			break;
+		case "rejected":
+			processState = ProcessState.REJECTED;
+			break;
+		case "revised":
+			processState = ProcessState.REVISED;
+			break;
+		default:
+			processState = null;
+			break;
+		}
+		if(processState == null) {
+			throw new Exception("State dosent exist");
+		}
+		Document document = findOneById(id);
+		if(!getProcessPSPState(document).equals(ProcessState.SCORED.getAction())) {
+			throw new Exception("You can not change state of process");
+		}
+		setProcessPSPState(document, processState);
+		processPSPRepo.update(document);
+	}
 
 }

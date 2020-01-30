@@ -47,4 +47,8 @@ public interface ProcessPSPService {
 
 	String getProcessPSPState(Document document) throws Exception;
 
+	String findOne(String processId) throws Exception;
+
+	void setProcessPSPStateFromScored(String xml) throws Exception;
+
 }

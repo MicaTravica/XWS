@@ -1,9 +1,18 @@
 <div>
-     <mat-card *ngFor="let r of review">
+     <mat-card *ngFor="let r of reviewAssignments">
         <mat-card-header>
-            <mat-card-title>{{r.author}}</mat-card-title>
+            <mat-card-title>Review</mat-card-title>
+            <mat-card-title>{{r.idQue}}Questionaire</mat-card-title>
         </mat-card-header>
         <mat-card-actions>
+            <a mat-raised-button routerLink=".">XML</a>
+            <a mat-raised-button routerLink=".">HTML</a>
+            <a mat-raised-button routerLink=".">PDF</a>
+        </mat-card-actions>
+        <mat-card-header *ngIf="r.idSPC">
+            <mat-card-title>SP comments{{r.idQue}}</mat-card-title>
+        </mat-card-header>
+        <mat-card-actions *ngIf="r.idSPC">
             <a mat-raised-button routerLink=".">XML</a>
             <a mat-raised-button routerLink=".">HTML</a>
             <a mat-raised-button routerLink=".">PDF</a>
