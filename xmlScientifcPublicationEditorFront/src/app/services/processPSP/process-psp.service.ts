@@ -67,4 +67,12 @@ export class ProcessPSPService {
         responseType: 'text'
       });
   }
+
+   getMyProcess(id: string) {
+    return this.http.get(this.url + '/myPSP/' + id,
+      {
+        headers: authHttpOptions(this.authService.getToken()),
+        responseType: 'text'
+      });
+  }
 }

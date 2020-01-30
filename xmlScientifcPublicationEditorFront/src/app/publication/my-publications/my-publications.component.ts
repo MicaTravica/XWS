@@ -20,11 +20,12 @@ export class MyPublicationsComponent implements OnInit {
 
   ngOnInit() {
     this.processPSPService.getMyPublications()
-        .subscribe( res => {
-          const obj = JSON.parse(convert.xml2json(res, {compact: true, spaces: 4}));
+      .subscribe(res => {
+        const obj = JSON.parse(convert.xml2json(res, { compact: true, spaces: 4 }));
+        if (obj.processes.processPSP) {
           const processPSPList = obj.processes.processPSP as any[];
           if (processPSPList.length) {
-            processPSPList.forEach( p => {
+            processPSPList.forEach(p => {
               this.publications.push({
                 id: p.sp.scientificPublicationId._text,
                 name: p.sp.scientificPublicationName._text,
@@ -37,24 +38,33 @@ export class MyPublicationsComponent implements OnInit {
           } else {
             const p = processPSPList as any;
             this.publications.push({
-                id: p.sp.scientificPublicationId._text,
-                name: p.sp.scientificPublicationName._text,
-                authors: (p.sp.authors.author.length) ? p.sp.authors.author : [p.sp.authors.author],
-                processState: p.processState._text,
-                lastVersion: p.lastVersion._text,
-                processId: p.processId._text
+              id: p.sp.scientificPublicationId._text,
+              name: p.sp.scientificPublicationName._text,
+              authors: (p.sp.authors.author.length) ? p.sp.authors.author : [p.sp.authors.author],
+              processState: p.processState._text,
+              lastVersion: p.lastVersion._text,
+              processId: p.processId._text
             });
           }
+        }
       });
   }
 
-  addCoverLetter(sp: any) {
-    this.router.navigate(['add_cover_letter', sp.processId]);
+  addCoverLetter(processId: string) {
+    this.router.navigate(['add_cover_letter', processId]);
   }
 
-  withdraw(id: number) {
+  retract(processId: string) {
+    // dodati otkazivanje
   }
 
+  delete(processId: string) {
+    // dodati otkazivanje
+  }
+
+  seeHistory(processId: string) {
+    this.router.navigate(['see_revision', processId]);
+  }
 
 
 }

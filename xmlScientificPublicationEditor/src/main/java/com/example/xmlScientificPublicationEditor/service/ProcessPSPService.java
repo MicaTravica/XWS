@@ -54,4 +54,6 @@ public interface ProcessPSPService {
 
 	void setProcessPSPStateFromScored(String xml) throws Exception;
 
+	String findMySPProcess(String id, String name) throws Exception;
+
 }

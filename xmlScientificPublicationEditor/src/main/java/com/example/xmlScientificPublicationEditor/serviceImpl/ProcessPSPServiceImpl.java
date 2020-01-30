@@ -24,7 +24,6 @@ import com.example.xmlScientificPublicationEditor.service.ScientificPublicationS
 import com.example.xmlScientificPublicationEditor.util.DOMParser.DOMParser;
 import com.example.xmlScientificPublicationEditor.util.XSLFOTransformer.XSLFOTransformer;
 
-import arq.update;
 import jlibs.xml.sax.XMLDocument;
 import jlibs.xml.xsd.XSInstance;
 import jlibs.xml.xsd.XSParser;
@@ -286,5 +285,10 @@ public class ProcessPSPServiceImpl implements ProcessPSPService {
         retVal.append("</processes>");
         return retVal.toString();
     }
+
+	@Override
+	public String findMySPProcess(String id, String email) throws Exception {
+        return this.processPSPRepo.findMySPProcess(id, personService.findOneAuth(email).getId());
+	}
 
 }

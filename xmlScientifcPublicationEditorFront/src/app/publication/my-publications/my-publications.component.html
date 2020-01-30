@@ -1,4 +1,7 @@
 <div>
+    <h1 *ngIf="publications.length < 1">
+        You dont have publications
+    </h1>
     <mat-card *ngFor="let sp of publications">
         <mat-card-header>
             <mat-card-title>{{sp.name}}</mat-card-title>
@@ -6,11 +9,13 @@
             <mat-card-subtitle *ngFor="let a of sp.authors">{{a.name._text}} {{a.surname._text}}</mat-card-subtitle>
         </mat-card-header>
         <mat-card-actions>
-            <button mat-raised-button color="accent" (click)="withdraw(sp.id)">Withdraw</button>
             <a mat-raised-button routerLink=".">XML</a>
             <a mat-raised-button routerLink=".">HTML</a>
             <a mat-raised-button routerLink=".">PDF</a>
-            <a *ngIf="sp.processState =='inProgress'" mat-raised-button (click)="addCoverLetter(sp)">Add CoverLetter</a>
+            <button mat-raised-button color="accent" *ngIf="sp.processState !='published'" (click)="retract(sp.processId)">Retract</button>
+            <button mat-raised-button color="accent" *ngIf="sp.processState =='published'" (click)="delete(sp.processId)">Delete</button>
+            <button mat-raised-button color="accent" *ngIf="sp.processState =='inProgress'" (click)="addCoverLetter(sp.processId)">Add CoverLetter</button>
+            <button mat-raised-button color="accent" *ngIf="sp.processState =='published' || sp.processState =='rejected' || sp.processState =='revised'" (click)="seeHistory(sp.processId)">See history</button>
         </mat-card-actions>
     </mat-card>
 </div>

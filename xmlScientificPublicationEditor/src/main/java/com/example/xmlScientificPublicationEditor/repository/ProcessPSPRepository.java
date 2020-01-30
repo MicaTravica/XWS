@@ -344,4 +344,35 @@ public class ProcessPSPRepository {
 		update(document);
 	}
 
+	public String findMySPProcess(String id, String authId) throws Exception {
+		String retVal = "";
+		String xQueryPath = "src/main/resources/data/xQuery/showMySPProcess.txt";
+
+		HashMap<String, String> params = new HashMap<>();
+		params.put("AUTH_ID", authId); 
+		params.put("PROCESS_ID", id);
+
+		ResourceSet resultSet = RetriveFromDB.executeXQuery(
+			ProcessPSPCollectionId, xQueryPath, params, TARGET_NAMESPACE);
+		if (resultSet == null) {
+			return retVal;
+		}
+		ResourceIterator i = resultSet.getIterator();
+		XMLResource res = null;
+		while (i.hasMoreResources()) {
+			try {
+				res = (XMLResource) i.nextResource();
+				retVal = res.getContent().toString();
+			} finally {
+				// don't forget to cleanup resources
+				try {
+					((EXistResource) res).freeResources();
+				} catch (XMLDBException xe) {
+					xe.printStackTrace();
+				}
+			}
+		}
+		return retVal;
+	}
+
 }
