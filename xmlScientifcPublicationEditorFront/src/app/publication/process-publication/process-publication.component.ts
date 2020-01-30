@@ -26,7 +26,7 @@ export class ProcessPublicationComponent implements OnInit {
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       this.id = id;
-      this.processService.geProcess(id).subscribe(
+      this.processService.getProcess(id).subscribe(
         (data: any) => {
           const obj = JSON.parse(convert.xml2json(data, { compact: true, spaces: 4 }));
           const version = obj['ns:version'] as any;
