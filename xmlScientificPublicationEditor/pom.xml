@@ -181,11 +181,24 @@
     		<artifactId>xml-apis</artifactId>
     		<version>1.4.01</version>
 		</dependency>
-		<dependency>
-			<groupId>org.exist-db</groupId>
-			<artifactId>exist-core</artifactId>
-			<version>5.2.0</version>
-		</dependency>
+
+				<dependency>
+					<groupId>exist</groupId>
+					<artifactId>exist-modules</artifactId>
+					<version>1.1.1</version>
+				</dependency>
+				<dependency>
+				    <groupId>exist</groupId>
+				    <artifactId>exist-db</artifactId>
+				    <version>1.1.1</version>
+		   		</dependency>
+<!--		<dependency>-->
+<!--			<groupId>org.exist-db</groupId>-->
+<!--			<artifactId>exist-core</artifactId>-->
+<!--			<version>5.2.0</version>-->
+<!--		</dependency>-->
+
+
 	</dependencies>
 	<build>
 		<plugins>

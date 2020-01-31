@@ -297,7 +297,7 @@ public class ProcessPSPRepository {
 
 		ResourceSet resultSet = RetriveFromDB.executeXQuery(
 			ProcessPSPCollectionId, xQueryPath, params, TARGET_NAMESPACE);
-		if (resultSet == null) {
+		if (resultSet == null || (resultSet.getSize() == 0 )) {
 			return retVal;
 		}
 		ResourceIterator i = resultSet.getIterator();
@@ -309,7 +309,9 @@ public class ProcessPSPRepository {
 			} finally {
 				// don't forget to cleanup resources
 				try {
-					((EXistResource) res).freeResources();
+					if(res != null) {
+						((EXistResource) res).freeResources();
+					}
 				} catch (XMLDBException xe) {
 					xe.printStackTrace();
 				}

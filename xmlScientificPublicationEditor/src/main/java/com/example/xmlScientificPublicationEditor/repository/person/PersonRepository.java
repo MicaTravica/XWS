@@ -3,6 +3,7 @@ package com.example.xmlScientificPublicationEditor.repository.person;
 import static com.example.xmlScientificPublicationEditor.util.template.XUpdateTemplate.TARGET_NAMESPACE;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.exist.xmldb.EXistResource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,8 @@ public class PersonRepository {
 	public static String authCollectionId = "/db/sample/auth";
 	public static String personSchemaPath = "src/main/resources/data/schemas/person.xsd";
 	public static String userAuthSchemaPath = "src/main/resources/data/schemas/userAuth.xsd";
+
+	public static String authPersonXQuery = "src/main/resources/data/xQuery/findAuthPerson.txt";
 
 	public TPerson save(TPerson person) throws Exception {
 		String id = "person" + idGeneratorService.getId("person");

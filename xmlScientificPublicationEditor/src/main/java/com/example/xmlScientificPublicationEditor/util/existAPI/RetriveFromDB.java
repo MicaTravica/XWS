@@ -109,7 +109,8 @@ public class RetriveFromDB {
                 xqueryService.declareVariable(param, parameterMap.get(param));
             }
             CompiledExpression compiledXquery = xqueryService.compile(xqueryExpression);
-            result = xqueryService.execute(compiledXquery);
+//            result = xqueryService.execute(compiledXquery);
+            result = xqueryService.query(xqueryExpression);
         } finally {
         	
             // don't forget to cleanup
