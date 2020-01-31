@@ -25,4 +25,10 @@ public interface ScientificPublicationService {
 
 	String getScientificPublicationName(Document sc);
 
+	String findOneNotPub(String id, String name) throws Exception;
+
+	String saveNewVersion(String scientificPublication, String name, String processId) throws Exception;
+
+	void addAcceptedAt(String idSp) throws Exception;
+
 }

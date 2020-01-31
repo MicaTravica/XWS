@@ -63,7 +63,6 @@
             <xs:attribute name="version" type="xs:positiveInteger" use="required"/>
             <xs:attribute default="true" name="tableOfContent" type="xs:boolean"/>
             <xs:attribute name="accepted_at" type="xs:date"/>
-            <xs:attribute name="revisited_at" type="xs:date"/>
             <xs:attribute name="recived_at" type="xs:date"/>
             <xs:anyAttribute processContents="lax"/>
         </xs:complexType>

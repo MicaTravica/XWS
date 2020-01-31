@@ -19,7 +19,11 @@ return
         	{for $v in $versions
         	return(
         	if($v/@version = $lastVersion and not($processPSPState='published' or $processPSPState='rejected' or $processPSPState='revised'))
-        	then ()
+        	then 
+        	<version>
+        		<number>{data($v/@version)}</number>
+        		<spId>{data($v/scientificPublication)}</spId>
+        	</version>
         	else 
         	<version>
         		<number>{data($v/@version)}</number>

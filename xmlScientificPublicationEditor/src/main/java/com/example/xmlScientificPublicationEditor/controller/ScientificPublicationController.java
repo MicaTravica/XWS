@@ -56,6 +56,13 @@ public class ScientificPublicationController extends BaseController {
 		String sp = scientificPublicationService.findOne(id);
 		return new ResponseEntity<>(sp, HttpStatus.OK);
 	}
+	
+	@GetMapping(value = "/scientificPublication/notPub/{id}", produces = MediaType.APPLICATION_XML_VALUE)
+	@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_REVIEWER') or hasRole('ROLE_REDACTOR')")
+	public ResponseEntity<String> getScientificPublicationNotPubById(@PathVariable("id") String id, Principal user) throws Exception {
+		String sp = scientificPublicationService.findOneNotPub(id, user.getName());
+		return new ResponseEntity<>(sp, HttpStatus.OK);
+	}
 
 	@GetMapping(value = "/scientificPublication/html/{id}", produces = MediaType.TEXT_HTML_VALUE)
 	public ResponseEntity<String> getScientificPublicationByIdHTML(@PathVariable("id") String id) throws Exception {
@@ -76,6 +83,16 @@ public class ScientificPublicationController extends BaseController {
 		String id = scientificPublicationService.save(scientificPublication, author.getName());
 		return new ResponseEntity<>(String.format("You succesfully add scientific publication with id %s", id), HttpStatus.OK);
 	}
+	
+	@PostMapping(value = "/scientificPublication/{id}", consumes = MediaType.APPLICATION_XML_VALUE, produces = MediaType.APPLICATION_XML_VALUE)
+	@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_REVIEWER') or hasRole('ROLE_REDACTOR')")
+	public ResponseEntity<String> addScientificPublicationNewVersion(@PathVariable("id") String processId,
+			@RequestBody String scientificPublication, Principal author) throws Exception {
+		String id = scientificPublicationService.saveNewVersion(scientificPublication, author.getName(), processId);
+		return new ResponseEntity<>(String.format("You succesfully add scientific publication with id %s", id),
+				HttpStatus.OK);
+	}
+	
 	@PostMapping(value="/scientificPublication/upload", 
 			consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
 			produces = MediaType.APPLICATION_XML_VALUE)
@@ -97,6 +114,29 @@ public class ScientificPublicationController extends BaseController {
 		}
 		String id = scientificPublicationService.save(sb.toString(), author.getName());
 		return new ResponseEntity<>(String.format("You succesfully add scientific publication with id %s",id), HttpStatus.OK);
+	}
+	
+	@PostMapping(value = "/scientificPublication/upload/newVersion", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_XML_VALUE)
+	@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_REVIEWER') or hasRole('ROLE_REDACTOR')")
+	public ResponseEntity<String> uploadNewVersion(@RequestParam(("processId")) String processId,
+			@RequestParam(("file")) MultipartFile q, Principal author) throws Exception {
+		BufferedReader br;
+		StringBuilder sb = new StringBuilder();
+		try {
+			String line;
+			InputStream is = q.getInputStream();
+			br = new BufferedReader(new InputStreamReader(is));
+			while ((line = br.readLine()) != null) {
+				sb.append(line);
+				sb.append("\n");
+			}
+		} catch (IOException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.OK);
+		}
+		System.out.println(processId);
+		String id = scientificPublicationService.saveNewVersion(sb.toString(), author.getName(), processId);
+		return new ResponseEntity<>(String.format("You succesfully add scientific publication with id %s", id),
+				HttpStatus.OK);
 	}
 	
 	@PutMapping(value="/scientificPublication", consumes = MediaType.APPLICATION_XML_VALUE,produces = MediaType.APPLICATION_XML_VALUE)

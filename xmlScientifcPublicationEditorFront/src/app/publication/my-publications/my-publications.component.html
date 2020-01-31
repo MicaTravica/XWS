@@ -15,7 +15,8 @@
             <button mat-raised-button color="accent" *ngIf="sp.processState !='published'" (click)="retract(sp.processId)">Retract</button>
             <button mat-raised-button color="accent" *ngIf="sp.processState =='published'" (click)="delete(sp.processId)">Delete</button>
             <button mat-raised-button color="accent" *ngIf="sp.processState =='inProgress'" (click)="addCoverLetter(sp.processId)">Add CoverLetter</button>
-            <button mat-raised-button color="accent" *ngIf="sp.processState =='published' || sp.processState =='rejected' || sp.processState =='revised'" (click)="seeHistory(sp.processId)">See history</button>
+            <button mat-raised-button color="accent" (click)="seeHistory(sp.processId)">See history</button>
+            <button mat-raised-button color="accent" *ngIf="sp.processState =='revised'" (click)="addNewVersion(sp)">Add new version</button>
         </mat-card-actions>
     </mat-card>
 </div>

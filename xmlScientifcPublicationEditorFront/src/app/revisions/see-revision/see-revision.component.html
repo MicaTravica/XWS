@@ -1,1 +1,30 @@
-<p>see-revision works!</p>
+<div>
+     <mat-card *ngFor="let v of versions">
+        <mat-card-header>
+            <mat-card-title>Version {{v.version}}</mat-card-title>
+        </mat-card-header>
+        <mat-card-actions>
+            <!-- dodati za rad za tu verziju -->
+            <a mat-raised-button routerLink=".">XML</a>
+            <a mat-raised-button routerLink=".">HTML</a>
+            <a mat-raised-button routerLink=".">PDF</a>
+        </mat-card-actions>
+        <mat-card-header *ngIf="v.spc">
+            <mat-card-title>Questionaires</mat-card-title>
+        </mat-card-header>
+        <mat-card-actions *ngIf="v.spc">
+            <a mat-raised-button routerLink=".">XML</a>
+            <a mat-raised-button routerLink=".">HTML</a>
+            <a mat-raised-button routerLink=".">PDF</a>
+        </mat-card-actions>
+        <mat-card-header *ngIf="v.spc && v.spc.length > 0">
+            <mat-card-title>Comments</mat-card-title>
+        </mat-card-header>
+        <mat-card-actions *ngFor="let spcId of v.spc; let i = index" [attr.data-index]="i">
+            {{i + 1}}:
+            <a mat-raised-button routerLink=".">XML</a>
+            <a mat-raised-button routerLink=".">HTML</a>
+            <a mat-raised-button routerLink=".">PDF</a>
+        </mat-card-actions>
+    </mat-card>
+</div>

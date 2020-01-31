@@ -10,6 +10,7 @@ import org.apache.xerces.xs.XSModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 import com.example.xmlScientificPublicationEditor.exception.ResourceNotFoundException;
@@ -58,6 +59,22 @@ public class ProcessPSPServiceImpl implements ProcessPSPService {
         processPSPRepo.save(newProcess);
         return newProcess.getDocumentElement().getAttribute("id");
     }
+
+
+	@Override
+	public String newVersionSP(String scID, String scName, String email, String processId) throws Exception {
+		Document process = findOneById(processId);
+		if(!getAuthor(process).equals(email)) {
+			throw new Exception("You can not add publication to this process!");
+		}
+		if(!getProcessPSPState(process).equals(ProcessState.REVISED.getAction())) {
+			throw new Exception("You can not add new version!");
+		}
+		String lastVersion = processPSPRepo.addNewVersion(process, scID, scName);
+        this.setProcessPSPState(process, ProcessState.FOR_REVIEW);
+        processPSPRepo.update(process);
+        return lastVersion;
+	}
 
     @Override
     public Document findOneById(String processId) throws Exception {
@@ -140,9 +157,8 @@ public class ProcessPSPServiceImpl implements ProcessPSPService {
     }
 
     @Override
-    public Node getLastVersion(String processId) throws Exception {
-        // TODO Auto-generated method stub
-        return null;
+    public Node getLastVersion(Document document) throws Exception {
+        return processPSPRepo.getLastVersion(document);
     }
 
     @Override
@@ -271,6 +287,13 @@ public class ProcessPSPServiceImpl implements ProcessPSPService {
 		}
 		setProcessPSPState(document, processState);
 		processPSPRepo.update(document);
+		if (processState.equals(ProcessState.PUBLISHED)) {
+			Node lastVersion = getLastVersion(document);
+			Element lv = (Element) lastVersion;
+			String idSp = lv.getElementsByTagName(ProcessPSPRepository.ScientificPublicationFiled).item(0)
+					.getTextContent();
+			scService.addAcceptedAt(idSp);
+		}
 	}
 
     @Override
@@ -289,6 +312,12 @@ public class ProcessPSPServiceImpl implements ProcessPSPService {
 	@Override
 	public String findMySPProcess(String id, String email) throws Exception {
         return this.processPSPRepo.findMySPProcess(id, personService.findOneAuth(email).getId());
+	}
+	
+	@Override
+	public String getAuthor(Document process) {
+		return process.getDocumentElement().getAttributes().getNamedItem(ProcessPSPRepository.AUTHOR_EMAIL)
+				.getTextContent();
 	}
 
 }
