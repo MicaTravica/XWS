@@ -6,6 +6,7 @@ import org.xmldb.api.base.CompiledExpression;
 import org.xmldb.api.base.Database;
 import org.xmldb.api.base.ResourceSet;
 import org.xmldb.api.base.XMLDBException;
+import org.xmldb.api.modules.CollectionManagementService;
 import org.xmldb.api.modules.XPathQueryService;
 import org.xmldb.api.modules.XQueryService;
 
@@ -45,7 +46,7 @@ public class RetriveFromDB {
         try {
             // get the collection
             System.out.println("[INFO] Retrieving the collection: " + collectionId);
-            col = DatabaseManager.getCollection(conn.uri + collectionId);
+            col = DBUtil.getOrCreateCollection(conn, collectionId);
 
             if (col == null) {
                 return null;
@@ -91,7 +92,7 @@ public class RetriveFromDB {
         try { 
         	// get the collection
         	System.out.println("[INFO] Retrieving the collection: " + collectionId);
-            col = DatabaseManager.getCollection(conn.uri + collectionId);
+            col = DBUtil.getOrCreateCollection(conn, collectionId);
             // get an instance of xquery service
             XQueryService xqueryService = (XQueryService) col.getService("XQueryService", "1.0");
             xqueryService.setProperty("indent", "yes");
@@ -108,7 +109,8 @@ public class RetriveFromDB {
                 xqueryService.declareVariable(param, parameterMap.get(param));
             }
             CompiledExpression compiledXquery = xqueryService.compile(xqueryExpression);
-            result = xqueryService.execute(compiledXquery);
+//            result = xqueryService.execute(compiledXquery);
+            result = xqueryService.query(xqueryExpression);
         } finally {
         	
             // don't forget to cleanup
@@ -126,5 +128,11 @@ public class RetriveFromDB {
     public static String readFile(String path, Charset encoding) throws IOException {
 		byte[] encoded = Files.readAllBytes(Paths.get(path));
 		return new String(encoded, encoding);
-	}
+    }
+    
+
+
+   
+    
+    
 }
