@@ -1,0 +1,16 @@
+declare namespace ns="http://www.uns.ac.rs/Tim1";
+let $docs := collection("/db/sample/processPSP")
+for $doc in $docs
+let $processPSP := $doc/processPSP
+where $processPSP/@id = $PROCESS_ID
+let $lastVersion := $processPSP/@lastVersion
+for $version in $processPSP/versions//version
+where $version/@version = $lastVersion
+let $AcceptedReviewsAssigmentNumber := count($version/reviewAssignments//reviewAssigment[@state='accepted'])
+let $DoneReviewsAssigmentNumber := count($version/reviewAssignments//reviewAssigment[review/@state = 'Done'])
+let $processState :=
+    if($AcceptedReviewsAssigmentNumber = $DoneReviewsAssigmentNumber)
+    then ('scored')
+    else ($processPSP/@state)
+return
+    update value $processPSP/@state with $processState

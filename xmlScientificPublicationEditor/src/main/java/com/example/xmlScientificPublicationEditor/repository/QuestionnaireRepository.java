@@ -3,6 +3,7 @@ package com.example.xmlScientificPublicationEditor.repository;
 import static com.example.xmlScientificPublicationEditor.util.template.XUpdateTemplate.TARGET_NAMESPACE;
 
 import java.io.StringWriter;
+import java.util.HashMap;
 
 import org.exist.xmldb.EXistResource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -138,5 +139,6 @@ public class QuestionnaireRepository {
 		deleteMetadata(cvId);
 		StoreToRDF.store(metadata, url);
 	}
+
 
 }

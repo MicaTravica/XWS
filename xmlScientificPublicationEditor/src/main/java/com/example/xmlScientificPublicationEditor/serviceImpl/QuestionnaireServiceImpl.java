@@ -7,6 +7,7 @@ import java.io.StringWriter;
 import javax.xml.namespace.QName;
 import javax.xml.transform.stream.StreamResult;
 
+import com.example.xmlScientificPublicationEditor.service.ProcessPSPService;
 import org.apache.xerces.xs.XSModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,6 +36,9 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
 
 	@Autowired
 	private QuestionnaireRepository questionnaireRepository;
+
+	@Autowired
+	private ProcessPSPService processPSPService;
 
 	@Override
 	public String findOne(String id) throws Exception {
@@ -67,9 +71,19 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
 	}
 
 	@Override
-	public String save(String questionnaire) throws Exception {
+	public String save(String questionnaire, String processId, String reviewerEmail) throws Exception {
 		String qId = questionnaireRepository.save(questionnaire);
-		questionnaireRepository.saveMetadata(this.extractMetadata(questionnaire), qId);
+
+		processPSPService.saveQuestionnaireToProcessPSP(processId, reviewerEmail, qId);
+		// imas id procesa, treba da u odredjeni review tog procesa stavis id
+		// od sacuvanog questionnaire-a......
+		// vidis i za koju je verziju rada i ko je review-er...
+		// e onda kad si to uradio
+		// vidi da li trba da promenis stanje celog procesa, u scored...
+		// ako su svi koji su prihvatili da rade recenziju ocenili rad...
+
+
+//		questionnaireRepository.saveMetadata(this.extractMetadata(questionnaire), qId);
 		return qId;
 	}
 
@@ -109,4 +123,5 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
 		xsInstance.generate(xsModel, rootElement, sampleXml);
 		return sw.toString();
 	}
+
 }

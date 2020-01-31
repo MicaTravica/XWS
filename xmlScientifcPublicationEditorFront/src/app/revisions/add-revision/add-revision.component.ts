@@ -3,6 +3,7 @@ import { RevisionService } from 'src/app/services/revision-service/revision.serv
 import { docSpec} from 'src/app/util/xonomy-editor-doc-spec/doc-spec-questionnaire';
 import { ToastrService } from 'ngx-toastr';
 import { HttpErrorResponse } from '@angular/common/http';
+import { ActivatedRoute } from '@angular/router';
 declare const Xonomy: any;
 
 @Component({
@@ -14,26 +15,30 @@ export class AddRevisionComponent implements OnInit {
 
   revisionXml = '';
   file: File;
+  processId = '';
 
   constructor(
     private revisionService: RevisionService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private route: ActivatedRoute,
   ) { }
 
   ngOnInit() {
-    this.revisionService.getQuestionnaireTemplate()
-      .subscribe( (template: string) => {
+    this.route.params.subscribe(params => {
+      this.processId = params.processId;
+      this.revisionService.getQuestionnaireTemplate().subscribe( (template: string) => {
           this.revisionXml = template;
           this.revisionXml = this.revisionXml.split('ns1:anyAttr="anyValue"').join('');
           const editor = document.getElementById('editor');
           // tslint:disable-next-line: no-unused-expression
           new Xonomy.render(this.revisionXml, editor, docSpec);
       });
+    });
   }
 
   addRevision() {
     this.revisionXml = Xonomy.harvest() as string;
-    this.revisionService.addRevision(this.revisionXml).subscribe(
+    this.revisionService.addRevision(this.revisionXml, this.processId).subscribe(
       (data: string) => {
         this.toastr.success(data);
       }, (error: HttpErrorResponse) => {
@@ -46,7 +51,7 @@ export class AddRevisionComponent implements OnInit {
   }
 
   onUpload() {
-    this.revisionService.upload(this.file, '').subscribe(
+    this.revisionService.upload(this.file,  this.processId).subscribe(
       (data: string) => {
         this.toastr.success(data);
       }, (error: HttpErrorResponse) => {

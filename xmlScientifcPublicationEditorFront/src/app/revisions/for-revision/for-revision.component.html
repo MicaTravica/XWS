@@ -2,11 +2,16 @@
     <mat-card *ngFor="let sp of publications">
         <mat-card-header>
             <mat-card-title>{{sp.name}}</mat-card-title>
-            <mat-card-subtitle>{{sp.authors}}</mat-card-subtitle>
+            <mat-card-subtitle>{{sp.processState}}</mat-card-subtitle>
         </mat-card-header>
         <mat-card-actions>
-            <button mat-raised-button color="accent" (click)="accept(sp.id)">Accept</button>
-            <button mat-raised-button color="accent" (click)="reject(sp.id)">Reject</button>
+            <span *ngIf="sp.reviewAssigmentState == 'pending'">
+                <button mat-raised-button color="accent" (click)="accept(sp)">Accept</button>
+                <button mat-raised-button color="accent" (click)="reject(sp)">Reject</button>
+            </span>
+            <span *ngIf="sp.reviewAssigmentState == 'accepted' && sp.reviewState =='inProgress'">
+                <button mat-raised-button color="accent" (click)="addReview(sp)">Add Review</button>
+            </span>
             <a mat-raised-button routerLink=".">XML</a>
             <a mat-raised-button routerLink=".">HTML</a>
             <a mat-raised-button routerLink=".">PDF</a>

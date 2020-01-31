@@ -76,5 +76,21 @@ public class ProcessPSPController {
 		String process = processPSPService.findMySPProcess(id, principal.getName());
 		return new ResponseEntity<>(process, HttpStatus.OK);
 	}
+
+	@GetMapping(value="/processPSP/acceptRejectAssigmentReviewTemplate", produces = MediaType.APPLICATION_XML_VALUE)
+	@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_REVIEWER') or hasRole('ROLE_REDACTOR')")
+	public ResponseEntity<String> getMySPProcess() throws Exception{
+		String template = processPSPService.generateReviewAssigmentXMLTemplate();
+		return new ResponseEntity<>(template, HttpStatus.OK);
+	}
+
+	@PostMapping(value="/processPSP/acceptRejectAssigmentReview",
+			consumes = MediaType.APPLICATION_XML_VALUE,
+			produces = MediaType.APPLICATION_XML_VALUE)
+	@PreAuthorize("hasRole('ROLE_REDACTOR')")
+	public ResponseEntity<String> addReviewers(@RequestBody String acceptanceData, Principal reviewer) throws Exception {
+		processPSPService.acceptRejectReviewAssigment(acceptanceData, reviewer.getName());
+		return new ResponseEntity<>(String.format("You succesfully accepted/rejected review assigment!"), HttpStatus.OK);
+	}
     
 }
