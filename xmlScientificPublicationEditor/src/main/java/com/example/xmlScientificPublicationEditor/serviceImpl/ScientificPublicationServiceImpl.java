@@ -2,6 +2,7 @@ package com.example.xmlScientificPublicationEditor.serviceImpl;
 
 import java.io.ByteArrayOutputStream;
 import java.io.StringWriter;
+import java.security.Principal;
 
 import javax.xml.namespace.QName;
 import javax.xml.transform.stream.StreamResult;
@@ -147,6 +148,16 @@ public class ScientificPublicationServiceImpl implements ScientificPublicationSe
 	@Override
 	public void addAcceptedAt(String idSp) throws Exception {
 		scientificPublicationRepository.addAcceptedAt(idSp);
+	}
+
+
+	@Override
+	public String search(String param, Principal user) throws Exception {
+		String email = "";
+		if(user != null) {
+			email = user.getName();
+		}
+		return scientificPublicationRepository.search(param, email);
 	}
 
 

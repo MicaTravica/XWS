@@ -7,9 +7,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.security.Principal;
 
-import com.example.xmlScientificPublicationEditor.service.NotificationService;
-import com.example.xmlScientificPublicationEditor.service.ScientificPublicationService;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -25,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.example.xmlScientificPublicationEditor.service.ScientificPublicationService;
 
 @RestController
 @RequestMapping("/api")
@@ -138,6 +137,12 @@ public class ScientificPublicationController extends BaseController {
 	public ResponseEntity<String> getSPTemplate() throws Exception {
 		String sp = scientificPublicationService.generateSPXMLTemplate();
         return new ResponseEntity<>(sp, HttpStatus.OK);
+	}
+	
+	@GetMapping(value = "/scientificPublication/search", produces = MediaType.APPLICATION_XML_VALUE)
+	public ResponseEntity<String> search(@RequestParam(("param")) String param,Principal user) throws Exception {
+		String result = scientificPublicationService.search(param, user);
+        return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 
 }
