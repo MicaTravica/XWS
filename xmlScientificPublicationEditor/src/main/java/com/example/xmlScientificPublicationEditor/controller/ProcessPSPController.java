@@ -65,7 +65,7 @@ public class ProcessPSPController {
     
 	@PostMapping(value = "/processPSP/changeState", consumes=MediaType.APPLICATION_XML_VALUE, produces = MediaType.APPLICATION_XML_VALUE)
     @PreAuthorize("hasRole('ROLE_REDACTOR')")
-	public ResponseEntity<String> setAccept(@RequestBody String xml) throws Exception {
+	public ResponseEntity<String> setChangeState(@RequestBody String xml) throws Exception {
 		processPSPService.setProcessPSPStateFromScored(xml);
 		return new ResponseEntity<>("Scientific publication state is changed!", HttpStatus.OK);
 	}

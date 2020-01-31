@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { PublicationService } from 'src/app/services/publication-service/publication.service';
+
+declare var require: any;
+const convert = require('xml-js');
 
 @Component({
   selector: 'app-search-publications',
@@ -9,9 +13,12 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 export class SearchPublicationsComponent implements OnInit {
 
   searchForm: FormGroup;
-  publications = [{ id: 'aaaaaaaa', name: 'aaaaaaaa', authors: 'aaaaaaaaaaaaaa' }];
+  publications = [];
 
-  constructor(fb: FormBuilder) {
+  constructor(
+    private fb: FormBuilder,
+    private publicationService: PublicationService
+  ) {
     this.searchForm = fb.group({
       searchType: 'regular',
       search: ''
@@ -29,7 +36,24 @@ export class SearchPublicationsComponent implements OnInit {
     }
   }
   doRegularSearch() {
-    console.log(this.searchForm.value.search);
+    this.publicationService.reguralSearch(this.searchForm.value.search).subscribe(
+      (data: any) => {
+        this.publications = [];
+        const obj = JSON.parse(convert.xml2json(data, { compact: true, spaces: 4 }));
+        const result = obj.search as any;
+        if (result.sp) {
+          const sps = (result.sp.length) ? result.sp : [result.sp];
+          for (const sp of sps) {
+            this.publications.push(
+              {
+                id: sp.id._text,
+                name: sp.name._text
+              }
+            );
+          }
+        }
+      }
+    );
   }
 
   doAdvancedSearch() {

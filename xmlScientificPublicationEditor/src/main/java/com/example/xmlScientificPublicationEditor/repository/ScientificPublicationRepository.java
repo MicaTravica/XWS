@@ -4,6 +4,7 @@ import static com.example.xmlScientificPublicationEditor.util.template.XUpdateTe
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -186,6 +187,39 @@ public class ScientificPublicationRepository {
 		doc.getDocumentElement().setAttribute("accepted_at", date);
 		update(DOMParser.parseDocument(doc, scientificPublicationSchemaPath));
 		
+	}
+
+	public String search(String param, String email) throws Exception {
+		String retVal = "";
+		String xQueryPath = "src/main/resources/data/xQuery/search.txt";
+
+		HashMap<String, String> params = new HashMap<>();
+		params.put("AUTH", email); 
+		params.put("PARAM", param);
+
+		ResourceSet resultSet = RetriveFromDB.executeXQuery(
+			scientificPublicationCollectionId, xQueryPath, params, TARGET_NAMESPACE);
+		if (resultSet == null || (resultSet.getSize() == 0 )) {
+			return retVal;
+		}
+		ResourceIterator i = resultSet.getIterator();
+		XMLResource res = null;
+		while (i.hasMoreResources()) {
+			try {
+				res = (XMLResource) i.nextResource();
+				retVal += res.getContent().toString();
+			} finally {
+				// don't forget to cleanup resources
+				try {
+					if(res != null) {
+						((EXistResource) res).freeResources();
+					}
+				} catch (XMLDBException xe) {
+					xe.printStackTrace();
+				}
+			}
+		}
+		return retVal;
 	}
 
 }

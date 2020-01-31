@@ -8,14 +8,9 @@
                 <title>Notification</title>
             </head>
             <body>
-                <xsl:variable name="sp" select="document(concat('http://', n:notification/n:spUrl))"/>
                 <h3>
                     Notification about scientific publication 
-                    "<xsl:value-of select="$sp/n:scientificPublication/n:caption"/>"<br/>
-                    Authors:<br/>
-                    <xsl:for-each select="$sp/n:scientificPublication/n:authors/n:author">
-                        <xsl:value-of select="./n:name"/> <xsl:value-of select="./n:surname"/><br/>
-                    </xsl:for-each>
+                    "<xsl:value-of select="n:notification/n:sp"/>"<br/>
                 </h3>
                 <xsl:for-each select="n:notification/n:content">
                     <xsl:call-template name="TParagraph"/>
