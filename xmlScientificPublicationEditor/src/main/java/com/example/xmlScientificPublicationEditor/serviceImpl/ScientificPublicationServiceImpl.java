@@ -13,12 +13,14 @@ import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import com.example.xmlScientificPublicationEditor.exception.ResourceNotFoundException;
 import com.example.xmlScientificPublicationEditor.repository.ProcessPSPRepository;
 import com.example.xmlScientificPublicationEditor.repository.ScientificPublicationRepository;
 import com.example.xmlScientificPublicationEditor.service.ProcessPSPService;
 import com.example.xmlScientificPublicationEditor.service.ScientificPublicationService;
+import com.example.xmlScientificPublicationEditor.util.DOMParser.DOMParser;
 import com.example.xmlScientificPublicationEditor.util.XSLFOTransformer.XSLFOTransformer;
 
 import jlibs.xml.sax.XMLDocument;
@@ -158,6 +160,40 @@ public class ScientificPublicationServiceImpl implements ScientificPublicationSe
 			email = user.getName();
 		}
 		return scientificPublicationRepository.search(param, email);
+	}
+
+
+	@Override
+	public String getSPReview(String processId, String email) throws Exception {
+		Document document = processPSPService.findOneById(processId);
+		Node lastVersion = processPSPService.getLastVersion(document);
+		Element lv = (Element) lastVersion;
+		NodeList ras = lv.getElementsByTagName(ProcessPSPRepository.ReviewAssigment);
+		boolean isReviewer = false;
+		for (int i = 0; i < ras.getLength(); i++) {
+			Element ra = (Element) ras.item(i);
+			if(ra.getElementsByTagName(ProcessPSPRepository.IdReviewer).item(0).getTextContent().equals(email)) {
+				isReviewer = true;
+				break;
+			}
+		}
+		if(!isReviewer) {
+			throw new Exception("You can not see this publication!");
+		};
+		String sp = findOne(
+				lv.getElementsByTagName(ProcessPSPRepository.ScientificPublicationFiled).item(0).getTextContent());
+		Document dom = DOMParser.buildDocument(sp, ScientificPublicationRepository.scientificPublicationSchemaPath);
+		Element authors = (Element) dom.getDocumentElement().getElementsByTagName(IdGeneratorServiceImpl.AUTHORS)
+				.item(0);
+		dom.getDocumentElement().removeChild(authors);
+		return DOMParser.parseDocumentWithoutSchema(dom);
+	}
+
+
+	@Override
+	public String saveComments(String file, String name, String processId) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 

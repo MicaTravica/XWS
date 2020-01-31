@@ -34,4 +34,8 @@ public interface ScientificPublicationService {
 
 	String search(String param, Principal user) throws Exception;
 
+	String getSPReview(String processId, String email) throws Exception;
+
+	String saveComments(String file, String name, String processId);
+
 }

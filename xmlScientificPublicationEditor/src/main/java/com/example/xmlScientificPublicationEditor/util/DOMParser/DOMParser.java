@@ -147,5 +147,26 @@ public class DOMParser {
 
 		return sw.toString();
 	}
+	
+	public static String parseDocumentWithoutSchema(Document document) throws Exception{
+
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		factory.setValidating(false);
+		factory.setNamespaceAware(true);
+		factory.setIgnoringComments(true);
+		factory.setIgnoringElementContentWhitespace(true);
+
+		DocumentBuilder builder = factory.newDocumentBuilder();
+		builder.setErrorHandler(new ErrorHandlerImpl());
+		DOMSource domSource = new DOMSource(document);		
+
+		StringWriter writer = new StringWriter();
+		StreamResult result = new StreamResult(writer);
+		
+		TransformerFactory tf = TransformerFactory.newInstance();
+		Transformer transformer = tf.newTransformer();
+		transformer.transform(domSource, result);
+		return writer.toString();
+	}
 
 }

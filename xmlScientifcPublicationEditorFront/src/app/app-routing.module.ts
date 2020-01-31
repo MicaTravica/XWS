@@ -18,6 +18,7 @@ import { ProfilEditComponent } from './profil/profil-edit/profil-edit.component'
 import { AddReviewersComponent } from './revisions/add-reviewers/add-reviewers.component';
 import { SeeRevisionComponent } from './revisions/see-revision/see-revision.component';
 import { NewVersionComponent } from './publication/new-version/new-version.component';
+import { AddCommentsComponent } from './revisions/add-comments/add-comments.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent, canActivate: [LoginGuard] },
@@ -52,8 +53,12 @@ const routes: Routes = [
     data: { expectedRoles: 'ROLE_REVIEWER|ROLE_REDACTOR|ROLE_USER' }
   },
   {
-    path: 'new_version/:processId/:spId', component: NewVersionComponent, canActivate: [RoleGuard],
+    path: 'new_version/:processId', component: NewVersionComponent, canActivate: [RoleGuard],
     data: { expectedRoles: 'ROLE_REVIEWER|ROLE_REDACTOR|ROLE_USER' }
+  },
+  {
+    path: 'add_comments/:processId', component: AddCommentsComponent, canActivate: [RoleGuard],
+    data: { expectedRoles: 'ROLE_REVIEWER|ROLE_REDACTOR' }
   },
   { path: 'for_publication', component: ForPublicationComponent, canActivate: [RoleGuard], data: { expectedRoles: 'ROLE_REDACTOR' } },
   { path: 'process/:id', component: ProcessPublicationComponent, canActivate: [RoleGuard], data: { expectedRoles: 'ROLE_REDACTOR' } },

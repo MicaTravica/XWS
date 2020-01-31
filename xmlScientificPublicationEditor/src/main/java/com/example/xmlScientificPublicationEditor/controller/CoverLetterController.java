@@ -1,10 +1,6 @@
 package com.example.xmlScientificPublicationEditor.controller;
 
-import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.xmlScientificPublicationEditor.service.CoverLetterService;
+import com.example.xmlScientificPublicationEditor.util.MyFile;
 
 @RestController
 @RequestMapping("/api")
@@ -61,20 +58,8 @@ public class CoverLetterController extends BaseController {
 	@PostMapping(value = "/coverLetter/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_XML_VALUE)
 	public ResponseEntity<String> uploadCoverLetter(
 		@RequestParam(("processId")) String processId, @RequestParam(("file")) MultipartFile q) throws Exception {
-		BufferedReader br;
-		StringBuilder sb = new StringBuilder();
-		try {
-			String line;
-			InputStream is = q.getInputStream();
-			br = new BufferedReader(new InputStreamReader(is));
-			while ((line = br.readLine()) != null) {
-				sb.append(line);
-				sb.append("\n");
-			}
-		} catch (IOException e) {
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.OK);
-		}
-		String id = coverLetterService.save(sb.toString(), processId);
+		String file = MyFile.readFile(q);
+		String id = coverLetterService.save(file, processId);
 		return new ResponseEntity<>(String.format("You succesfully add cover letter with id %s", id), HttpStatus.OK);
 	}
 

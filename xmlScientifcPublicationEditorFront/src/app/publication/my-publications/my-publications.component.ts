@@ -66,8 +66,8 @@ export class MyPublicationsComponent implements OnInit {
     this.router.navigate(['see_revision', processId]);
   }
 
-  addNewVersion(sp: any) {
-    this.router.navigate(['new_version', sp.processId, sp.id]);
+  addNewVersion(processId: string) {
+    this.router.navigate(['new_version', processId]);
   }
 
 }

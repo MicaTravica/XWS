@@ -13,6 +13,7 @@ import com.example.xmlScientificPublicationEditor.service.IdGeneratorService;
 public class IdGeneratorServiceImpl implements IdGeneratorService {
 
 	public static String CAPTION = "ns:caption";
+	public static String AUTHORS= "ns:authors";
 	public static String AUTHOR = "ns:author";
 	public static String INSTITUTION = "ns:institution";
 	public static String ADDRESS = "ns:address";
