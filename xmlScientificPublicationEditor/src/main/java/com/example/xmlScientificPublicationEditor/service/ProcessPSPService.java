@@ -63,5 +63,5 @@ public interface ProcessPSPService {
     boolean acceptRejectReviewAssigment(String acceptanceData, String name) throws  Exception;
     String generateReviewAssigmentXMLTemplate() throws  Exception;
 
-    boolean saveQuestionnaireToProcessPSP(String processId, String reviewerEmail, String qId) throws  Exception;
+    String saveQuestionnaireToProcessPSP(String processId, String reviewerEmail, String qId) throws  Exception;
 }

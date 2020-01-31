@@ -7,6 +7,7 @@ import java.io.StringWriter;
 import javax.xml.namespace.QName;
 import javax.xml.transform.stream.StreamResult;
 
+import com.example.xmlScientificPublicationEditor.service.NotificationService;
 import com.example.xmlScientificPublicationEditor.service.ProcessPSPService;
 import org.apache.xerces.xs.XSModel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +41,9 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
 	@Autowired
 	private ProcessPSPService processPSPService;
 
+	@Autowired
+	private NotificationService notificationService;
+
 	@Override
 	public String findOne(String id) throws Exception {
 		String questionnaire = questionnaireRepository.findOne(id);
@@ -72,18 +76,14 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
 
 	@Override
 	public String save(String questionnaire, String processId, String reviewerEmail) throws Exception {
+		String[] emails = new String[1];
+		emails[0] =  reviewerEmail;
 		String qId = questionnaireRepository.save(questionnaire);
-
-		processPSPService.saveQuestionnaireToProcessPSP(processId, reviewerEmail, qId);
-		// imas id procesa, treba da u odredjeni review tog procesa stavis id
-		// od sacuvanog questionnaire-a......
-		// vidis i za koju je verziju rada i ko je review-er...
-		// e onda kad si to uradio
-		// vidi da li trba da promenis stanje celog procesa, u scored...
-		// ako su svi koji su prihvatili da rade recenziju ocenili rad...
-
-
+		String scName = processPSPService.saveQuestionnaireToProcessPSP(processId, reviewerEmail, qId);
 //		questionnaireRepository.saveMetadata(this.extractMetadata(questionnaire), qId);
+		if(scName != null) {
+			this.notificationService.letterOfThanks(emails, scName);
+		}
 		return qId;
 	}
 

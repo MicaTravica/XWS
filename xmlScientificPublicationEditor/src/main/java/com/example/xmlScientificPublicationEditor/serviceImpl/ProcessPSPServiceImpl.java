@@ -153,7 +153,7 @@ public class ProcessPSPServiceImpl implements ProcessPSPService {
     }
 
     @Override
-    public boolean saveQuestionnaireToProcessPSP(String processId, String reviewerEmail, String qId) throws Exception {
+    public String saveQuestionnaireToProcessPSP(String processId, String reviewerEmail, String qId) throws Exception {
         return this.processPSPRepo.saveQuestionnaireToProcessPSP(processId, reviewerEmail, qId);
     }
 

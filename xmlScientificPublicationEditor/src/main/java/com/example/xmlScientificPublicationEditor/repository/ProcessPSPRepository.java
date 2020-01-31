@@ -81,6 +81,10 @@ public class ProcessPSPRepository {
 	public static String Change_toScored_State_ProcessPSP =
 			"src/main/resources/data/xQuery/changeProcessPSPstateToScored.txt";
 
+	public static  String getSCName_forVersion_ProcessPSP =
+			"src/main/resources/data/xQuery/findSCNameFromLastVersionOfPSP.txt";
+
+
 	public String findOneByScientificPublicationID(String id) throws Exception {
 		String retVal = null;
 		String xpathExp = "//ns:processPSP[ns:scientificPublication=\"" + id + "\"]";
@@ -449,7 +453,7 @@ public class ProcessPSPRepository {
 		return  true;
 	}
 
-	public boolean saveQuestionnaireToProcessPSP(String processId, String reviewEmail, String qId) throws  Exception {
+	public String saveQuestionnaireToProcessPSP(String processId, String reviewEmail, String qId) throws  Exception {
 		HashMap<String, String> params = new HashMap<>();
 		params.put("PROCESS_ID", processId);
 		params.put("Q_ID", qId);
@@ -457,21 +461,30 @@ public class ProcessPSPRepository {
 		ResourceSet resultSet = RetriveFromDB.executeXQuery(
 				ProcessPSPCollectionId, Questionnaire_Save_to_ProcessPSP, params, TARGET_NAMESPACE);
 		if (resultSet == null) {
-			return false;
+			return null;
 		}
 		// change Review state to DONE
 		resultSet = RetriveFromDB.executeXQuery(
 				ProcessPSPCollectionId, Questionnaire_Save_to_State_ProcessPSP, params, TARGET_NAMESPACE);
 		if (resultSet == null) {
-			return false;
+			return null;
 		}
 		// change processPSPState to SCORED if all accepted reviewAssigments are Done..
 		resultSet = RetriveFromDB.executeXQuery(
 				ProcessPSPCollectionId, Change_toScored_State_ProcessPSP, params, TARGET_NAMESPACE);
 		if (resultSet == null) {
-			return false;
+			return null;
 		}
-		return  true;
+		resultSet = RetriveFromDB.executeXQuery(
+				ProcessPSPCollectionId, getSCName_forVersion_ProcessPSP, params, TARGET_NAMESPACE);
+		if (resultSet == null) {
+			return null;
+		}
+		ResourceIterator i = resultSet.getIterator();
+		if(i.hasMoreResources()) {
+			return  i.nextResource().getContent().toString();
+		}
+		return null;
 	}
 	
 	public String getScientificPublicationNameByNode(Element lastVersion) {
