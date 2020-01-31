@@ -33,24 +33,6 @@ public class ScientificPublicationController extends BaseController {
 	@Autowired
 	private ScientificPublicationService scientificPublicationService;
 
-	// obrisati ksanije
-	@Autowired
-	private NotificationService nService;
-
-	@GetMapping(value = "/notifications", produces = MediaType.APPLICATION_XML_VALUE)
-	public ResponseEntity<?> getNotificaions() throws Exception {
-		String[] emails = new String[] { "mica97@email.com", "dusanbzr@gmail.com" };
-		String spUrl = "localhost:8081/api/scientificPublication/sp1";
-		nService.letterOfThanks(emails, spUrl);
-		nService.addedCoverLetter(emails, spUrl);
-		nService.addedQuestionnaire(emails, spUrl);
-		nService.publicationAccepted(emails, spUrl);
-		nService.publicationRejected(emails, spUrl);
-		nService.questionnaireReviewers(emails, spUrl);
-		return new ResponseEntity<>(HttpStatus.OK);
-	}
-	// dovde
-
 	@GetMapping(value = "/scientificPublication/{id}", produces = MediaType.APPLICATION_XML_VALUE)
 	public ResponseEntity<String> getScientificPublicationById(@PathVariable("id") String id) throws Exception {
 		String sp = scientificPublicationService.findOne(id);

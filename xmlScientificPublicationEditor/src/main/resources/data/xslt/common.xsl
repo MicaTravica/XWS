@@ -51,7 +51,7 @@
     
     <xsl:template match="n:paragraph | n:answer" name="TParagraph">
         <xsl:for-each select="./*">
-            <xsl:if test="name(.) = 'text'">   
+            <xsl:if test="name(.) = 'ns:text'">   
                 <p>
                     <xsl:apply-templates></xsl:apply-templates>
                 </p>

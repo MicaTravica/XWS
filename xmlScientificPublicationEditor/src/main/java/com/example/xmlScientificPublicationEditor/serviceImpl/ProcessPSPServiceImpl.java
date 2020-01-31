@@ -19,6 +19,7 @@ import com.example.xmlScientificPublicationEditor.model.authPerson.TRole;
 import com.example.xmlScientificPublicationEditor.model.person.TPersons;
 import com.example.xmlScientificPublicationEditor.repository.ProcessPSPRepository;
 import com.example.xmlScientificPublicationEditor.repository.ScientificPublicationRepository;
+import com.example.xmlScientificPublicationEditor.service.NotificationService;
 import com.example.xmlScientificPublicationEditor.service.PersonService;
 import com.example.xmlScientificPublicationEditor.service.ProcessPSPService;
 import com.example.xmlScientificPublicationEditor.service.ScientificPublicationService;
@@ -43,6 +44,9 @@ public class ProcessPSPServiceImpl implements ProcessPSPService {
 
     @Autowired
 	private XSLFOTransformer xslFoTransformer;
+    
+    @Autowired 
+    private NotificationService notificationService;
 
     @Override
     public String create(
@@ -143,8 +147,6 @@ public class ProcessPSPServiceImpl implements ProcessPSPService {
         QName rootElement = new QName("http://www.uns.ac.rs/Tim1", "processPSP");
         XMLDocument sampleXml = new XMLDocument(new StreamResult(sw), true, 4, null);
         xsInstance.generate(xsModel, rootElement, sampleXml);
-
-        System.out.println(sw.toString());
         return sw.toString();
     }
 
@@ -287,12 +289,22 @@ public class ProcessPSPServiceImpl implements ProcessPSPService {
 		}
 		setProcessPSPState(document, processState);
 		processPSPRepo.update(document);
+		Node lastVersion = getLastVersion(document);
+		Element lv = (Element) lastVersion;
+		String sp = processPSPRepo.getScientificPublicationNameByNode(lv);
+
+		String author = getAuthor(document);
+		String[] emails = new String[1];
+		emails[0] = author;
 		if (processState.equals(ProcessState.PUBLISHED)) {
-			Node lastVersion = getLastVersion(document);
-			Element lv = (Element) lastVersion;
 			String idSp = lv.getElementsByTagName(ProcessPSPRepository.ScientificPublicationFiled).item(0)
 					.getTextContent();
 			scService.addAcceptedAt(idSp);
+			notificationService.publicationAccepted(emails, sp);
+		}else if(processState.equals(ProcessState.REJECTED)) {
+			notificationService.publicationRejected(emails, sp);
+		}else if(processState.equals(ProcessState.REVISED)) {
+			notificationService.publicationRevised(emails, sp);
 		}
 	}
 
