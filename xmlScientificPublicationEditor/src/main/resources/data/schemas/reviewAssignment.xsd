@@ -18,6 +18,27 @@
             </xs:simpleType>
         </xs:attribute>
     </xs:complexType>
+    <xs:element name="reviewAssigmentAcceptance" type="TReviewAssigmentAcceptance"/>
+    <xs:complexType name="TReviewAssigmentAcceptance">
+        <xs:sequence>
+            <xs:element name="processId">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:length value="1"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="processVersion" type="xs:integer"/>
+            <xs:element name="decision">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="rejected"/>
+                        <xs:enumeration value="accepted"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
     <xs:complexType name="TReview">
         <xs:sequence>
             <xs:element name="idQuestionnaire" type="xs:string" minOccurs="0"/>

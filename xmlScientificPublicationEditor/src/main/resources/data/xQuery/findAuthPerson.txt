@@ -1,0 +1,6 @@
+let $docs := collection("/db/sample/auth")
+for $doc in $docs
+let $authPerson := $doc/auth
+where $authPerson/email = "dusan@gmail.com"
+return
+    $authPerson
