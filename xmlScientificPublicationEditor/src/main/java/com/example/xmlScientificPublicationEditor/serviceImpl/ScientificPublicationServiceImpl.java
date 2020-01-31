@@ -10,9 +10,6 @@ import org.apache.xerces.xs.XSModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-
 import com.example.xmlScientificPublicationEditor.exception.ResourceNotFoundException;
 import com.example.xmlScientificPublicationEditor.repository.ScientificPublicationRepository;
 import com.example.xmlScientificPublicationEditor.service.ProcessPSPService;

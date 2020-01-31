@@ -11,6 +11,8 @@ import org.apache.xerces.xs.XSModel;
 import org.exist.xmldb.EXistResource;
 import org.springframework.stereotype.Repository;
 import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.xmldb.api.base.ResourceIterator;
 import org.xmldb.api.base.ResourceSet;
 import org.xmldb.api.base.XMLDBException;
@@ -35,17 +37,29 @@ public class IdGeneratorRepository {
 		String retVal = null;
 		String xpathExp = "/";
 		ResourceSet resultSet = RetriveFromDB.executeXPathExpression(idGeneratorPath, xpathExp, TARGET_NAMESPACE);
-		if (resultSet == null) {
+		if (resultSet == null || (resultSet.getSize() == 0)) {
 			StringWriter sw = new StringWriter();
 			XSModel xsModel = new XSParser().parse(idGeneratorSchemaPath);
 			XSInstance xsInstance = new XSInstance();
+			xsInstance.generateDefaultAttributes = Boolean.TRUE;
 			QName rootElement = new QName("http://www.uns.ac.rs/Tim1", "idGenerator");
 			XMLDocument sampleXml = new XMLDocument(new StreamResult(sw), true, 4, null);
 			xsInstance.generate(xsModel, rootElement, sampleXml);
 			String glt = sw.toString();
+			Document document = DOMParser.buildDocument(glt, idGeneratorSchemaPath);
+			NodeList values = document.getDocumentElement().getChildNodes();
+			for(int i=0; i< values.getLength(); i++) {
+				Node n = values.item(i);
+				if(n.getNodeName().contains("ns:"))
+				{
+					n.setTextContent("1");
+				}
+				
+			}
+			glt = DOMParser.parseDocument(document, idGeneratorSchemaPath);
+		
 			return save(element, glt);
 		}
-
 		ResourceIterator i = resultSet.getIterator();
 		XMLResource res = null;
 		while (i.hasMoreResources()) {
