@@ -10,7 +10,11 @@ import org.apache.xerces.xs.XSModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+
 import com.example.xmlScientificPublicationEditor.exception.ResourceNotFoundException;
+import com.example.xmlScientificPublicationEditor.repository.ProcessPSPRepository;
 import com.example.xmlScientificPublicationEditor.repository.ScientificPublicationRepository;
 import com.example.xmlScientificPublicationEditor.service.ProcessPSPService;
 import com.example.xmlScientificPublicationEditor.service.ScientificPublicationService;
@@ -41,6 +45,19 @@ public class ScientificPublicationServiceImpl implements ScientificPublicationSe
 		return sp;
 	}
 
+
+	@Override
+	public String findOneNotPub(String id, String email) throws Exception {
+		Document document = processPSPService.findOneById(id);
+		if (!processPSPService.getAuthor(document).equals(email)) {
+			throw new Exception("You can not see this file");
+		}
+		Node lastVersion = processPSPService.getLastVersion(document);
+		Element lv = (Element) lastVersion;
+		return findOne(
+				lv.getElementsByTagName(ProcessPSPRepository.ScientificPublicationFiled).item(0).getTextContent());
+	}
+	
 	@Override
 	public String findOneHTML(String id) throws Exception {
 		String sp = scientificPublicationRepository.findOne(id);
@@ -72,7 +89,15 @@ public class ScientificPublicationServiceImpl implements ScientificPublicationSe
 	}
 
 
-
+	@Override
+	public String saveNewVersion(String scientificPublication, String name, String processId) throws Exception {
+		Document sc = scientificPublicationRepository.save(scientificPublication);
+		String scName = this.getScientificPublicationName(sc);
+		String scID = this.getScientificPublicationID(sc);
+		String lastVersion = processPSPService.newVersionSP(scID, scName, name, processId);
+		scientificPublicationRepository.setLastVersion(scID, lastVersion);
+		return scID;
+	}
 
 
 
@@ -117,4 +142,12 @@ public class ScientificPublicationServiceImpl implements ScientificPublicationSe
 		String retVal = sc.getElementsByTagName("ns:value").item(0).getTextContent();
 		return retVal;
 	}
+
+
+	@Override
+	public void addAcceptedAt(String idSp) throws Exception {
+		scientificPublicationRepository.addAcceptedAt(idSp);
+	}
+
+
 }

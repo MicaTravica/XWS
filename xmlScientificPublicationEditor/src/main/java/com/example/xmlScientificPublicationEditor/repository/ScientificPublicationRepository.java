@@ -80,8 +80,8 @@ public class ScientificPublicationRepository {
 
 		generateIDs(document, id);
 
-		String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date()) + "Z";
-		document.getDocumentElement().setAttribute("revisited_at", date);
+		String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+		document.getDocumentElement().setAttribute("recived_at", date);
 		document.getDocumentElement().getAttributes().getNamedItem("version").setTextContent("1");
 
 		String toSave = DOMParser.parseDocument(document, scientificPublicationSchemaPath);
@@ -170,6 +170,22 @@ public class ScientificPublicationRepository {
 		if (mods == 0) {
 			throw new ResourceNotDeleted(String.format("Scientific publication with id %s", id));
 		}
+	}
+
+	public void setLastVersion(String scID, String lastVersion) throws Exception {
+		String sp = findOne(scID);
+		Document doc = DOMParser.buildDocument(sp, scientificPublicationSchemaPath);
+		doc.getDocumentElement().getAttributes().getNamedItem("version").setTextContent(lastVersion);
+		update(DOMParser.parseDocument(doc, scientificPublicationSchemaPath));
+	}
+
+	public void addAcceptedAt(String idSp) throws Exception {
+		String sp = findOne(idSp);
+		Document doc = DOMParser.buildDocument(sp, scientificPublicationSchemaPath);
+		String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+		doc.getDocumentElement().setAttribute("accepted_at", date);
+		update(DOMParser.parseDocument(doc, scientificPublicationSchemaPath));
+		
 	}
 
 }

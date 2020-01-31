@@ -31,8 +31,6 @@ public interface ProcessPSPService {
     Document setLastVersionNumber(Document process, String version) throws Exception;
 
     String getLastVersionNumber(String processId) throws Exception;
-
-    Node getLastVersion(String processId) throws Exception;
     
     Document setProcessPSPState(Document process, ProcessState processState) throws Exception;
 
@@ -49,5 +47,17 @@ public interface ProcessPSPService {
 	void addReviewers(TPersons reviewers, String processId) throws Exception;
 
 	String getProcessPSPState(Document document) throws Exception;
+
+	String findOne(String processId) throws Exception;
+
+	void setProcessPSPStateFromScored(String xml) throws Exception;
+
+	String findMySPProcess(String id, String name) throws Exception;
+
+	Node getLastVersion(Document document) throws Exception;
+
+	String newVersionSP(String scID, String scName, String name, String processId) throws Exception;
+
+	String getAuthor(Document process);
 
 }

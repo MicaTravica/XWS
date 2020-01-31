@@ -9,7 +9,7 @@ import { UploadDocumentsService } from '../upload-service/upload-documents.servi
   providedIn: 'root'
 })
 export class CoverLetterService {
-  
+
   private url: string;
 
   constructor(

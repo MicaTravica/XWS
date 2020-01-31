@@ -16,6 +16,8 @@ import { ProcessPublicationComponent } from './publication/process-publication/p
 import { AddCoverLetterComponent } from './add-cover-letter/add-cover-letter.component';
 import { ProfilEditComponent } from './profil/profil-edit/profil-edit.component';
 import { AddReviewersComponent } from './revisions/add-reviewers/add-reviewers.component';
+import { SeeRevisionComponent } from './revisions/see-revision/see-revision.component';
+import { NewVersionComponent } from './publication/new-version/new-version.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent, canActivate: [LoginGuard] },
@@ -44,6 +46,14 @@ const routes: Routes = [
   {
     path: 'add_revision', component: AddRevisionComponent, canActivate: [RoleGuard],
     data: { expectedRoles: 'ROLE_REVIEWER|ROLE_REDACTOR' }
+  },
+  {
+    path: 'see_revision/:id', component: SeeRevisionComponent, canActivate: [RoleGuard],
+    data: { expectedRoles: 'ROLE_REVIEWER|ROLE_REDACTOR|ROLE_USER' }
+  },
+  {
+    path: 'new_version/:processId/:spId', component: NewVersionComponent, canActivate: [RoleGuard],
+    data: { expectedRoles: 'ROLE_REVIEWER|ROLE_REDACTOR|ROLE_USER' }
   },
   { path: 'for_publication', component: ForPublicationComponent, canActivate: [RoleGuard], data: { expectedRoles: 'ROLE_REDACTOR' } },
   { path: 'process/:id', component: ProcessPublicationComponent, canActivate: [RoleGuard], data: { expectedRoles: 'ROLE_REDACTOR' } },

@@ -44,11 +44,15 @@ public class ProcessPSPRepository {
 	public static String RedactorFiled = "ns:idRedactor";
 	public static String CoverLetterFiled = "ns:coverLetter";
 	public static String PROCESS_ID = "id";
+	public static String AUTHOR_EMAIL = "authorEmail";
 	public static String PROCESS_ROOT = "ns:processPSP";
 	public static String ReviewAssignments = "ns:reviewAssignments";
 	public static String ReviewAssigment = "ns:reviewAssigment";
 	public static String Review = "ns:review";
 	public static String IdReviewer = "ns:idReviewer";
+	public static String VERSIONS = "ns:versions";
+	public static String VERSION = "ns:version";
+	private static final String VERSION_VERSION = "version";
 	public static final String PROCESS_LAST_VERSION = "lastVersion";
 	public static final String PROCESS_STATE = "state";
 	public static final String PROCESS_AUTHOR_SP = "authorEmail";
@@ -133,7 +137,6 @@ public class ProcessPSPRepository {
 		process.getElementsByTagName(PROCESS_ROOT).item(0).getAttributes().getNamedItem(PROCESS_ID).setTextContent(id);
 	}
 
-	// TODO: kako ce front znati koji id je slobodan za Notification????
 	public Document save(Document process) throws Exception {
 		String id = idGeneratorService.getId("process");
 		this.setProceesId(process, id);
@@ -201,8 +204,7 @@ public class ProcessPSPRepository {
 	// vrati deo dokumenta process tj vrati deo koji cini poslednja verzija
 	public Node getLastVersion(Document process) {
 		
-		String lastVersionNumber = process.getElementsByTagName(PROCESS_ROOT).item(0).
-			getAttributes().getNamedItem(PROCESS_LAST_VERSION).getTextContent();
+		String lastVersionNumber = getLastVersionNumber(process);
 		
 		NodeList l = process.getElementsByTagName(PROCESS_ROOT).item(0).getChildNodes();
 		for(int i = 0; i < l.getLength(); i++){
@@ -344,6 +346,68 @@ public class ProcessPSPRepository {
 		}
 		lv.appendChild(reviewAssignments);
 		update(document);
+	}
+
+	public String findMySPProcess(String id, String authId) throws Exception {
+		String retVal = "";
+		String xQueryPath = "src/main/resources/data/xQuery/showMySPProcess.txt";
+
+		HashMap<String, String> params = new HashMap<>();
+		params.put("AUTH_ID", authId); 
+		params.put("PROCESS_ID", id);
+
+		ResourceSet resultSet = RetriveFromDB.executeXQuery(
+			ProcessPSPCollectionId, xQueryPath, params, TARGET_NAMESPACE);
+		if (resultSet == null) {
+			return retVal;
+		}
+		ResourceIterator i = resultSet.getIterator();
+		XMLResource res = null;
+		while (i.hasMoreResources()) {
+			try {
+				res = (XMLResource) i.nextResource();
+				retVal = res.getContent().toString();
+			} finally {
+				// don't forget to cleanup resources
+				try {
+					((EXistResource) res).freeResources();
+				} catch (XMLDBException xe) {
+					xe.printStackTrace();
+				}
+			}
+		}
+		return retVal;
+	}
+
+	public String getLastVersionNumber(Document process) {
+		return process.getElementsByTagName(PROCESS_ROOT).item(0).getAttributes().getNamedItem(PROCESS_LAST_VERSION)
+				.getTextContent();
+	}
+
+	public String addNewVersion(Document process, String scId, String scName) {
+		String lastVersionNum = getLastVersionNumber(process);
+		String newVersion = (Integer.parseInt(lastVersionNum) + 1) + "";
+		process.getDocumentElement().getAttributes().getNamedItem(PROCESS_LAST_VERSION)
+				.setTextContent(newVersion);
+
+		Element versions = (Element) process.getDocumentElement().getElementsByTagName(VERSIONS).item(0);
+		
+		Element version = process.createElement(VERSION);
+		version.setAttribute(VERSION_VERSION, newVersion);
+		
+		Element spId = process.createElement(ScientificPublicationFiled);
+		spId.appendChild(process.createTextNode(scId));
+		
+		Element spName = process.createElement(ScientificPublicationNameFiled);
+		spName.appendChild(process.createTextNode(scName));
+		
+		Element ra = process.createElement(ReviewAssignments);
+		
+		version.appendChild(spId);
+		version.appendChild(spName);
+		version.appendChild(ra);
+		versions.appendChild(version);
+		return newVersion;
 	}
 
 }

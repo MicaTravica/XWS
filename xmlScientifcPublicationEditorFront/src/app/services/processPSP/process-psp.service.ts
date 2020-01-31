@@ -44,8 +44,32 @@ export class ProcessPSPService {
       });
   }
 
+  getProcess(id: string) {
+    return this.http.get(this.url + '/' + id,
+      {
+        headers: authHttpOptions(this.authService.getToken()),
+        responseType: 'text'
+      });
+  }
+
+  changeState(xml: string) {
+    return this.http.post(this.url + '/changeState', xml,
+      {
+        headers: authHttpOptions(this.authService.getToken()),
+        responseType: 'text'
+      });
+  }
+
   getMyReviewAssigments() {
     return this.http.get(this.url + '/getMyReviewAssigments',
+      {
+        headers: authHttpOptions(this.authService.getToken()),
+        responseType: 'text'
+      });
+  }
+
+   getMyProcess(id: string) {
+    return this.http.get(this.url + '/myPSP/' + id,
       {
         headers: authHttpOptions(this.authService.getToken()),
         responseType: 'text'
