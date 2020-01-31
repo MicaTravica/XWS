@@ -23,6 +23,7 @@ import com.example.xmlScientificPublicationEditor.model.ProcessState;
 import com.example.xmlScientificPublicationEditor.model.person.TPerson;
 import com.example.xmlScientificPublicationEditor.model.person.TPersons;
 import com.example.xmlScientificPublicationEditor.service.IdGeneratorService;
+import com.example.xmlScientificPublicationEditor.service.NotificationService;
 import com.example.xmlScientificPublicationEditor.service.PersonService;
 import com.example.xmlScientificPublicationEditor.util.DOMParser.DOMParser;
 import com.example.xmlScientificPublicationEditor.util.existAPI.RetriveFromDB;
@@ -39,6 +40,9 @@ public class ProcessPSPRepository {
 
 	@Autowired
 	private PersonService personService;
+	
+	@Autowired
+	private NotificationService notificationService;
 	
 	public static String ScientificPublicationFiled = "ns:scientificPublication";
 	public static String ScientificPublicationNameFiled = "ns:scientificPublicationName";
@@ -338,6 +342,8 @@ public class ProcessPSPRepository {
 		if (ra.getLength() > 0) {
 			lv.removeChild(ra.item(0));
 		}
+		String[] emails = new String[persons.getPersons().size()];
+		int i = 0;
 		Element reviewAssignments = document.createElement(ReviewAssignments);
 		for (TPerson p : persons.getPersons()) {
 			Element reviewAssigment = document.createElement(ReviewAssigment);
@@ -347,14 +353,19 @@ public class ProcessPSPRepository {
 			review.setAttribute(PROCESS_STATE, IN_PROGRESS);
 
 			Element idReviewer = document.createElement(IdReviewer);
-			idReviewer.appendChild(document.createTextNode(personService.findOneAuthByPersonId(p.getId()).getEmail()));
+			String email = personService.findOneAuthByPersonId(p.getId()).getEmail();
+			idReviewer.appendChild(document.createTextNode(email));
 
 			review.appendChild(idReviewer);
 			reviewAssigment.appendChild(review);
 			reviewAssignments.appendChild(reviewAssigment);
+			
+			emails[i] = email;
+			i += 1;
 		}
 		lv.appendChild(reviewAssignments);
 		update(document);
+		notificationService.questionnaireReviewers(emails, getScientificPublicationNameByNode(lv));
 	}
 
 	public String findMySPProcess(String id, String authId) throws Exception {
@@ -461,5 +472,9 @@ public class ProcessPSPRepository {
 			return false;
 		}
 		return  true;
+	}
+	
+	public String getScientificPublicationNameByNode(Element lastVersion) {
+		return lastVersion.getElementsByTagName(ScientificPublicationNameFiled).item(0).getTextContent();
 	}
 }

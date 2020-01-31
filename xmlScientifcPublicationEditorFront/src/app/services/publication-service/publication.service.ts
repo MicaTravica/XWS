@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { authHttpOptions } from 'src/app/util/http-util';
 import { AuthService } from '../auth-service/auth.service';
 import { UploadDocumentsService } from '../upload-service/upload-documents.service';
@@ -57,6 +57,16 @@ export class PublicationService {
       {
         headers: authHttpOptions(this.authService.getToken()),
         responseType: 'text'
+      });
+  }
+
+  reguralSearch(value: string) {
+    const param = new HttpParams().append('param', value);
+    return this.http.get(this.url + '/search',
+      {
+        headers: authHttpOptions(this.authService.getToken()),
+        responseType: 'text',
+        params: param
       });
   }
 }

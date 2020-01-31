@@ -1,6 +1,7 @@
 package com.example.xmlScientificPublicationEditor.service;
 
 import java.io.ByteArrayOutputStream;
+import java.security.Principal;
 
 import org.w3c.dom.Document;
 
@@ -30,5 +31,7 @@ public interface ScientificPublicationService {
 	String saveNewVersion(String scientificPublication, String name, String processId) throws Exception;
 
 	void addAcceptedAt(String idSp) throws Exception;
+
+	String search(String param, Principal user) throws Exception;
 
 }
