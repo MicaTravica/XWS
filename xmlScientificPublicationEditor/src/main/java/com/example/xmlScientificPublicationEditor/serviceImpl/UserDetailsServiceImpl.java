@@ -33,9 +33,6 @@ public class UserDetailsServiceImpl implements UserDetailsService{
 		{
 			throw new UsernameNotFoundException("Error while retriving user from DB");
 		}
-		// if(!user.isVerified()) {
-		// 	throw new UsernameNotFoundException("You need to verify your email.");
-		// }
 		// treba sad da se pretvori u objekat..
 		List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
 

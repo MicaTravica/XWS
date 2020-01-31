@@ -10,6 +10,7 @@ import org.apache.xerces.xs.XSModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 import com.example.xmlScientificPublicationEditor.exception.ResourceNotFoundException;
@@ -59,6 +60,22 @@ public class ProcessPSPServiceImpl implements ProcessPSPService {
         return newProcess.getDocumentElement().getAttribute("id");
     }
 
+
+	@Override
+	public String newVersionSP(String scID, String scName, String email, String processId) throws Exception {
+		Document process = findOneById(processId);
+		if(!getAuthor(process).equals(email)) {
+			throw new Exception("You can not add publication to this process!");
+		}
+		if(!getProcessPSPState(process).equals(ProcessState.REVISED.getAction())) {
+			throw new Exception("You can not add new version!");
+		}
+		String lastVersion = processPSPRepo.addNewVersion(process, scID, scName);
+        this.setProcessPSPState(process, ProcessState.FOR_REVIEW);
+        processPSPRepo.update(process);
+        return lastVersion;
+	}
+
     @Override
     public Document findOneById(String processId) throws Exception {
         Document process = processPSPRepo.findOneById(processId);
@@ -68,6 +85,13 @@ public class ProcessPSPServiceImpl implements ProcessPSPService {
         return process;
     }
 
+    @Override
+    public String findOne(String processId) throws Exception {
+    	Document document = findOneById(processId);
+    	Node lv = processPSPRepo.getLastVersion(document);
+    	return DOMParser.nodeToString(lv);
+    }
+   
     @Override
     public String findOneByScientificPublicationID(String scientificPublicationId) throws Exception {
         String procesStr = processPSPRepo.findOneByScientificPublicationID(scientificPublicationId);
@@ -133,9 +157,8 @@ public class ProcessPSPServiceImpl implements ProcessPSPService {
     }
 
     @Override
-    public Node getLastVersion(String processId) throws Exception {
-        // TODO Auto-generated method stub
-        return null;
+    public Node getLastVersion(Document document) throws Exception {
+        return processPSPRepo.getLastVersion(document);
     }
 
     @Override
@@ -171,11 +194,6 @@ public class ProcessPSPServiceImpl implements ProcessPSPService {
         return null;
     }
 
-
-
-
-
-
     @Override
     public String findForPublishing() throws Exception{
         StringBuilder retVal = new StringBuilder();
@@ -204,6 +222,9 @@ public class ProcessPSPServiceImpl implements ProcessPSPService {
 	@Override
 	public void addReviewers(TPersons reviewers, String processId) throws Exception {
 		Document document = findOneById(processId);
+		if(!getProcessPSPState(document).equals(ProcessState.FOR_REVIEW.getAction())) {
+			throw new Exception("You can not add reviewers");
+		}
 		setProcessPSPState(document, ProcessState.WAITING_FOR_REVIEWERS);
 		processPSPRepo.addReviewAssigment(document, reviewers);
 	}
@@ -233,6 +254,47 @@ public class ProcessPSPServiceImpl implements ProcessPSPService {
         return retVal.toString();
     }
 
+	@Override
+	public void setProcessPSPStateFromScored(String xml) throws Exception {
+		Document doc = DOMParser.buildDocumentWithOutSchema(xml);
+		if(doc.getElementsByTagName("processId") == null || doc.getElementsByTagName("state") ==null ) {
+			throw new Exception("Bad xml document");
+		}
+
+		String id = doc.getElementsByTagName("processId").item(0).getTextContent();
+		String strState = doc.getElementsByTagName("state").item(0).getTextContent();
+		ProcessState processState;
+		switch (strState) {
+		case "published":
+			processState = ProcessState.PUBLISHED;
+			break;
+		case "rejected":
+			processState = ProcessState.REJECTED;
+			break;
+		case "revised":
+			processState = ProcessState.REVISED;
+			break;
+		default:
+			processState = null;
+			break;
+		}
+		if(processState == null) {
+			throw new Exception("State dosent exist");
+		}
+		Document document = findOneById(id);
+		if(!getProcessPSPState(document).equals(ProcessState.SCORED.getAction())) {
+			throw new Exception("You can not change state of process");
+		}
+		setProcessPSPState(document, processState);
+		processPSPRepo.update(document);
+		if (processState.equals(ProcessState.PUBLISHED)) {
+			Node lastVersion = getLastVersion(document);
+			Element lv = (Element) lastVersion;
+			String idSp = lv.getElementsByTagName(ProcessPSPRepository.ScientificPublicationFiled).item(0)
+					.getTextContent();
+			scService.addAcceptedAt(idSp);
+		}
+	}
 
     @Override
     public String findMyReviewAssigments(String email) throws Exception {
@@ -246,5 +308,16 @@ public class ProcessPSPServiceImpl implements ProcessPSPService {
         retVal.append("</processes>");
         return retVal.toString();
     }
+
+	@Override
+	public String findMySPProcess(String id, String email) throws Exception {
+        return this.processPSPRepo.findMySPProcess(id, personService.findOneAuth(email).getId());
+	}
+	
+	@Override
+	public String getAuthor(Document process) {
+		return process.getDocumentElement().getAttributes().getNamedItem(ProcessPSPRepository.AUTHOR_EMAIL)
+				.getTextContent();
+	}
 
 }

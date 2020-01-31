@@ -39,4 +39,24 @@ export class PublicationService {
   upload(data: File, processId: string) {
     return this.uploadService.upload(data, this.url + '/upload', processId);
   }
+
+  uploadNewVersion(file: File, processId: string) {
+    return this.uploadService.upload(file, this.url + '/upload/newVersion', processId);
+  }
+
+  getMyPublication(spId: string) {
+    return this.http.get(this.url + '/notPub/' + spId,
+      {
+        headers: authHttpOptions(this.authService.getToken()),
+        responseType: 'text'
+      });
+  }
+
+  addNewVersionPublication(publicationXml: string, processId: string) {
+     return this.http.post(this.url + '/' + processId, publicationXml,
+      {
+        headers: authHttpOptions(this.authService.getToken()),
+        responseType: 'text'
+      });
+  }
 }

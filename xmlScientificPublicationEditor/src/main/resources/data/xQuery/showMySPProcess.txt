@@ -1,0 +1,43 @@
+let $docs := collection("/db/sample/processPSP")
+for $doc in $docs
+let $processPSP := $doc/processPSP
+let $lastVersion := $doc/processPSP/@lastVersion
+let $processPSPId := $doc/processPSP/@id
+let $processPSPState := $doc/processPSP/@state
+where $processPSPId = $PROCESS_ID
+let $versions := $processPSP/versions//version
+
+return
+    <processPSP>
+        <processId>
+            {data($processPSP/@id)}
+        </processId>
+        <lastVersion>
+            {data($lastVersion)}
+        </lastVersion>
+        <versions>
+        	{for $v in $versions
+        	return(
+        	if($v/@version = $lastVersion and not($processPSPState='published' or $processPSPState='rejected' or $processPSPState='revised'))
+        	then 
+        	<version>
+        		<number>{data($v/@version)}</number>
+        		<spId>{data($v/scientificPublication)}</spId>
+        	</version>
+        	else 
+        	<version>
+        		<number>{data($v/@version)}</number>
+        		<spId>{data($v/scientificPublication)}</spId>
+        		<spc>
+        		{for $r in $v/reviewAssignments/reviewAssigment
+        			return (
+        			if($r/@state = "accepted" and $r/review/idScientificPublication)
+        			then <com>{data($r/review/idScientificPublication)}</com>
+        			else ()
+        			) 
+        		}
+        		</spc>
+        	</version> )}
+        	
+        </versions>
+    </processPSP>
