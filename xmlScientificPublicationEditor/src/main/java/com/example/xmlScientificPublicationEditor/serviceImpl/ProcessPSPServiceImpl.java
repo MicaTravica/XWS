@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import javax.xml.namespace.QName;
 import javax.xml.transform.stream.StreamResult;
 
+import com.jayway.jsonpath.internal.path.ArrayPathToken;
 import org.apache.xerces.xs.XSModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -155,6 +156,34 @@ public class ProcessPSPServiceImpl implements ProcessPSPService {
     @Override
     public String saveQuestionnaireToProcessPSP(String processId, String reviewerEmail, String qId) throws Exception {
         return this.processPSPRepo.saveQuestionnaireToProcessPSP(processId, reviewerEmail, qId);
+    }
+
+    @Override
+    public void retractPSP(String processId) throws Exception {
+        ArrayList<ProcessState> invalidStates = new ArrayList<>();
+        invalidStates.add(ProcessState.PUBLISHED);
+        invalidStates.add(ProcessState.DELETED);
+        invalidStates.add(ProcessState.RETRACTED);
+        Document process = this.findOneById(processId);
+        String current_state = this.getProcessPSPState(process);
+        for(ProcessState ps: invalidStates){
+            if(current_state.equals(ps.getAction())){
+                throw new Exception("process can't be retracted in current state");
+            }
+        }
+        process = this.setProcessPSPState(process, ProcessState.RETRACTED);
+        this.processPSPRepo.update(process);
+    }
+
+    @Override
+    public void deletePSP(String processId) throws Exception {
+        Document process = this.findOneById(processId);
+        String current_state = this.getProcessPSPState(process);
+        if(!current_state.equals(ProcessState.PUBLISHED.getAction())){
+            throw new Exception("process can't be deleted in current state");
+        }
+        process = this.setProcessPSPState(process, ProcessState.DELETED);
+        this.processPSPRepo.update(process);
     }
 
     @Override

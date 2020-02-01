@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ProcessPSPService } from 'src/app/services/processPSP/process-psp.service';
 import { Router } from '@angular/router';
+import { HttpErrorResponse } from '@angular/common/http/http';
+import { ToastrService } from 'ngx-toastr';
 
 declare var require: any;
 const convert = require('xml-js');
@@ -16,12 +18,19 @@ export class MyPublicationsComponent implements OnInit {
   publications = [];
 
   constructor(private processPSPService: ProcessPSPService,
-              private router: Router ) { }
+              private router: Router,
+              private toastr: ToastrService ) { }
 
   ngOnInit() {
     this.processPSPService.getMyPublications()
       .subscribe(res => {
-        const obj = JSON.parse(convert.xml2json(res, { compact: true, spaces: 4 }));
+          this.populateList(res)     
+    });
+  }
+
+  populateList(res: any) {
+    this.publications = [];
+    const obj = JSON.parse(convert.xml2json(res, { compact: true, spaces: 4 }));
         if (obj.processes.processPSP) {
           const processPSPList = obj.processes.processPSP as any[];
           if (processPSPList.length) {
@@ -46,8 +55,7 @@ export class MyPublicationsComponent implements OnInit {
               processId: p.processId._text
             });
           }
-        }
-      });
+    }
   }
 
   addCoverLetter(processId: string) {
@@ -55,11 +63,33 @@ export class MyPublicationsComponent implements OnInit {
   }
 
   retract(processId: string) {
-    // dodati otkazivanje
+    this.processPSPService.retractScientificPublication(processId).
+      subscribe( res => {
+        this.toastr.success(res);
+    },
+    (err: HttpErrorResponse)=>{
+        this.toastr.error(err.error)
+      },
+      ()=>this.processPSPService.getMyPublications()
+        .subscribe(res => {
+            this.populateList(res)     
+      })
+    );
   }
 
   delete(processId: string) {
-    // dodati otkazivanje
+    this.processPSPService.deleteScientificPublication(processId).
+      subscribe( res => {
+        this.toastr.success(res);
+    }, 
+      (err: HttpErrorResponse)=>{
+        this.toastr.error(err.error)
+      },
+      ()=>this.processPSPService.getMyPublications()
+        .subscribe(res => {
+            this.populateList(res)     
+      })
+    )
   }
 
   seeHistory(processId: string) {
