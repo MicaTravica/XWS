@@ -7,6 +7,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.security.Principal;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -51,15 +52,21 @@ public class QuestionnaireController extends BaseController {
 	@PostMapping(value="/questionnaire", 
 			consumes = MediaType.APPLICATION_XML_VALUE,
 			produces = MediaType.APPLICATION_XML_VALUE)
-	public ResponseEntity<String> addQuestionnaire(@RequestBody String q) throws Exception {
-		String id = questionnaireService.save(q);
+	public ResponseEntity<String> addQuestionnaire(
+			@RequestParam(("processId")) String processId,
+			@RequestBody String q,
+			Principal reviewer) throws Exception {
+		String id = questionnaireService.save(q, processId, reviewer.getName());
 		return new ResponseEntity<>(String.format("You succesfully add Questionnaire with id %s", id), HttpStatus.OK);
 	}
 
 	@PostMapping(value="/questionnaire/upload", 
 			consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
 			produces = MediaType.APPLICATION_XML_VALUE)
-	public ResponseEntity<String> uploadQuestionnaire(@RequestParam(("file")) MultipartFile q) throws Exception {
+	public ResponseEntity<String> uploadQuestionnaire(
+			@RequestParam(("processId")) String processId,
+			@RequestParam(("file")) MultipartFile q,
+			Principal reviewer) throws Exception {
 		BufferedReader br;
 		StringBuilder sb = new StringBuilder();
 		try {
@@ -73,7 +80,7 @@ public class QuestionnaireController extends BaseController {
 		} catch (IOException e) {
 			return new ResponseEntity<>(e.getMessage(),HttpStatus.OK);
 		}
-		String id = questionnaireService.save(sb.toString());
+		String id = questionnaireService.save(sb.toString(), processId, reviewer.getName());
 		return new ResponseEntity<>(String.format("You succesfully add Questionnaire with id %s",id), HttpStatus.OK);
 	}
 

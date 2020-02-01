@@ -60,4 +60,8 @@ public interface ProcessPSPService {
 
 	String getAuthor(Document process);
 
+    boolean acceptRejectReviewAssigment(String acceptanceData, String name) throws  Exception;
+    String generateReviewAssigmentXMLTemplate() throws  Exception;
+
+    String saveQuestionnaireToProcessPSP(String processId, String reviewerEmail, String qId) throws  Exception;
 }

@@ -75,4 +75,24 @@ export class ProcessPSPService {
         responseType: 'text'
       });
   }
+
+
+  getReviewAssigmentTemplate() {
+    return this.http.get(this.url + '/acceptRejectAssigmentReviewTemplate',
+      {
+        headers: authHttpOptions(this.authService.getToken()),
+        responseType: 'text'
+      });
+  }
+
+  acceptRejectAssigmentReview(acceptRejectData: string) {
+    return this.http.post(this.url + '/acceptRejectAssigmentReview', acceptRejectData, 
+      {
+        headers: authHttpOptions(this.authService.getToken()),
+        responseType: 'text'
+      });
+  }
+
+  
+
 }

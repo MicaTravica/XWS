@@ -5,6 +5,7 @@ import static com.example.xmlScientificPublicationEditor.util.template.XUpdateTe
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.apache.jena.base.Sys;
 import org.exist.xmldb.EXistResource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -69,8 +70,20 @@ public class ProcessPSPRepository {
     public static String ProcessPSPTemplatePath = "src/main/resources/data/xml/processPSPTemplate.xml";
 	public static String ProcessPSPCollectionId = "/db/sample/processPSP";
 	public static String ProcessPSPSchemaPath = "src/main/resources/data/schemas/processPSP.xsd";
+	public static String ReviewAssigmentSchemaPath = "src/main/resources/data/schemas/reviewAssignment.xsd";
 
 	public static String ProcessPSPXSLForReview = "src/main/resources/data/xslt/processforRevision.xsl";
+
+	public static String Questionnaire_Save_to_ProcessPSP = "src/main/resources/data/xQuery/reviewUpdateProcessPSP.txt";
+	public static String Questionnaire_Save_to_State_ProcessPSP
+			= "src/main/resources/data/xQuery/reviewStateUpdateProcessPSP.txt";
+
+	public static String Change_toScored_State_ProcessPSP =
+			"src/main/resources/data/xQuery/changeProcessPSPstateToScored.txt";
+
+	public static  String getSCName_forVersion_ProcessPSP =
+			"src/main/resources/data/xQuery/findSCNameFromLastVersionOfPSP.txt";
+
 
 	public String findOneByScientificPublicationID(String id) throws Exception {
 		String retVal = null;
@@ -421,6 +434,59 @@ public class ProcessPSPRepository {
 		return newVersion;
 	}
 
+
+	public boolean updateProcessReviewAssigment
+			(String processId, String version, String decision, String email) throws Exception {
+		String xQueryPath = "src/main/resources/data/xQuery/updateReviewAssigment.txt";
+
+		HashMap<String, String> params = new HashMap<>();
+		params.put("PROCESS_ID", processId);
+		params.put("SC_VERSION", version);
+		params.put("DECISION", decision);
+		params.put("REVIEWER_EMAIL", email);
+
+		ResourceSet resultSet = RetriveFromDB.executeXQuery(
+				ProcessPSPCollectionId, xQueryPath, params, TARGET_NAMESPACE);
+		if (resultSet == null) {
+			return false;
+		}
+		return  true;
+	}
+
+	public String saveQuestionnaireToProcessPSP(String processId, String reviewEmail, String qId) throws  Exception {
+		HashMap<String, String> params = new HashMap<>();
+		params.put("PROCESS_ID", processId);
+		params.put("Q_ID", qId);
+		params.put("REVIEWER_EMAIL", reviewEmail);
+		ResourceSet resultSet = RetriveFromDB.executeXQuery(
+				ProcessPSPCollectionId, Questionnaire_Save_to_ProcessPSP, params, TARGET_NAMESPACE);
+		if (resultSet == null) {
+			return null;
+		}
+		// change Review state to DONE
+		resultSet = RetriveFromDB.executeXQuery(
+				ProcessPSPCollectionId, Questionnaire_Save_to_State_ProcessPSP, params, TARGET_NAMESPACE);
+		if (resultSet == null) {
+			return null;
+		}
+		// change processPSPState to SCORED if all accepted reviewAssigments are Done..
+		resultSet = RetriveFromDB.executeXQuery(
+				ProcessPSPCollectionId, Change_toScored_State_ProcessPSP, params, TARGET_NAMESPACE);
+		if (resultSet == null) {
+			return null;
+		}
+		resultSet = RetriveFromDB.executeXQuery(
+				ProcessPSPCollectionId, getSCName_forVersion_ProcessPSP, params, TARGET_NAMESPACE);
+		if (resultSet == null) {
+			return null;
+		}
+		ResourceIterator i = resultSet.getIterator();
+		if(i.hasMoreResources()) {
+			return  i.nextResource().getContent().toString();
+		}
+		return null;
+	}
+	
 	public String getScientificPublicationNameByNode(Element lastVersion) {
 		return lastVersion.getElementsByTagName(ScientificPublicationNameFiled).item(0).getTextContent();
 	}

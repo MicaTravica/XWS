@@ -29,6 +29,7 @@ import com.example.xmlScientificPublicationEditor.util.XSLFOTransformer.XSLFOTra
 import jlibs.xml.sax.XMLDocument;
 import jlibs.xml.xsd.XSInstance;
 import jlibs.xml.xsd.XSParser;
+import org.w3c.dom.NodeList;
 
 @Service
 public class ProcessPSPServiceImpl implements ProcessPSPService {
@@ -131,6 +132,29 @@ public class ProcessPSPServiceImpl implements ProcessPSPService {
     @Override
     public void delete(String processId) throws Exception {
         processPSPRepo.delete(processId);
+    }
+
+    public String generateReviewAssigmentXMLTemplate() throws Exception {
+        StringWriter sw = new StringWriter();
+        XSModel xsModel = new XSParser().parse(ProcessPSPRepository.ReviewAssigmentSchemaPath);
+        XSInstance xsInstance = new XSInstance();
+        xsInstance.maximumElementsGenerated = 1;
+        xsInstance.maximumListItemsGenerated = 0;
+        xsInstance.maximumRecursionDepth = 0;
+        xsInstance.generateOptionalAttributes = Boolean.TRUE;
+        xsInstance.generateDefaultAttributes = Boolean.TRUE;
+        xsInstance.generateOptionalElements = Boolean.TRUE; // null means rando
+        QName rootElement = new QName("http://www.uns.ac.rs/Tim1", "reviewAssigmentAcceptance");
+        XMLDocument sampleXml = new XMLDocument(new StreamResult(sw), true, 4, null);
+        xsInstance.generate(xsModel, rootElement, sampleXml);
+
+        System.out.println(sw.toString());
+        return sw.toString();
+    }
+
+    @Override
+    public String saveQuestionnaireToProcessPSP(String processId, String reviewerEmail, String qId) throws Exception {
+        return this.processPSPRepo.saveQuestionnaireToProcessPSP(processId, reviewerEmail, qId);
     }
 
     @Override
@@ -331,5 +355,18 @@ public class ProcessPSPServiceImpl implements ProcessPSPService {
 		return process.getDocumentElement().getAttributes().getNamedItem(ProcessPSPRepository.AUTHOR_EMAIL)
 				.getTextContent();
 	}
+
+    @Override
+    public boolean acceptRejectReviewAssigment(String acceptanceData, String email) throws  Exception {
+        Document document = DOMParser.buildDocument(acceptanceData, ProcessPSPRepository.ReviewAssigmentSchemaPath);
+        // hocu da dobavim process sa tim id i da onda udjem u odgovarajucu verziju i
+        // nadjem autora i ond stanje da stavim rejected/accepted
+        // validiram dokument i sacuvam ga.
+        String processId = document.getDocumentElement().getElementsByTagName("ns:processId").item(0).getTextContent();
+        String processVersion = document.getDocumentElement().getElementsByTagName("ns:processVersion").item(0).getTextContent();
+        String decision = document.getDocumentElement().getElementsByTagName("ns:decision").item(0).getTextContent();
+        boolean updated = this.processPSPRepo.updateProcessReviewAssigment(processId, processVersion, decision, email);
+        return  updated;
+    }
 
 }
