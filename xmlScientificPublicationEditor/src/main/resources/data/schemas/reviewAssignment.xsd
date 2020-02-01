@@ -40,11 +40,11 @@
         </xs:sequence>
     </xs:complexType>
     <xs:complexType name="TReview">
-        <xs:sequence>
+        <xs:all>
             <xs:element name="idQuestionnaire" type="xs:string" minOccurs="0"/>
             <xs:element name="idScientificPublication" minOccurs="0"/>
             <xs:element name="idReviewer" type="xs:string"/>
-        </xs:sequence>
+        </xs:all>
         <xs:attribute default="inProgress" name="state">
             <xs:simpleType>
                 <xs:restriction base="xs:string">

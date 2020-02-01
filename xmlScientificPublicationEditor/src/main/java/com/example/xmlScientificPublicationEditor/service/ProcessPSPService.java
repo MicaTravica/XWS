@@ -64,4 +64,7 @@ public interface ProcessPSPService {
     String generateReviewAssigmentXMLTemplate() throws  Exception;
 
     String saveQuestionnaireToProcessPSP(String processId, String reviewerEmail, String qId) throws  Exception;
+
+    void retractPSP(String processId) throws Exception;
+    void deletePSP(String processId) throws Exception;
 }

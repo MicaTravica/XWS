@@ -48,6 +48,9 @@ export class ForPublicationComponent implements OnInit {
       });
   }
 
+  
+
+
   reviewers(id: number) {
     this.router.navigate(['/add_rev/' + id]);
   }

@@ -7,13 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.example.xmlScientificPublicationEditor.model.person.TPersons;
 import com.example.xmlScientificPublicationEditor.service.ProcessPSPService;
@@ -92,5 +86,28 @@ public class ProcessPSPController {
 		processPSPService.acceptRejectReviewAssigment(acceptanceData, reviewer.getName());
 		return new ResponseEntity<>(String.format("You succesfully accepted/rejected review assigment!"), HttpStatus.OK);
 	}
-    
+
+	@PutMapping(value="/processPSP/retract",
+			produces = MediaType.APPLICATION_XML_VALUE,
+			consumes = MediaType.APPLICATION_XML_VALUE)
+	@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_REVIEWER') or hasRole('ROLE_REDACTOR')")
+	public ResponseEntity<String> retractScientificPublication(
+			@RequestParam(name = "processId") String processId) throws  Exception{
+    	processPSPService.retractPSP(processId);
+    	return  new ResponseEntity<>(
+    			String.format("You succesfully retracted scientific publication!"),
+				HttpStatus.OK);
+	}
+
+	@PutMapping(value="/processPSP/delete",
+			produces = MediaType.APPLICATION_XML_VALUE,
+			consumes = MediaType.APPLICATION_XML_VALUE)
+	@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_REVIEWER') or hasRole('ROLE_REDACTOR')")
+	public ResponseEntity<String> deleteScientificPublication(
+			@RequestParam(name = "processId") String processId) throws  Exception{
+		processPSPService.deletePSP(processId);
+		return  new ResponseEntity<>(
+				String.format("You succesfully deleted scientific publication!"),
+				HttpStatus.OK);
+	}
 }
