@@ -72,12 +72,11 @@ public class ScientificPublicationController extends BaseController {
 	}
 	
 	@PostMapping(value = "/scientificPublication/review/{id}", consumes = MediaType.APPLICATION_XML_VALUE, produces = MediaType.APPLICATION_XML_VALUE)
-	@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_REVIEWER') or hasRole('ROLE_REDACTOR')")
+	@PreAuthorize("hasRole('ROLE_REVIEWER') or hasRole('ROLE_REDACTOR')")
 	public ResponseEntity<String> addReviewComments(@PathVariable("id") String processId,
 			@RequestBody String scientificPublication, Principal author) throws Exception {
-		String id = scientificPublicationService.saveComments(scientificPublication, author.getName(), processId);
-		return new ResponseEntity<>(String.format("You succesfully add scientific publication with id %s", id),
-				HttpStatus.OK);
+		scientificPublicationService.saveComments(scientificPublication, author.getName(), processId);
+		return new ResponseEntity<>("You succesfully add comments for scientific publication", HttpStatus.OK);
 	}
 	
 	@PostMapping(value="/scientificPublication/upload", 
@@ -102,13 +101,12 @@ public class ScientificPublicationController extends BaseController {
 	}
 	
 	@PostMapping(value = "/scientificPublication/upload/review", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_XML_VALUE)
-	@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_REVIEWER') or hasRole('ROLE_REDACTOR')")
+	@PreAuthorize("hasRole('ROLE_REVIEWER') or hasRole('ROLE_REDACTOR')")
 	public ResponseEntity<String> uploadReviewComments(@RequestParam(("processId")) String processId,
 			@RequestParam(("file")) MultipartFile q, Principal author) throws Exception {
 		String file = MyFile.readFile(q);
-		String id = scientificPublicationService.saveComments(file, author.getName(), processId);
-		return new ResponseEntity<>(String.format("You succesfully add scientific publication with id %s", id),
-				HttpStatus.OK);
+		scientificPublicationService.saveComments(file, author.getName(), processId);
+		return new ResponseEntity<>("You succesfully add comments for scientific publication", HttpStatus.OK);
 	}
 	
 	@PutMapping(value="/scientificPublication", consumes = MediaType.APPLICATION_XML_VALUE,produces = MediaType.APPLICATION_XML_VALUE)

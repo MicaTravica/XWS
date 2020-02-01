@@ -36,6 +36,6 @@ public interface ScientificPublicationService {
 
 	String getSPReview(String processId, String email) throws Exception;
 
-	String saveComments(String file, String name, String processId);
+	void saveComments(String file, String name, String processId) throws Exception;
 
 }

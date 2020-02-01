@@ -168,21 +168,7 @@ public class ScientificPublicationServiceImpl implements ScientificPublicationSe
 		Document document = processPSPService.findOneById(processId);
 		Node lastVersion = processPSPService.getLastVersion(document);
 		Element lv = (Element) lastVersion;
-		NodeList ras = lv.getElementsByTagName(ProcessPSPRepository.ReviewAssigment);
-		boolean isReviewer = false;
-		for (int i = 0; i < ras.getLength(); i++) {
-			Element ra = (Element) ras.item(i);
-			if(ra.getElementsByTagName(ProcessPSPRepository.IdReviewer).item(0).getTextContent().equals(email)) {
-				isReviewer = true;
-				break;
-			}
-		}
-		if(!isReviewer) {
-			throw new Exception("You can not see this publication!");
-		};
-		String sp = findOne(
-				lv.getElementsByTagName(ProcessPSPRepository.ScientificPublicationFiled).item(0).getTextContent());
-		Document dom = DOMParser.buildDocument(sp, ScientificPublicationRepository.scientificPublicationSchemaPath);
+		Document dom = getSpFromProcessForReviewer(lv, email);
 		Element authors = (Element) dom.getDocumentElement().getElementsByTagName(IdGeneratorServiceImpl.AUTHORS)
 				.item(0);
 		dom.getDocumentElement().removeChild(authors);
@@ -191,10 +177,38 @@ public class ScientificPublicationServiceImpl implements ScientificPublicationSe
 
 
 	@Override
-	public String saveComments(String file, String name, String processId) {
-		// TODO Auto-generated method stub
-		return null;
+	public void saveComments(String file, String email, String processId) throws Exception {
+		Document comments = DOMParser.buildDocumentWithOutSchema(file);
+		NodeList nodeComments = comments.getDocumentElement().getElementsByTagName(IdGeneratorServiceImpl.COMMENTS);
+		if (nodeComments.getLength() < 1) {
+			throw new Exception("You dont have comments to add");
+		}
+		Document document = processPSPService.findOneById(processId);
+		Node lastVersion = processPSPService.getLastVersion(document);
+		Element lv = (Element) lastVersion;
+		Document doc = getSpFromProcessForReviewer(lv, email);
+		Element com = (Element) nodeComments.item(0);
+		scientificPublicationRepository.saveComments(doc, com);
 	}
 
+	private Document getSpFromProcessForReviewer(Element lastVersion, String email) throws Exception {
+		NodeList ras = lastVersion.getElementsByTagName(ProcessPSPRepository.ReviewAssigment);
+		boolean isReviewer = false;
+		for (int i = 0; i < ras.getLength(); i++) {
+			Element ra = (Element) ras.item(i);
+			if(ra.getElementsByTagName(ProcessPSPRepository.IdReviewer).item(0).getTextContent().equals(email)
+					&& ra.getAttributes().getNamedItem(ProcessPSPRepository.PROCESS_STATE).getTextContent().equals(ProcessPSPRepository.ACCEPTED)) {
+				isReviewer = true;
+				break;
+			}
+		}
+		if(!isReviewer) {
+			throw new Exception("You can not work with this publication!");
+		};
+
+		String sp = findOne(
+				lastVersion.getElementsByTagName(ProcessPSPRepository.ScientificPublicationFiled).item(0).getTextContent());
+		return DOMParser.buildDocument(sp, ScientificPublicationRepository.scientificPublicationSchemaPath);
+	}
 
 }

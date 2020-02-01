@@ -222,4 +222,39 @@ public class ScientificPublicationRepository {
 		return retVal;
 	}
 
+
+	public void saveComments(Document doc, Element com) throws Exception {
+		String id = "sp" + idGeneratorService.getId("scientificPublication");
+		String spId = doc.getDocumentElement().getAttributes().getNamedItem("id").getTextContent();
+
+		Element commentsElement = doc.createElement(IdGeneratorServiceImpl.COMMENTS);
+		NodeList comments = com.getElementsByTagName(IdGeneratorServiceImpl.COMMENT);
+		for (int i = 0; i < comments.getLength(); ++i) {
+			Element commentEl = doc.createElement(IdGeneratorServiceImpl.COMMENT);
+			idGeneratorService.generateElementId(commentEl, id + "_comment" + (i + 1), IdGeneratorServiceImpl.COMMENT);
+			String ref = comments.item(i).getAttributes().getNamedItem("ref").getTextContent();
+
+			if (ref.equals(spId)) {
+				ref = id;
+			} else {
+				String xpathExp = "//scientificPublication[@id='" + spId + "']//*[@id='" + ref + "']";
+				ResourceSet resultSet = RetriveFromDB.executeXPathExpression(scientificPublicationCollectionId,
+						xpathExp, TARGET_NAMESPACE);
+				if (!resultSet.getIterator().hasMoreResources()) {
+					throw new Exception("You must use for ref comment id that exist in file!");
+				}
+
+			}
+			commentEl.appendChild(doc.createTextNode(comments.item(i).getTextContent()));
+			commentEl.setAttribute("ref", ref);
+			commentsElement.appendChild(commentEl);
+		}
+		doc.getDocumentElement().appendChild(commentsElement);
+		doc.getDocumentElement().getAttributes().getNamedItem("id").setTextContent(id);
+
+		String toSave = DOMParser.parseDocument(doc, scientificPublicationSchemaPath);
+		StoreToDB.store(scientificPublicationCollectionId, id, toSave);
+
+	}
+
 }

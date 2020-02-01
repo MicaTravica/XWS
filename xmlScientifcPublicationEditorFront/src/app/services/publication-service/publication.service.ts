@@ -87,6 +87,6 @@ export class PublicationService {
   }
 
   uploadCommentProcess(file: File, processId: string) {
-    return this.uploadService.upload(file, this.url + '/review/upload', processId);
+    return this.uploadService.upload(file, this.url + '/upload/review', processId);
   }
 }
