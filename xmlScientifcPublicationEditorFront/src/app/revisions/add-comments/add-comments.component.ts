@@ -1,19 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ProcessPSPService } from 'src/app/services/processPSP/process-psp.service';
 import { PublicationService } from 'src/app/services/publication-service/publication.service';
 import { ToastrService } from 'ngx-toastr';
-import { docSpec } from 'src/app/util/xonomy-editor-doc-spec/doc-spec-publication';
-import { HttpErrorResponse } from '@angular/common/http/http';
+import { HttpErrorResponse } from '@angular/common/http';
+import { docSpec } from 'src/app/util/xonomy-editor-doc-spec/doc-spec-comments';
 
 declare const Xonomy: any;
 
 @Component({
-  selector: 'app-new-version',
-  templateUrl: './new-version.component.html',
-  styleUrls: ['./new-version.component.scss']
+  selector: 'app-add-comments',
+  templateUrl: './add-comments.component.html',
+  styleUrls: ['./add-comments.component.scss']
 })
-export class NewVersionComponent implements OnInit {
+export class AddCommentsComponent implements OnInit {
 
   publicationXml = '';
   file: File;
@@ -29,7 +28,7 @@ export class NewVersionComponent implements OnInit {
     const processId = this.route.snapshot.paramMap.get('processId');
     if (processId) {
       this.processId = processId;
-      this.publicationService.getMyPublication(processId).subscribe(
+      this.publicationService.getPublicationReviewerProcess(processId).subscribe(
         (data: string) => {
           this.publicationXml = data;
           this.publicationXml = this.publicationXml.split('ns1:anyAttr="anyValue"').join('');
@@ -43,7 +42,7 @@ export class NewVersionComponent implements OnInit {
 
   addPublication() {
     this.publicationXml = Xonomy.harvest() as string;
-    this.publicationService.addNewVersionPublication(this.publicationXml, this.processId).subscribe(
+    this.publicationService.addCommentsProcess(this.publicationXml, this.processId).subscribe(
       (data: string) => {
         this.toastr.success(data);
       }, (error: HttpErrorResponse) => {
@@ -56,7 +55,7 @@ export class NewVersionComponent implements OnInit {
   }
 
   onUpload() {
-    this.publicationService.uploadNewVersion(this.file, this.processId).subscribe(
+    this.publicationService.uploadCommentProcess(this.file, this.processId).subscribe(
       (data: string) => {
         this.toastr.success(data);
       }, (error: HttpErrorResponse) => {

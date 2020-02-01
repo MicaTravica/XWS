@@ -1,10 +1,6 @@
 package com.example.xmlScientificPublicationEditor.controller;
 
-import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.security.Principal;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.xmlScientificPublicationEditor.service.ScientificPublicationService;
+import com.example.xmlScientificPublicationEditor.util.MyFile;
 
 @RestController
 @RequestMapping("/api")
@@ -74,26 +71,22 @@ public class ScientificPublicationController extends BaseController {
 				HttpStatus.OK);
 	}
 	
+	@PostMapping(value = "/scientificPublication/review/{id}", consumes = MediaType.APPLICATION_XML_VALUE, produces = MediaType.APPLICATION_XML_VALUE)
+	@PreAuthorize("hasRole('ROLE_REVIEWER') or hasRole('ROLE_REDACTOR')")
+	public ResponseEntity<String> addReviewComments(@PathVariable("id") String processId,
+			@RequestBody String scientificPublication, Principal author) throws Exception {
+		scientificPublicationService.saveComments(scientificPublication, author.getName(), processId);
+		return new ResponseEntity<>("You succesfully add comments for scientific publication", HttpStatus.OK);
+	}
+	
 	@PostMapping(value="/scientificPublication/upload", 
 			consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
 			produces = MediaType.APPLICATION_XML_VALUE)
 	@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_REVIEWER') or hasRole('ROLE_REDACTOR')")
 	public ResponseEntity<String> uploadScientificPublication(
 			@RequestParam(("file")) MultipartFile q, Principal author) throws Exception {
-		BufferedReader br;
-		StringBuilder sb = new StringBuilder();
-		try {
-     		String line;
-     		InputStream is = q.getInputStream();
-     		br = new BufferedReader(new InputStreamReader(is));
-     		while ((line = br.readLine()) != null) {
-				  sb.append(line);
-				  sb.append("\n");
-     		}
-		} catch (IOException e) {
-			return new ResponseEntity<>(e.getMessage(),HttpStatus.OK);
-		}
-		String id = scientificPublicationService.save(sb.toString(), author.getName());
+		String file = MyFile.readFile(q);
+		String id = scientificPublicationService.save(file, author.getName());
 		return new ResponseEntity<>(String.format("You succesfully add scientific publication with id %s",id), HttpStatus.OK);
 	}
 	
@@ -101,23 +94,19 @@ public class ScientificPublicationController extends BaseController {
 	@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_REVIEWER') or hasRole('ROLE_REDACTOR')")
 	public ResponseEntity<String> uploadNewVersion(@RequestParam(("processId")) String processId,
 			@RequestParam(("file")) MultipartFile q, Principal author) throws Exception {
-		BufferedReader br;
-		StringBuilder sb = new StringBuilder();
-		try {
-			String line;
-			InputStream is = q.getInputStream();
-			br = new BufferedReader(new InputStreamReader(is));
-			while ((line = br.readLine()) != null) {
-				sb.append(line);
-				sb.append("\n");
-			}
-		} catch (IOException e) {
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.OK);
-		}
-		System.out.println(processId);
-		String id = scientificPublicationService.saveNewVersion(sb.toString(), author.getName(), processId);
+		String file = MyFile.readFile(q);
+		String id = scientificPublicationService.saveNewVersion(file, author.getName(), processId);
 		return new ResponseEntity<>(String.format("You succesfully add scientific publication with id %s", id),
 				HttpStatus.OK);
+	}
+	
+	@PostMapping(value = "/scientificPublication/upload/review", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_XML_VALUE)
+	@PreAuthorize("hasRole('ROLE_REVIEWER') or hasRole('ROLE_REDACTOR')")
+	public ResponseEntity<String> uploadReviewComments(@RequestParam(("processId")) String processId,
+			@RequestParam(("file")) MultipartFile q, Principal author) throws Exception {
+		String file = MyFile.readFile(q);
+		scientificPublicationService.saveComments(file, author.getName(), processId);
+		return new ResponseEntity<>("You succesfully add comments for scientific publication", HttpStatus.OK);
 	}
 	
 	@PutMapping(value="/scientificPublication", consumes = MediaType.APPLICATION_XML_VALUE,produces = MediaType.APPLICATION_XML_VALUE)
@@ -142,6 +131,13 @@ public class ScientificPublicationController extends BaseController {
 	@GetMapping(value = "/scientificPublication/search", produces = MediaType.APPLICATION_XML_VALUE)
 	public ResponseEntity<String> search(@RequestParam(("param")) String param,Principal user) throws Exception {
 		String result = scientificPublicationService.search(param, user);
+        return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+	
+	@GetMapping(value = "/scientificPublication/review/{id}", produces = MediaType.APPLICATION_XML_VALUE)
+	@PreAuthorize("hasRole('ROLE_REVIEWER') or hasRole('ROLE_REDACTOR')")
+	public ResponseEntity<String> reviewSP(@PathVariable("id")String processId,Principal user) throws Exception {
+		String result = scientificPublicationService.getSPReview(processId, user.getName());
         return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 

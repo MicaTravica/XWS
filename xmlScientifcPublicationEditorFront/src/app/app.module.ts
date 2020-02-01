@@ -29,6 +29,7 @@ import { ToastrModule } from 'ngx-toastr';
 import { AddReviewersComponent } from './revisions/add-reviewers/add-reviewers.component';
 import { SeeRevisionComponent } from './revisions/see-revision/see-revision.component';
 import { NewVersionComponent } from './publication/new-version/new-version.component';
+import { AddCommentsComponent } from './revisions/add-comments/add-comments.component';
 
 @NgModule({
   declarations: [
@@ -48,7 +49,8 @@ import { NewVersionComponent } from './publication/new-version/new-version.compo
     AddCoverLetterComponent,
     AddReviewersComponent,
     SeeRevisionComponent,
-    NewVersionComponent
+    NewVersionComponent,
+    AddCommentsComponent
   ],
   imports: [
     BrowserModule,

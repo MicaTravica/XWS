@@ -13,12 +13,14 @@ import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import com.example.xmlScientificPublicationEditor.exception.ResourceNotFoundException;
 import com.example.xmlScientificPublicationEditor.repository.ProcessPSPRepository;
 import com.example.xmlScientificPublicationEditor.repository.ScientificPublicationRepository;
 import com.example.xmlScientificPublicationEditor.service.ProcessPSPService;
 import com.example.xmlScientificPublicationEditor.service.ScientificPublicationService;
+import com.example.xmlScientificPublicationEditor.util.DOMParser.DOMParser;
 import com.example.xmlScientificPublicationEditor.util.XSLFOTransformer.XSLFOTransformer;
 
 import jlibs.xml.sax.XMLDocument;
@@ -160,5 +162,53 @@ public class ScientificPublicationServiceImpl implements ScientificPublicationSe
 		return scientificPublicationRepository.search(param, email);
 	}
 
+
+	@Override
+	public String getSPReview(String processId, String email) throws Exception {
+		Document document = processPSPService.findOneById(processId);
+		Node lastVersion = processPSPService.getLastVersion(document);
+		Element lv = (Element) lastVersion;
+		Document dom = getSpFromProcessForReviewer(lv, email);
+		Element authors = (Element) dom.getDocumentElement().getElementsByTagName(IdGeneratorServiceImpl.AUTHORS)
+				.item(0);
+		dom.getDocumentElement().removeChild(authors);
+		return DOMParser.parseDocumentWithoutSchema(dom);
+	}
+
+
+	@Override
+	public void saveComments(String file, String email, String processId) throws Exception {
+		Document comments = DOMParser.buildDocumentWithOutSchema(file);
+		NodeList nodeComments = comments.getDocumentElement().getElementsByTagName(IdGeneratorServiceImpl.COMMENTS);
+		if (nodeComments.getLength() < 1) {
+			throw new Exception("You dont have comments to add");
+		}
+		Document document = processPSPService.findOneById(processId);
+		Node lastVersion = processPSPService.getLastVersion(document);
+		Element lv = (Element) lastVersion;
+		Document doc = getSpFromProcessForReviewer(lv, email);
+		Element com = (Element) nodeComments.item(0);
+		scientificPublicationRepository.saveComments(doc, com);
+	}
+
+	private Document getSpFromProcessForReviewer(Element lastVersion, String email) throws Exception {
+		NodeList ras = lastVersion.getElementsByTagName(ProcessPSPRepository.ReviewAssigment);
+		boolean isReviewer = false;
+		for (int i = 0; i < ras.getLength(); i++) {
+			Element ra = (Element) ras.item(i);
+			if(ra.getElementsByTagName(ProcessPSPRepository.IdReviewer).item(0).getTextContent().equals(email)
+					&& ra.getAttributes().getNamedItem(ProcessPSPRepository.PROCESS_STATE).getTextContent().equals(ProcessPSPRepository.ACCEPTED)) {
+				isReviewer = true;
+				break;
+			}
+		}
+		if(!isReviewer) {
+			throw new Exception("You can not work with this publication!");
+		};
+
+		String sp = findOne(
+				lastVersion.getElementsByTagName(ProcessPSPRepository.ScientificPublicationFiled).item(0).getTextContent());
+		return DOMParser.buildDocument(sp, ScientificPublicationRepository.scientificPublicationSchemaPath);
+	}
 
 }

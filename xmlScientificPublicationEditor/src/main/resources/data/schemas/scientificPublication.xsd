@@ -157,11 +157,12 @@
         <xs:attribute name="id" type="xs:string" use="required"/>
     </xs:complexType>
     <xs:complexType mixed="false" name="TComment">
-        <xs:choice>
-            <xs:element name="content" type="TParagraph"/>
-        </xs:choice>
-        <xs:attribute name="id" type="xs:string" use="required"/>
-        <xs:anyAttribute/>
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute name="id" type="xs:string" use="required"/>
+                <xs:anyAttribute/>
+            </xs:extension>
+        </xs:simpleContent>
     </xs:complexType>
     <xs:complexType name="TRichParagraph">
         <xs:complexContent mixed="false">

@@ -1,13 +1,6 @@
 package com.example.xmlScientificPublicationEditor.controller;
 
-import com.example.xmlScientificPublicationEditor.service.QuestionnaireService;
-
-import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.security.Principal;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,6 +17,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.example.xmlScientificPublicationEditor.service.QuestionnaireService;
+import com.example.xmlScientificPublicationEditor.util.MyFile;
 
 
 @RestController
@@ -63,24 +59,9 @@ public class QuestionnaireController extends BaseController {
 	@PostMapping(value="/questionnaire/upload", 
 			consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
 			produces = MediaType.APPLICATION_XML_VALUE)
-	public ResponseEntity<String> uploadQuestionnaire(
-			@RequestParam(("processId")) String processId,
-			@RequestParam(("file")) MultipartFile q,
-			Principal reviewer) throws Exception {
-		BufferedReader br;
-		StringBuilder sb = new StringBuilder();
-		try {
-     		String line;
-     		InputStream is = q.getInputStream();
-     		br = new BufferedReader(new InputStreamReader(is));
-     		while ((line = br.readLine()) != null) {
-				  sb.append(line);
-				  sb.append("\n");
-     		}
-		} catch (IOException e) {
-			return new ResponseEntity<>(e.getMessage(),HttpStatus.OK);
-		}
-		String id = questionnaireService.save(sb.toString(), processId, reviewer.getName());
+	public ResponseEntity<String> uploadQuestionnaire(@RequestParam(("file")) MultipartFile q) throws Exception {
+		String file = MyFile.readFile(q);
+		String id = questionnaireService.save(file);
 		return new ResponseEntity<>(String.format("You succesfully add Questionnaire with id %s",id), HttpStatus.OK);
 	}
 

@@ -63,9 +63,11 @@ public class ProcessPSPRepository {
 	public static final String PROCESS_AUTHOR_SP = "authorEmail";
 	public static String IN_PROGRESS = "inProgress";
 	public static String PENDING = "pending";
+	public static String ACCEPTED = "accepted";
 	
 
 	public static final String ProcessPSPXSLSPId = "src/main/resources/data/xslt/processPSPgetLastSCId.xsl";
+
 
     public static String ProcessPSPTemplatePath = "src/main/resources/data/xml/processPSPTemplate.xml";
 	public static String ProcessPSPCollectionId = "/db/sample/processPSP";
