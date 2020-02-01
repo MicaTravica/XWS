@@ -93,6 +93,25 @@ export class ProcessPSPService {
       });
   }
 
-  
+  retractScientificPublication(processId: string) {
+    const param = new HttpParams().append('processId', processId);
+    return this.http.put(this.url+ '/retract', null, {
+      headers: authHttpOptions(this.authService.getToken()),
+      responseType: 'text',
+      params: param
+    })
+  }
 
+  deleteScientificPublication(processId: string) {
+    const param = new HttpParams().append('processId', processId);
+    return this.http.put(this.url+ '/delete', null, {
+      headers: authHttpOptions(this.authService.getToken()),
+      responseType: 'text',
+      params: param
+    })
+  }
+
+
+
+  
 }

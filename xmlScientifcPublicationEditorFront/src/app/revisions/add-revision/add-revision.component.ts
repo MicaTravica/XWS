@@ -4,6 +4,7 @@ import { docSpec} from 'src/app/util/xonomy-editor-doc-spec/doc-spec-questionnai
 import { ToastrService } from 'ngx-toastr';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 declare const Xonomy: any;
 
 @Component({
@@ -21,6 +22,7 @@ export class AddRevisionComponent implements OnInit {
     private revisionService: RevisionService,
     private toastr: ToastrService,
     private route: ActivatedRoute,
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -41,6 +43,7 @@ export class AddRevisionComponent implements OnInit {
     this.revisionService.addRevision(this.revisionXml, this.processId).subscribe(
       (data: string) => {
         this.toastr.success(data);
+        this.router.navigate(['for_revision']);
       }, (error: HttpErrorResponse) => {
         this.toastr.error(error.error);
       });
@@ -54,6 +57,7 @@ export class AddRevisionComponent implements OnInit {
     this.revisionService.upload(this.file,  this.processId).subscribe(
       (data: string) => {
         this.toastr.success(data);
+        this.router.navigate(['for_revision']);
       }, (error: HttpErrorResponse) => {
         this.toastr.error(error.error);
       });
