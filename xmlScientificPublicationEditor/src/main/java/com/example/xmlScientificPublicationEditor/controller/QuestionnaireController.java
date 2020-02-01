@@ -48,8 +48,11 @@ public class QuestionnaireController extends BaseController {
 	@PostMapping(value="/questionnaire", 
 			consumes = MediaType.APPLICATION_XML_VALUE,
 			produces = MediaType.APPLICATION_XML_VALUE)
-	public ResponseEntity<String> addQuestionnaire(@RequestBody String q) throws Exception {
-		String id = questionnaireService.save(q);
+	public ResponseEntity<String> addQuestionnaire(
+			@RequestParam(("processId")) String processId,
+			@RequestBody String q,
+			Principal reviewer) throws Exception {
+		String id = questionnaireService.save(q, processId, reviewer.getName());
 		return new ResponseEntity<>(String.format("You succesfully add Questionnaire with id %s", id), HttpStatus.OK);
 	}
 

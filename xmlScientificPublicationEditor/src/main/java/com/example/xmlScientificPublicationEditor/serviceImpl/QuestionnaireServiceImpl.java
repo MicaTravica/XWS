@@ -7,6 +7,8 @@ import java.io.StringWriter;
 import javax.xml.namespace.QName;
 import javax.xml.transform.stream.StreamResult;
 
+import com.example.xmlScientificPublicationEditor.service.NotificationService;
+import com.example.xmlScientificPublicationEditor.service.ProcessPSPService;
 import org.apache.xerces.xs.XSModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,6 +37,12 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
 
 	@Autowired
 	private QuestionnaireRepository questionnaireRepository;
+
+	@Autowired
+	private ProcessPSPService processPSPService;
+
+	@Autowired
+	private NotificationService notificationService;
 
 	@Override
 	public String findOne(String id) throws Exception {
@@ -67,9 +75,15 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
 	}
 
 	@Override
-	public String save(String questionnaire) throws Exception {
+	public String save(String questionnaire, String processId, String reviewerEmail) throws Exception {
+		String[] emails = new String[1];
+		emails[0] =  reviewerEmail;
 		String qId = questionnaireRepository.save(questionnaire);
-		questionnaireRepository.saveMetadata(this.extractMetadata(questionnaire), qId);
+		String scName = processPSPService.saveQuestionnaireToProcessPSP(processId, reviewerEmail, qId);
+//		questionnaireRepository.saveMetadata(this.extractMetadata(questionnaire), qId);
+		if(scName != null) {
+			this.notificationService.letterOfThanks(emails, scName);
+		}
 		return qId;
 	}
 
@@ -109,4 +123,5 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
 		xsInstance.generate(xsModel, rootElement, sampleXml);
 		return sw.toString();
 	}
+
 }

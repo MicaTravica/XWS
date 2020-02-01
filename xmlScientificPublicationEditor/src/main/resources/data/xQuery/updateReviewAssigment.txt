@@ -1,0 +1,10 @@
+let $docs := collection("/db/sample/processPSP")
+for $doc in $docs
+let $processPSP := $doc/processPSP
+where $processPSP/@id = $PROCESS_ID
+for $version in $processPSP/versions//version
+where $version/@version = $SC_VERSION
+for $reviewAssigment in $version/reviewAssignments//reviewAssigment
+where $reviewAssigment/review/idReviewer = $REVIEWER_EMAIL
+return
+    update value $reviewAssigment/@state with $DECISION

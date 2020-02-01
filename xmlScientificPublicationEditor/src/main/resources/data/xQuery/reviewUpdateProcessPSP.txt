@@ -1,0 +1,14 @@
+declare namespace ns="http://www.uns.ac.rs/Tim1";
+let $docs := collection("/db/sample/processPSP")
+for $doc in $docs
+let $processPSP := $doc/processPSP
+where $processPSP/@id = $PROCESS_ID
+let $lastVersion := $processPSP/@lastVersion
+for $version in $processPSP/versions//version
+where $version/@version = $lastVersion
+for $reviewAssigment in $version/reviewAssignments//reviewAssigment
+where $reviewAssigment/review/idReviewer = $REVIEWER_EMAIL
+let $review := $reviewAssigment/review
+where $review/@state != "Done"
+return
+     update insert <ns:idQuestionnaire> {data($Q_ID)} </ns:idQuestionnaire> into $review

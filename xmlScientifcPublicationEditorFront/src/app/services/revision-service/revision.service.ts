@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { AuthService } from '../auth-service/auth.service';
 import { environment } from 'src/environments/environment';
 import { authHttpOptions, uploadAuthHttpOptions } from 'src/app/util/http-util';
@@ -27,10 +27,12 @@ export class RevisionService {
       });
   }
 
-  addRevision(revisionXml: string) {
+  addRevision(revisionXml: string, processId: string) {
+    const param = new HttpParams().append('processId', processId);
     return this.http.post(this.revisionUrl, revisionXml, {
       headers: authHttpOptions(this.authService.getToken()),
-      responseType: 'text'
+      responseType: 'text',
+      params: param
     });
   }
 

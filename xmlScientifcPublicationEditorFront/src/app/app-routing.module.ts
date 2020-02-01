@@ -45,7 +45,7 @@ const routes: Routes = [
     data: { expectedRoles: 'ROLE_REVIEWER|ROLE_REDACTOR' }
   },
   {
-    path: 'add_revision', component: AddRevisionComponent, canActivate: [RoleGuard],
+    path: 'add_revision/:processId', component: AddRevisionComponent, canActivate: [RoleGuard],
     data: { expectedRoles: 'ROLE_REVIEWER|ROLE_REDACTOR' }
   },
   {
