@@ -1,7 +1,6 @@
 package com.example.xmlScientificPublicationEditor.serviceImpl;
 
 import java.io.ByteArrayOutputStream;
-import java.io.StringReader;
 import java.io.StringWriter;
 
 import javax.xml.namespace.QName;
@@ -15,7 +14,6 @@ import com.example.xmlScientificPublicationEditor.exception.ResourceNotFoundExce
 import com.example.xmlScientificPublicationEditor.repository.CoverLetterRepository;
 import com.example.xmlScientificPublicationEditor.service.CoverLetterService;
 import com.example.xmlScientificPublicationEditor.service.ProcessPSPService;
-import com.example.xmlScientificPublicationEditor.util.RDF.MetadataExtractor;
 import com.example.xmlScientificPublicationEditor.util.XSLFOTransformer.XSLFOTransformer;
 
 import jlibs.xml.sax.XMLDocument;
@@ -27,9 +25,6 @@ public class CoverLetterServiceImpl implements CoverLetterService {
 
 	@Autowired
 	private XSLFOTransformer xslFoTransformer;
-
-	@Autowired
-	private MetadataExtractor metadataExtractor;
 	
 	@Autowired
 	private CoverLetterRepository coverLetterRepository;
@@ -68,9 +63,7 @@ public class CoverLetterServiceImpl implements CoverLetterService {
 
 	@Override
 	public String save(String cl, String processId) throws Exception {
-		String cvId = coverLetterRepository.save(cl);
-//		coverLetterRepository.saveMetadata(this.extractMetadata(cl), cvId);
-//		String scId = this.getScientificPublicationID(cl);
+		String cvId = coverLetterRepository.save(cl, processId);
 		processPSPService.setCoverLetter(processId, cvId);
 		return cvId;
 	}
@@ -78,7 +71,6 @@ public class CoverLetterServiceImpl implements CoverLetterService {
 	@Override
 	public String update(String coverLetter) throws Exception {
 		String cvId = coverLetterRepository.update(coverLetter);
-		coverLetterRepository.updateMetadata(this.extractMetadata(coverLetter), cvId);
 		return cvId;
 	}
 
@@ -87,13 +79,6 @@ public class CoverLetterServiceImpl implements CoverLetterService {
 		coverLetterRepository.delete(id);
 	}
 
-	@Override
-	public StringWriter extractMetadata(String cl) throws Exception{
-		StringWriter out = new StringWriter(); 
-		StringReader in = new StringReader(cl); 
-		metadataExtractor.extractMetadata(in, out);
-		return out;
-	}
 	
 	@Override
 	public String generateCoverLetterXMLTemplate() throws Exception {

@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import javax.xml.namespace.QName;
 import javax.xml.transform.stream.StreamResult;
 
-import com.jayway.jsonpath.internal.path.ArrayPathToken;
 import org.apache.xerces.xs.XSModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,7 +29,6 @@ import com.example.xmlScientificPublicationEditor.util.XSLFOTransformer.XSLFOTra
 import jlibs.xml.sax.XMLDocument;
 import jlibs.xml.xsd.XSInstance;
 import jlibs.xml.xsd.XSParser;
-import org.w3c.dom.NodeList;
 
 @Service
 public class ProcessPSPServiceImpl implements ProcessPSPService {

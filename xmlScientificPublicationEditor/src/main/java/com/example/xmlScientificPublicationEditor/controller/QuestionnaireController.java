@@ -1,6 +1,7 @@
 package com.example.xmlScientificPublicationEditor.controller;
 
 import java.io.ByteArrayOutputStream;
+import java.security.Principal;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -59,9 +60,9 @@ public class QuestionnaireController extends BaseController {
 	@PostMapping(value="/questionnaire/upload", 
 			consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
 			produces = MediaType.APPLICATION_XML_VALUE)
-	public ResponseEntity<String> uploadQuestionnaire(@RequestParam(("file")) MultipartFile q) throws Exception {
+	public ResponseEntity<String> uploadQuestionnaire(@RequestParam(("processId")) String processId, @RequestParam(("file")) MultipartFile q, Principal reviewer) throws Exception {
 		String file = MyFile.readFile(q);
-		String id = questionnaireService.save(file);
+		String id = questionnaireService.save(file, processId, reviewer.getName());
 		return new ResponseEntity<>(String.format("You succesfully add Questionnaire with id %s",id), HttpStatus.OK);
 	}
 

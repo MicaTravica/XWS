@@ -20,8 +20,10 @@ import com.example.xmlScientificPublicationEditor.exception.ResourceNotFoundExce
 import com.example.xmlScientificPublicationEditor.service.IdGeneratorService;
 import com.example.xmlScientificPublicationEditor.serviceImpl.IdGeneratorServiceImpl;
 import com.example.xmlScientificPublicationEditor.util.DOMParser.DOMParser;
+import com.example.xmlScientificPublicationEditor.util.RDF.MetadataExtractor;
 import com.example.xmlScientificPublicationEditor.util.RDF.StoreToRDF;
 import com.example.xmlScientificPublicationEditor.util.RDF.UpdateRDF;
+import com.example.xmlScientificPublicationEditor.util.XSLFOTransformer.XSLFOTransformer;
 import com.example.xmlScientificPublicationEditor.util.existAPI.RetriveFromDB;
 import com.example.xmlScientificPublicationEditor.util.existAPI.StoreToDB;
 import com.example.xmlScientificPublicationEditor.util.existAPI.UpdateDB;
@@ -31,12 +33,20 @@ public class CoverLetterRepository {
 
 	@Autowired
 	private IdGeneratorService idGeneratorService;
+	
+	@Autowired
+	private MetadataExtractor metadataExtractor;
+	
+	@Autowired
+	private XSLFOTransformer xslFoTransformer;
 
     public static final String ScientificPublicationID = "href";
+
 	public static String coverLetterCollectionId = "/db/sample/coverLetter";
     public static String coverLetterSchemaPath = "src/main/resources/data/schemas/coverLetter.xsd";
     public static String CoverLetterXSLPath = "src/main/resources/data/xslt/coverLetter.xsl";
     public static String CoverLetterXSL_FO_PATH = "src/main/resources/data/xsl-fo/coverLetter_fo.xsl";
+	public static String CoverLetterRDFPath = "src/main/resources/data/xslt/coverLetterRDF.xsl";
     public static String CV_NAMED_GRAPH_URI_PREFIX = "/example/coverLetter/";
 
 	public String findOne(String id) throws Exception {
@@ -66,15 +76,20 @@ public class CoverLetterRepository {
 		return null;
 	}
 
-	public String save(String coverLetter) throws Exception {
+	public String save(String coverLetter, String processId) throws Exception {
 		Document document = DOMParser.buildDocument(coverLetter, coverLetterSchemaPath);
 		String id = "cl" + idGeneratorService.getId("coverLetter");
 
 		generateIDs(document, id);
 		
 		document.getDocumentElement().getAttributes().getNamedItem("id").setTextContent(id);
-		String toSave = DOMParser.parseDocument(document, CoverLetterRepository.coverLetterSchemaPath);
+		document.getDocumentElement().setAttribute("processId", processId);
+		String stringCL = DOMParser.parseDocument(document, CoverLetterRepository.coverLetterSchemaPath);
+		String toSave = xslFoTransformer.generateHTML(stringCL, CoverLetterRepository.CoverLetterRDFPath);
+		
 		StoreToDB.store(coverLetterCollectionId, id, toSave);
+		saveMetadata(metadataExtractor.extractMetadataXML(toSave), id);
+		
 		return id;
 	}
 
@@ -103,6 +118,7 @@ public class CoverLetterRepository {
 		}
 	}
 
+	// metadata
 	public String update(String coverLetter) throws Exception {
 		Document document = DOMParser.buildDocument(coverLetter, coverLetterSchemaPath);
 		String id = document.getDocumentElement().getAttribute("id");
@@ -113,6 +129,7 @@ public class CoverLetterRepository {
 		}
 		this.delete(id);
 		StoreToDB.store(coverLetterCollectionId, id, coverLetter);
+		updateMetadata(metadataExtractor.extractMetadataXML(coverLetter), id);
 		return id;
 	}
 
