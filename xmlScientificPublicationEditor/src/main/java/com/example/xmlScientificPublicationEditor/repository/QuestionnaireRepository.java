@@ -5,6 +5,8 @@ import static com.example.xmlScientificPublicationEditor.util.template.XUpdateTe
 import java.io.StringWriter;
 import java.util.HashMap;
 
+import com.example.xmlScientificPublicationEditor.util.RDF.MetadataExtractor;
+import com.example.xmlScientificPublicationEditor.util.XSLFOTransformer.XSLFOTransformer;
 import org.exist.xmldb.EXistResource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -33,11 +35,19 @@ public class QuestionnaireRepository {
 	@Autowired
 	private IdGeneratorService idGeneratorService;
 
+	@Autowired
+	private XSLFOTransformer xslFoTransformer;
+
+	@Autowired
+	private MetadataExtractor metadataExtractor;
+
 	public static String QuestionnaireCollectionId = "/db/sample/questionnaire";
 	public static String QuestionnaireSchemaPath = "src/main/resources/data/schemas/questionnaire.xsd";
 	public static String QUESTIONNAIRE_NAMED_GRAPH_URI_PREFIX = "/example/questionnaire/";
 	public static String QuestionnairerXSLPath = "src/main/resources/data/xslt/questionnaire.xsl";
 	public static String QuestionnaireXSL_FO_PATH = "src/main/resources/data/xsl-fo/questionnaire_fo.xsl";
+	public static String QuestionnaireRDFPath = "src/main/resources/data/xmlToRDFa/questionnaireToRDFa.xsl";
+
 
 	public String findOne(String id) throws Exception {
 		String retVal = null;
@@ -75,6 +85,9 @@ public class QuestionnaireRepository {
 		
 		String toSave = DOMParser.parseDocument(document, QuestionnaireSchemaPath);
 		StoreToDB.store(QuestionnaireCollectionId, id, toSave);
+
+		toSave = xslFoTransformer.generateHTML(toSave, QuestionnaireRDFPath);
+		saveMetadata(metadataExtractor.extractMetadataXML(toSave), id);
 		return id;
 	}
 
