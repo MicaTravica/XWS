@@ -47,10 +47,11 @@ public class MetadataExtractor {
 	 * @param out RDF/XML output stream
 	 */
 	public void extractMetadata(StringReader in, StringWriter out) throws FileNotFoundException, TransformerException {
-		
+
+		StreamSource transformSource = null;
 		// Create transformation source
-		StreamSource transformSource = new StreamSource(new File(XSLT_FILE));
-		
+		transformSource = new StreamSource(new File(XSLT_FILE));
+
 		// Initialize GRDDL transformer object
 		Transformer grddlTransformer = transformerFactory.newTransformer(transformSource);
 		

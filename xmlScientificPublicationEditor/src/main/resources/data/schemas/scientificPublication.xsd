@@ -26,6 +26,15 @@
                         <xs:attribute name="id" type="xs:string" use="required"/>
                     </xs:complexType>
                 </xs:element>
+                <xs:element name="DateMetaData">
+                    <xs:complexType>
+                        <xs:all>
+                            <xs:element minOccurs="0" name="recived_at" type="xs:date"/>
+                            <xs:element name="created_at" type="xs:date"/>
+                            <xs:element minOccurs="0" name="accepted_at" type="xs:date"/>
+                        </xs:all>
+                    </xs:complexType>
+                </xs:element>
                 <xs:element name="authors">
                     <xs:complexType>
                         <xs:sequence>
@@ -62,8 +71,6 @@
             <xs:attribute name="id" type="xs:string" use="required"/>
             <xs:attribute name="version" type="xs:positiveInteger" use="required"/>
             <xs:attribute default="true" name="tableOfContent" type="xs:boolean"/>
-            <xs:attribute name="accepted_at" type="xs:date"/>
-            <xs:attribute name="recived_at" type="xs:date"/>
             <xs:anyAttribute processContents="lax"/>
         </xs:complexType>
     </xs:element>

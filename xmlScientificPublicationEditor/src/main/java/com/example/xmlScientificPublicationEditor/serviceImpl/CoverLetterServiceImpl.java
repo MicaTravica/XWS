@@ -7,6 +7,7 @@ import java.io.StringWriter;
 import javax.xml.namespace.QName;
 import javax.xml.transform.stream.StreamResult;
 
+import com.example.xmlScientificPublicationEditor.util.DOMParser.DOMParser;
 import org.apache.xerces.xs.XSModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,6 +37,10 @@ public class CoverLetterServiceImpl implements CoverLetterService {
 
 	@Autowired
 	private ProcessPSPService processPSPService;
+
+	@Autowired
+	private XSLFOTransformer xslfoTransformer;
+
 
 	@Override
 	public String findOne(String id) throws Exception {
@@ -69,7 +74,8 @@ public class CoverLetterServiceImpl implements CoverLetterService {
 	@Override
 	public String save(String cl, String processId) throws Exception {
 		String cvId = coverLetterRepository.save(cl);
-//		coverLetterRepository.saveMetadata(this.extractMetadata(cl), cvId);
+
+		coverLetterRepository.saveMetadata(this.extractMetadata(cl), cvId);
 //		String scId = this.getScientificPublicationID(cl);
 		processPSPService.setCoverLetter(processId, cvId);
 		return cvId;
@@ -89,9 +95,10 @@ public class CoverLetterServiceImpl implements CoverLetterService {
 
 	@Override
 	public StringWriter extractMetadata(String cl) throws Exception{
-		StringWriter out = new StringWriter(); 
-		StringReader in = new StringReader(cl); 
-		metadataExtractor.extractMetadata(in, out);
+		StringWriter out = new StringWriter();
+		cl = xslFoTransformer.applyTemplate(cl, CoverLetterRepository.toRDFaPath);
+		StringReader in = new StringReader(cl);
+		metadataExtractor.extractMetadata(in, out); // apply graddl transformatio
 		return out;
 	}
 	

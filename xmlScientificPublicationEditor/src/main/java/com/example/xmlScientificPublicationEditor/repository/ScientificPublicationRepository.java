@@ -2,12 +2,15 @@ package com.example.xmlScientificPublicationEditor.repository;
 
 import static com.example.xmlScientificPublicationEditor.util.template.XUpdateTemplate.TARGET_NAMESPACE;
 
+import java.io.StringWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.example.xmlScientificPublicationEditor.util.RDF.StoreToRDF;
+import com.example.xmlScientificPublicationEditor.util.RDF.UpdateRDF;
 import org.exist.xmldb.EXistResource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -42,6 +45,9 @@ public class ScientificPublicationRepository {
 	public static String ScientificPublicationXSLPath = "src/main/resources/data/xslt/scientificPublication.xsl";
 	public static String ScientificPublicationXSL_FO_PATH = "src/main/resources/data/xsl-fo/scientificPublication_fo.xsl";
 	public static String ScientificPublicationXSL_PATH_NO_AUTHOR = "src/main/resources/data/xslt/scientificPublicationIDName.xsl";
+
+	public static String SC_NAMED_GRAPH_URI_PREFIX = "/example/scientificPublication/";
+	public static String XMLToRDFa = "src/main/resources/data/xmlToRDFa/ScientificPublicationToRDFa.xsl";
 
 	public static String EL_ROOT = "ns:scientificPublication";
 
@@ -221,5 +227,19 @@ public class ScientificPublicationRepository {
 		}
 		return retVal;
 	}
+
+	public void saveMetadata(StringWriter metadata, String scId) throws Exception {
+		StoreToRDF.store(metadata, SC_NAMED_GRAPH_URI_PREFIX + scId);
+	}
+	public void deleteMetadata(String scId) throws Exception {
+		UpdateRDF.delete(SC_NAMED_GRAPH_URI_PREFIX + scId);
+	}
+
+	public void updateMetadata(StringWriter metadata, String scId) throws Exception {
+		String url = SC_NAMED_GRAPH_URI_PREFIX + scId;
+		deleteMetadata(scId);
+		StoreToRDF.store(metadata, url);
+	}
+
 
 }

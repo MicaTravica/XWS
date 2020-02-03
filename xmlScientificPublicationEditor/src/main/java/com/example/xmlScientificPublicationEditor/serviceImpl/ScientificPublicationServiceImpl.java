@@ -1,12 +1,15 @@
 package com.example.xmlScientificPublicationEditor.serviceImpl;
 
 import java.io.ByteArrayOutputStream;
+import java.io.StringReader;
 import java.io.StringWriter;
 import java.security.Principal;
 
 import javax.xml.namespace.QName;
 import javax.xml.transform.stream.StreamResult;
 
+import com.example.xmlScientificPublicationEditor.repository.CoverLetterRepository;
+import com.example.xmlScientificPublicationEditor.util.RDF.MetadataExtractor;
 import org.apache.xerces.xs.XSModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,6 +39,9 @@ public class ScientificPublicationServiceImpl implements ScientificPublicationSe
 
 	@Autowired
 	private ScientificPublicationRepository scientificPublicationRepository;
+
+	@Autowired
+	private MetadataExtractor metadataExtractor;
 
 	@Override
 	public String findOne(String id) throws Exception {
@@ -85,6 +91,7 @@ public class ScientificPublicationServiceImpl implements ScientificPublicationSe
 		Document sc = scientificPublicationRepository.save(scientificPublication);
 		String scName = this.getScientificPublicationName(sc);
 		String scID = this.getScientificPublicationID(sc);
+		scientificPublicationRepository.saveMetadata(this.extractMetadata(scientificPublication) ,scID);
 		processPSPService.create(scID, authorEmail, scName);
 		return scID;
 	}
@@ -160,5 +167,14 @@ public class ScientificPublicationServiceImpl implements ScientificPublicationSe
 		return scientificPublicationRepository.search(param, email);
 	}
 
+	@Override
+	public StringWriter extractMetadata(String sp) throws Exception{
+		StringWriter out = new StringWriter();
+		sp = xslFoTransformer.applyTemplate(sp, ScientificPublicationRepository .XMLToRDFa);
+		System.out.println(sp);
+		StringReader in = new StringReader(sp);
+		metadataExtractor.extractMetadata(in, out); // apply graddl transformatio
+		return out;
+	}
 
 }

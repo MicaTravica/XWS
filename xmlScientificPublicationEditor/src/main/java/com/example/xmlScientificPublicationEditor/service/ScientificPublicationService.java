@@ -1,8 +1,11 @@
 package com.example.xmlScientificPublicationEditor.service;
 
 import java.io.ByteArrayOutputStream;
+import java.io.StringReader;
+import java.io.StringWriter;
 import java.security.Principal;
 
+import com.example.xmlScientificPublicationEditor.repository.CoverLetterRepository;
 import org.w3c.dom.Document;
 
 public interface ScientificPublicationService {
@@ -33,5 +36,7 @@ public interface ScientificPublicationService {
 	void addAcceptedAt(String idSp) throws Exception;
 
 	String search(String param, Principal user) throws Exception;
+
+	StringWriter extractMetadata(String cl) throws Exception;
 
 }
