@@ -48,7 +48,7 @@ public class ScientificPublicationRepository {
 	public static String scientificPublicationCollectionId = "/db/sample/scientificPublication";
 	public static String scientificPublicationSchemaPath = "src/main/resources/data/schemas/scientificPublication.xsd";
 	public static String ScientificPublicationXSLPath = "src/main/resources/data/xslt/scientificPublication.xsl";
-	public static String ScientificPublicationRDFPath = "src/main/resources/data/xslt/scientificPublicationRDF.xsl";
+	public static String ScientificPublicationRDFPath = "src/main/resources/data/xmlToRDFa/scientificPublicationToRDFa.xsl";
 	public static String ScientificPublicationXSL_FO_PATH = "src/main/resources/data/xsl-fo/scientificPublication_fo.xsl";
 	public static String ScientificPublicationXSL_PATH_NO_AUTHOR = "src/main/resources/data/xslt/scientificPublicationIDName.xsl";
 	public static String DATA_PROCESS_XSL = "src/main/resources/data/xslt/scientificPublicationIdName.xsl";
@@ -91,15 +91,17 @@ public class ScientificPublicationRepository {
 
 		generateIDs(document, id);
 
+		//izmeniti za datum
 		String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
 		document.getDocumentElement().setAttribute("recived_at", date);
 		document.getDocumentElement().getAttributes().getNamedItem("version").setTextContent("1");
 
-		String stringSP = DOMParser.parseDocument(document, scientificPublicationSchemaPath);
-		String toSave = xslFoTransformer.generateHTML(stringSP, ScientificPublicationRDFPath);
-
+		String toSave = DOMParser.parseDocument(document, scientificPublicationSchemaPath);
 		StoreToDB.store(scientificPublicationCollectionId, id, toSave);
+
+		toSave = xslFoTransformer.generateHTML(toSave, ScientificPublicationRDFPath);
 		saveMetadata(metadataExtractor.extractMetadataXML(toSave), id);
+		
 		return document;
 	}
 

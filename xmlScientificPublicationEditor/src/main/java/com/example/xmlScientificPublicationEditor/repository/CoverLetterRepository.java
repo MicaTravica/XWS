@@ -46,7 +46,7 @@ public class CoverLetterRepository {
     public static String coverLetterSchemaPath = "src/main/resources/data/schemas/coverLetter.xsd";
     public static String CoverLetterXSLPath = "src/main/resources/data/xslt/coverLetter.xsl";
     public static String CoverLetterXSL_FO_PATH = "src/main/resources/data/xsl-fo/coverLetter_fo.xsl";
-	public static String CoverLetterRDFPath = "src/main/resources/data/xslt/coverLetterRDF.xsl";
+	public static String CoverLetterRDFPath = "src/main/resources/data/xmlToRDFa/coverLettertToRDFa.xsl";
     public static String CV_NAMED_GRAPH_URI_PREFIX = "/example/coverLetter/";
 
 	public String findOne(String id) throws Exception {
@@ -84,10 +84,12 @@ public class CoverLetterRepository {
 		
 		document.getDocumentElement().getAttributes().getNamedItem("id").setTextContent(id);
 		document.getDocumentElement().setAttribute("processId", processId);
-		String stringCL = DOMParser.parseDocument(document, CoverLetterRepository.coverLetterSchemaPath);
-		String toSave = xslFoTransformer.generateHTML(stringCL, CoverLetterRepository.CoverLetterRDFPath);
 		
+		String toSave = DOMParser.parseDocument(document, CoverLetterRepository.coverLetterSchemaPath);
 		StoreToDB.store(coverLetterCollectionId, id, toSave);
+		
+
+		toSave = xslFoTransformer.generateHTML(toSave, CoverLetterRepository.CoverLetterRDFPath);
 		saveMetadata(metadataExtractor.extractMetadataXML(toSave), id);
 		
 		return id;
