@@ -28,7 +28,7 @@ export const docSpec = {
             }
         },
         'ns:caption': {
-            mustBeBefore: ['ns:authors', 'ns:abstract', 'ns:chapter', 'ns:references', 'ns:comments'],
+            mustBeBefore: ['ns:authors', 'ns:abstract', 'ns:chapter', 'ns:references', 'ns:comments', 'ns:dateMetaData'],
             canDropTo: ['ns:scientificPublication'],
         },
         'ns:value': {
@@ -55,7 +55,7 @@ export const docSpec = {
         },
         'ns:authors': {
             mustBeAfter: ['ns:caption'],
-            mustBeBefore: ['ns:abstract', 'ns:chapter', 'ns:references', 'ns:comments'],
+            mustBeBefore: ['ns:abstract', 'ns:chapter', 'ns:references', 'ns:comments', 'ns:dateMetaData'],
             canDropTo: ['ns:scientificPublication'],
             menu: [
                 {
@@ -71,7 +71,7 @@ export const docSpec = {
         },
         'ns:abstract': {
             mustBeAfter: ['ns:caption', 'ns:authors'],
-            mustBeBefore: ['ns:chapter', 'ns:references', 'ns:comments'],
+            mustBeBefore: ['ns:chapter', 'ns:references', 'ns:comments', 'ns:dateMetaData'],
             canDropTo: ['ns:scientificPublication'],
             menu: [{
                 caption: 'Append an <ns:paragraph>',
@@ -82,7 +82,7 @@ export const docSpec = {
         },
         'ns:chapter': {
             mustBeAfter: ['ns:caption', 'ns:authors', 'ns:abstract'],
-            mustBeBefore: ['ns:references', 'ns:comments'],
+            mustBeBefore: ['ns:references', 'ns:comments', 'ns:dateMetaData'],
             canDropTo: ['ns:scientificPublication'],
             menu: [
                 {
@@ -108,7 +108,7 @@ export const docSpec = {
         },
         'ns:references': {
             mustBeAfter: ['ns:caption', 'ns:authors', 'ns:abstract', 'ns:chapter'],
-            mustBeBefore: ['ns:comments'],
+            mustBeBefore: ['ns:comments', 'ns:dateMetaData'],
             canDropTo: ['ns:scientificPublication'],
             menu: [
                 {
@@ -123,7 +123,7 @@ export const docSpec = {
             ]
         },
         'ns:comments': {
-            mustBeAfter: ['ns:caption', 'ns:authors', 'ns:abstract', 'ns:chapter', 'ns:references'],
+            mustBeAfter: ['ns:caption', 'ns:authors', 'ns:abstract', 'ns:chapter', 'ns:references', 'ns:dateMetaData'],
             canDropTo: ['ns:scientificPublication'],
             menu: [{
                     caption: 'Delete this comments',

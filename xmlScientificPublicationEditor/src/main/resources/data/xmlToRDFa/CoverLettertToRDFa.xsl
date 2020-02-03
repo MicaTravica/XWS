@@ -11,19 +11,17 @@
         </xsl:copy>
     </xsl:template>
 
-    <xsl:variable name="coverLetterId">
-        <xsl:value-of select="coverLetter/@id"/>
-    </xsl:variable>
-
     <xsl:template match="ns:coverLetter">
         <ns:coverLetter
                 vocab="https://schema.org/CreativeWork"
                 about="localhost:8081/api/coverLetter/{@id}"
-                typeof="sh:CreativeWork">
+                typeof="sh:CreativeWork" 
+                href="localhost:8081/api/scientificPublication/process/{@processId}" 
+                rel="sh:about">
             <xsl:apply-templates select="node()|@*"/>
         </ns:coverLetter>
     </xsl:template>
-
+    
     <xsl:template match="//ns:date">
         <ns:date property="sh:dateCreated" datatype="sh:Date" content="{.}">
             <xsl:apply-templates select="node()|@*"/>
@@ -34,7 +32,7 @@
         <ns:author vocab="https://schema.org/CreativeWork"
                 typeof="sh:Person"
                 rel="sh:author"
-                href="localhost:8081/api/person/{@id}">
+                href="localhost:8081/api/person/{./ns:email}">
             <xsl:apply-templates select="node()|@*"/>
         </ns:author>
     </xsl:template>
@@ -43,7 +41,7 @@
         <ns:contactPerson vocab="https://schema.org/Person"
                           typeof="sh:Person"
                           rel="sh:director"
-                          href="localhost:8081/api/person/{@id}">
+                          href="localhost:8081/api/person/{./ns:email}">
             <xsl:apply-templates select="node()|@*"/>
         </ns:contactPerson>
     </xsl:template>

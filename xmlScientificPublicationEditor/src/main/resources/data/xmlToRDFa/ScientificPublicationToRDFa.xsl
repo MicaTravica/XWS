@@ -26,28 +26,25 @@
             <xsl:apply-templates select="node()|@*"/>
         </ns:caption>
     </xsl:template>
-
-    <xsl:variable name="keywords">
-        <xsl:for-each select="//ns:keywords/ns:keyword">
-            <xsl:if test="position() != 1">,</xsl:if>
-            <xsl:value-of select="."/>
-        </xsl:for-each>
-    </xsl:variable>
-
-    <xsl:template match="//ns:keywords">
-        <ns:keywords property="sh:keywords" datatype="sh:Text" content="{$keywords}">
-            <xsl:apply-templates select="node()|@*"/>
-        </ns:keywords>
-    </xsl:template>
-
+    
     <xsl:template match="//ns:authors">
-        <ns:authors>
-            <xsl:for-each select="//ns:authors/ns:author">
-                <ns:author property="sh:author" datatype="sh:Text" content="{concat(ns:name, ' ', ns:surname)}"/>
-            </xsl:for-each>
-        </ns:authors>
+        <xsl:for-each select="./ns:author">
+            <ns:author
+                property="sh:author" datatype="sh:Text" 
+                content="{concat(./ns:name, ' ', ./ns:surname)}">
+                <xsl:apply-templates select="node()|@*"/>
+            </ns:author>
+        </xsl:for-each>
     </xsl:template>
-
+    
+    <xsl:template match="//ns:keywords">
+        <xsl:for-each select="./ns:keyword">
+            <ns:keyword
+                property="sh:keywords" datatype="sh:Text">
+                <xsl:apply-templates select="node()|@*"/>
+            </ns:keyword>
+        </xsl:for-each>
+    </xsl:template>
 
     <xsl:template match="//ns:created_at">
         <ns:received_at property="sh:dateCreated" datatype="sh:Date" content="{.}">
@@ -66,13 +63,13 @@
             <xsl:apply-templates select="node()|@*"/>
         </accepted>
     </xsl:template>
-
+    
     <xsl:template match="//ns:references">
-        <ns:references>
             <xsl:for-each select="//ns:references/ns:reference">
-                <ns:reference property="sh:citation" datatype="sh:Text" content="{./ns:link}"/>
+                <xsl:if test="./ns:link">
+                    <ns:reference property="sh:citation" datatype="sh:Text" content="{./ns:link}"/>
+                </xsl:if>
             </xsl:for-each>
-        </ns:references>
     </xsl:template>
 
 

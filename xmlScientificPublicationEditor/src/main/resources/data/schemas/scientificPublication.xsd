@@ -50,20 +50,20 @@
                         </xs:sequence>
                     </xs:complexType>
                 </xs:element>
+                <xs:element name="dateMetaData">
+                    <xs:complexType>
+                        <xs:all>
+                            <xs:element name="created_at" type="xs:date"/>
+                            <xs:element minOccurs="0" name="recived_at" type="xs:date"/>
+                            <xs:element minOccurs="0" name="accepted_at" type="xs:date"/>
+                        </xs:all>
+                    </xs:complexType>
+                </xs:element>
                 <xs:element name="comments" minOccurs="0" maxOccurs="1">
                     <xs:complexType>
                         <xs:sequence>
                             <xs:element maxOccurs="unbounded" name="comment" type="TComment"/>
                         </xs:sequence>
-                    </xs:complexType>
-                </xs:element>
-                <xs:element name="DateMetaData">
-                    <xs:complexType>
-                        <xs:all>
-                            <xs:element minOccurs="0" name="recived_at" type="xs:date"/>
-                            <xs:element name="created_at" type="xs:date"/>
-                            <xs:element minOccurs="0" name="accepted_at" type="xs:date"/>
-                        </xs:all>
                     </xs:complexType>
                 </xs:element>
             </xs:sequence>

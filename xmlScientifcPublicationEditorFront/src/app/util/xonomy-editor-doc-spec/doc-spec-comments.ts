@@ -14,7 +14,7 @@ export const docSpec = {
             ]
         },
         'ns:comments': {
-            mustBeAfter: ['ns:caption', 'ns:authors', 'ns:abstract', 'ns:chapter', 'ns:references'],
+            mustBeAfter: ['ns:caption', 'ns:authors', 'ns:abstract', 'ns:chapter', 'ns:references', 'ns:dateMetaData'],
             canDropTo: ['ns:scientificPublication'],
             menu: [
                 {

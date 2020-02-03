@@ -131,7 +131,9 @@ public class CoverLetterRepository {
 		}
 		this.delete(id);
 		StoreToDB.store(coverLetterCollectionId, id, coverLetter);
-		updateMetadata(metadataExtractor.extractMetadataXML(coverLetter), id);
+
+		String toSave = xslFoTransformer.generateHTML(coverLetter, CoverLetterRepository.CoverLetterRDFPath);
+		updateMetadata(metadataExtractor.extractMetadataXML(toSave), id);
 		return id;
 	}
 
