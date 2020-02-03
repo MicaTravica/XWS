@@ -70,22 +70,11 @@ public class MetadataExtractor {
 	}
 	
 	
-	// public void test() throws Exception {
-
-	// 	System.out.println("[INFO] " + MetadataExtractor.class.getSimpleName());
-		
-	// 	String filePath = "src/main/resources/data/rdfa/output.rdf";
-		
-	// 	InputStream in = new FileInputStream(new File("src/main/resources/data/rdfa/contacts.xml")); 
-
-	// 	OutputStream out = new FileOutputStream(filePath);
-		
-	// 	extractMetadata(in, out);
-		
-	// 	System.out.println("[INFO] File \"" + filePath + "\" generated successfully.");
-		
-	// 	System.out.println("[INFO] End.");
-
-	// }
+	public StringWriter extractMetadataXML(String xml) throws Exception{
+		StringWriter out = new StringWriter(); 
+		StringReader in = new StringReader(xml); 
+		extractMetadata(in, out);
+		return out;
+	}
 
 }

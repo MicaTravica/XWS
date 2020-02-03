@@ -50,6 +50,15 @@
                         </xs:sequence>
                     </xs:complexType>
                 </xs:element>
+                <xs:element name="dateMetaData">
+                    <xs:complexType>
+                        <xs:all>
+                            <xs:element name="created_at" type="xs:date"/>
+                            <xs:element minOccurs="0" name="recived_at" type="xs:date"/>
+                            <xs:element minOccurs="0" name="accepted_at" type="xs:date"/>
+                        </xs:all>
+                    </xs:complexType>
+                </xs:element>
                 <xs:element name="comments" minOccurs="0" maxOccurs="1">
                     <xs:complexType>
                         <xs:sequence>
@@ -62,8 +71,6 @@
             <xs:attribute name="id" type="xs:string" use="required"/>
             <xs:attribute name="version" type="xs:positiveInteger" use="required"/>
             <xs:attribute default="true" name="tableOfContent" type="xs:boolean"/>
-            <xs:attribute name="accepted_at" type="xs:date"/>
-            <xs:attribute name="recived_at" type="xs:date"/>
             <xs:anyAttribute processContents="lax"/>
         </xs:complexType>
     </xs:element>
@@ -157,12 +164,11 @@
         <xs:attribute name="id" type="xs:string" use="required"/>
     </xs:complexType>
     <xs:complexType mixed="false" name="TComment">
-        <xs:simpleContent>
-            <xs:extension base="xs:string">
-                <xs:attribute name="id" type="xs:string" use="required"/>
-                <xs:anyAttribute/>
-            </xs:extension>
-        </xs:simpleContent>
+        <xs:choice>
+            <xs:element name="content" type="TParagraph"/>
+        </xs:choice>
+        <xs:attribute name="id" type="xs:string" use="required"/>
+        <xs:anyAttribute/>
     </xs:complexType>
     <xs:complexType name="TRichParagraph">
         <xs:complexContent mixed="false">

@@ -1,1 +1,23 @@
-<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:h="http://www.w3.org/1999/xhtml"/>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:h="http://www.w3.org/1999/xhtml">
+  <rdf:Description rdf:about="localhost:8081/api/scientificPublication/sp102">
+    <sh:version xmlns:sh="https://schema.org/" rdf:datatype="https://schema.org/Text">1</sh:version>
+  </rdf:Description>
+  <rdf:Description rdf:about="localhost:8081/api/scientificPublication/sp102">
+    <sh:headline xmlns:sh="https://schema.org/" rdf:datatype="https://schema.org/Text">value1</sh:headline>
+  </rdf:Description>
+  <rdf:Description rdf:about="localhost:8081/api/scientificPublication/sp102">
+    <sh:author xmlns:sh="https://schema.org/" rdf:datatype="https://schema.org/Text">Name Surname</sh:author>
+  </rdf:Description>
+  <rdf:Description rdf:about="localhost:8081/api/scientificPublication/sp102">
+    <sh:keywords xmlns:sh="https://schema.org/" rdf:datatype="https://schema.org/Text">keyword1</sh:keywords>
+  </rdf:Description>
+  <rdf:Description rdf:about="localhost:8081/api/scientificPublication/sp102">
+    <sh:citation xmlns:sh="https://schema.org/" rdf:datatype="https://schema.org/Text">flaj</sh:citation>
+  </rdf:Description>
+  <rdf:Description rdf:about="localhost:8081/api/scientificPublication/sp102">
+    <sh:citation xmlns:sh="https://schema.org/" rdf:datatype="https://schema.org/Text">fd</sh:citation>
+  </rdf:Description>
+  <rdf:Description rdf:about="localhost:8081/api/scientificPublication/sp102">
+    <sh:dateCreated xmlns:sh="https://schema.org/" rdf:datatype="https://schema.org/Date">2020-02-03</sh:dateCreated>
+  </rdf:Description>
+</rdf:RDF>

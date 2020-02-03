@@ -11,7 +11,6 @@
             <xs:element maxOccurs="unbounded" minOccurs="0" name="list" type="TList"/>
         </xs:choice>
         <xs:attribute name="id" type="xs:string" use="required"/>
-        <xs:anyAttribute processContents="lax"/>
     </xs:complexType>
     <xs:complexType name="TFormula">
         <xs:choice>

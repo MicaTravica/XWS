@@ -2,6 +2,7 @@ package com.example.xmlScientificPublicationEditor.repository;
 
 import static com.example.xmlScientificPublicationEditor.util.template.XUpdateTemplate.TARGET_NAMESPACE;
 
+import java.io.StringWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -25,6 +26,10 @@ import com.example.xmlScientificPublicationEditor.exception.ResourceNotFoundExce
 import com.example.xmlScientificPublicationEditor.service.IdGeneratorService;
 import com.example.xmlScientificPublicationEditor.serviceImpl.IdGeneratorServiceImpl;
 import com.example.xmlScientificPublicationEditor.util.DOMParser.DOMParser;
+import com.example.xmlScientificPublicationEditor.util.RDF.MetadataExtractor;
+import com.example.xmlScientificPublicationEditor.util.RDF.StoreToRDF;
+import com.example.xmlScientificPublicationEditor.util.RDF.UpdateRDF;
+import com.example.xmlScientificPublicationEditor.util.XSLFOTransformer.XSLFOTransformer;
 import com.example.xmlScientificPublicationEditor.util.existAPI.RetriveFromDB;
 import com.example.xmlScientificPublicationEditor.util.existAPI.StoreToDB;
 import com.example.xmlScientificPublicationEditor.util.existAPI.UpdateDB;
@@ -32,20 +37,28 @@ import com.example.xmlScientificPublicationEditor.util.existAPI.UpdateDB;
 @Repository
 public class ScientificPublicationRepository {
 
-	public static final String DATA_PROCESS_XSL = "src/main/resources/data/xslt/scientificPublicationIdName.xsl";
-
 	@Autowired
 	private IdGeneratorService idGeneratorService;
+	
+	@Autowired
+	private XSLFOTransformer xslFoTransformer;
+	
+	@Autowired
+	private MetadataExtractor metadataExtractor;
 
 	public static String scientificPublicationCollectionId = "/db/sample/scientificPublication";
 	public static String scientificPublicationSchemaPath = "src/main/resources/data/schemas/scientificPublication.xsd";
 	public static String ScientificPublicationXSLPath = "src/main/resources/data/xslt/scientificPublication.xsl";
+	public static String ScientificPublicationRDFPath = "src/main/resources/data/xmlToRDFa/scientificPublicationToRDFa.xsl";
 	public static String ScientificPublicationXSL_FO_PATH = "src/main/resources/data/xsl-fo/scientificPublication_fo.xsl";
 	public static String ScientificPublicationXSL_PATH_NO_AUTHOR = "src/main/resources/data/xslt/scientificPublicationIDName.xsl";
-
+	public static String DATA_PROCESS_XSL = "src/main/resources/data/xslt/scientificPublicationIdName.xsl";
+	public static String SP_NAMED_GRAPH_URI_PREFIX = "/example/scientificPublication/";
 	public static String EL_ROOT = "ns:scientificPublication";
-
-
+	public static String DATE_METADATA = "ns:dateMetaData";
+	public static String CREATED_AT = "ns:created_at";
+	public static String ACCEPTED_AT = "ns:accepted_at";
+	
 	public String findOne(String id) throws Exception {
 		String retVal = null;
 		String xpathExp = "//scientificPublication[@id=\"" + id + "\"]";
@@ -80,13 +93,27 @@ public class ScientificPublicationRepository {
 		document.getDocumentElement().getAttributes().getNamedItem("id").setTextContent(id);
 
 		generateIDs(document, id);
-
+		
 		String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-		document.getDocumentElement().setAttribute("recived_at", date);
+		NodeList metadata = document.getDocumentElement().getElementsByTagName(DATE_METADATA);
+		if(metadata.getLength() > 0) {
+			document.getDocumentElement().removeChild(metadata.item(0));
+		}
+		Element dateMetadata = document.createElement(DATE_METADATA);
+		Element createdAt = document.createElement(CREATED_AT);
+		createdAt.appendChild(document.createTextNode(date));
+
+		dateMetadata.appendChild(createdAt);
+		document.getDocumentElement().appendChild(dateMetadata);
+		
 		document.getDocumentElement().getAttributes().getNamedItem("version").setTextContent("1");
 
 		String toSave = DOMParser.parseDocument(document, scientificPublicationSchemaPath);
 		StoreToDB.store(scientificPublicationCollectionId, id, toSave);
+
+		toSave = xslFoTransformer.generateHTML(toSave, ScientificPublicationRDFPath);
+		saveMetadata(metadataExtractor.extractMetadataXML(toSave), id);
+		
 		return document;
 	}
 
@@ -162,6 +189,9 @@ public class ScientificPublicationRepository {
 		}
 		this.delete(id);
 		StoreToDB.store(scientificPublicationCollectionId, id, scientificPublication);
+
+		String toSave = xslFoTransformer.generateHTML(scientificPublication, ScientificPublicationRDFPath);
+		updateMetadata(metadataExtractor.extractMetadataXML(toSave), id);
 		return id;
 	}
 
@@ -182,11 +212,18 @@ public class ScientificPublicationRepository {
 
 	public void addAcceptedAt(String idSp) throws Exception {
 		String sp = findOne(idSp);
-		Document doc = DOMParser.buildDocument(sp, scientificPublicationSchemaPath);
-		String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-		doc.getDocumentElement().setAttribute("accepted_at", date);
-		update(DOMParser.parseDocument(doc, scientificPublicationSchemaPath));
+		Document document = DOMParser.buildDocument(sp, scientificPublicationSchemaPath);
 		
+		String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+		
+		NodeList metadata = document.getDocumentElement().getElementsByTagName(DATE_METADATA);
+		Element dateMetadata = (Element) metadata.item(0);
+		Element acceptedAt = document.createElement(ACCEPTED_AT);
+		
+		acceptedAt.appendChild(document.createTextNode(date));
+		dateMetadata.appendChild(acceptedAt);
+		
+		update(DOMParser.parseDocument(document, scientificPublicationSchemaPath));	
 	}
 
 	public String search(String param, String email) throws Exception {
@@ -254,7 +291,19 @@ public class ScientificPublicationRepository {
 
 		String toSave = DOMParser.parseDocument(doc, scientificPublicationSchemaPath);
 		StoreToDB.store(scientificPublicationCollectionId, id, toSave);
-
 	}
 
+	public void saveMetadata(StringWriter metadata, String id) throws Exception {
+		StoreToRDF.store(metadata, SP_NAMED_GRAPH_URI_PREFIX + id);
+	}
+
+	public void deleteMetadata(String id) throws Exception {
+		UpdateRDF.delete(SP_NAMED_GRAPH_URI_PREFIX + id);
+	}
+	
+	public void updateMetadata(StringWriter metadata, String id) throws Exception {
+		String url = SP_NAMED_GRAPH_URI_PREFIX + id;
+		deleteMetadata(id);
+		StoreToRDF.store(metadata, url);
+	}
 }
