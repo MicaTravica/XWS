@@ -2,6 +2,7 @@ package com.example.xmlScientificPublicationEditor.repository;
 
 import static com.example.xmlScientificPublicationEditor.util.template.XUpdateTemplate.TARGET_NAMESPACE;
 
+import java.io.StringWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -25,6 +26,9 @@ import com.example.xmlScientificPublicationEditor.exception.ResourceNotFoundExce
 import com.example.xmlScientificPublicationEditor.service.IdGeneratorService;
 import com.example.xmlScientificPublicationEditor.serviceImpl.IdGeneratorServiceImpl;
 import com.example.xmlScientificPublicationEditor.util.DOMParser.DOMParser;
+import com.example.xmlScientificPublicationEditor.util.RDF.MetadataExtractor;
+import com.example.xmlScientificPublicationEditor.util.RDF.StoreToRDF;
+import com.example.xmlScientificPublicationEditor.util.XSLFOTransformer.XSLFOTransformer;
 import com.example.xmlScientificPublicationEditor.util.existAPI.RetriveFromDB;
 import com.example.xmlScientificPublicationEditor.util.existAPI.StoreToDB;
 import com.example.xmlScientificPublicationEditor.util.existAPI.UpdateDB;
@@ -32,17 +36,23 @@ import com.example.xmlScientificPublicationEditor.util.existAPI.UpdateDB;
 @Repository
 public class ScientificPublicationRepository {
 
-	public static final String DATA_PROCESS_XSL = "src/main/resources/data/xslt/scientificPublicationIdName.xsl";
-
 	@Autowired
 	private IdGeneratorService idGeneratorService;
+	
+	@Autowired
+	private XSLFOTransformer xslFoTransformer;
+	
+	@Autowired
+	private MetadataExtractor metadataExtractor;
 
 	public static String scientificPublicationCollectionId = "/db/sample/scientificPublication";
 	public static String scientificPublicationSchemaPath = "src/main/resources/data/schemas/scientificPublication.xsd";
 	public static String ScientificPublicationXSLPath = "src/main/resources/data/xslt/scientificPublication.xsl";
+	public static String ScientificPublicationRDFPath = "src/main/resources/data/xslt/scientificPublicationRDF.xsl";
 	public static String ScientificPublicationXSL_FO_PATH = "src/main/resources/data/xsl-fo/scientificPublication_fo.xsl";
 	public static String ScientificPublicationXSL_PATH_NO_AUTHOR = "src/main/resources/data/xslt/scientificPublicationIDName.xsl";
-
+	public static String DATA_PROCESS_XSL = "src/main/resources/data/xslt/scientificPublicationIdName.xsl";
+	public static String SP_NAMED_GRAPH_URI_PREFIX = "/example/scientificPublication/";
 	public static String EL_ROOT = "ns:scientificPublication";
 
 
@@ -85,9 +95,16 @@ public class ScientificPublicationRepository {
 		document.getDocumentElement().setAttribute("recived_at", date);
 		document.getDocumentElement().getAttributes().getNamedItem("version").setTextContent("1");
 
-		String toSave = DOMParser.parseDocument(document, scientificPublicationSchemaPath);
+		String stringSP = DOMParser.parseDocument(document, scientificPublicationSchemaPath);
+		String toSave = xslFoTransformer.generateHTML(stringSP, ScientificPublicationRDFPath);
+
 		StoreToDB.store(scientificPublicationCollectionId, id, toSave);
+		saveMetadata(metadataExtractor.extractMetadataXML(toSave), id);
 		return document;
+	}
+
+	private void saveMetadata(StringWriter metadata, String id) throws Exception {
+		StoreToRDF.store(metadata, SP_NAMED_GRAPH_URI_PREFIX + id);
 	}
 
 	private void generateIDs(Document document, String id) throws Exception {

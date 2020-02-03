@@ -1,11 +1,20 @@
 <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:h="http://www.w3.org/1999/xhtml">
-  <rdf:Description rdf:about="localhost:8081/api/coverLetter/cl14">
-    <pred:writtenFor xmlns:pred="http://www.uns.ac.rs/Tim1/predicate/" rdf:resource="localhost:8081/api/scientificPublication/process/20"/>
+  <rdf:Description rdf:about="localhost:8081/api/scientificPublication/sp87">
+    <pred:caption xmlns:pred="http://www.uns.ac.rs/Tim1/predicate/" rdf:datatype="http://www.w3.org/2000/01/rdf-schema#Literal">value1</pred:caption>
   </rdf:Description>
-  <rdf:Description rdf:about="localhost:8081/api/coverLetter/cl14">
-    <pred:writtenAt xmlns:pred="http://www.uns.ac.rs/Tim1/predicate/" rdf:datatype="http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral">2020-02-03</pred:writtenAt>
+  <rdf:Description rdf:about="localhost:8081/api/scientificPublication/sp87">
+    <pred:writtenBy xmlns:pred="http://www.uns.ac.rs/Tim1/predicate/" rdf:resource="localhost:8081/api/person/email1@hk.hk"/>
   </rdf:Description>
-  <rdf:Description rdf:about="localhost:8081/api/coverLetter/cl14">
+  <rdf:Description rdf:about="localhost:8081/api/scientificPublication/sp87">
     <pred:writtenBy xmlns:pred="http://www.uns.ac.rs/Tim1/predicate/" rdf:resource="localhost:8081/api/person/mica97@email.com"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="localhost:8081/api/scientificPublication/sp87">
+    <pred:keyword xmlns:pred="http://www.uns.ac.rs/Tim1/predicate/" rdf:datatype="http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral">keyword1</pred:keyword>
+  </rdf:Description>
+  <rdf:Description rdf:about="localhost:8081/api/scientificPublication/sp87">
+    <pred:keyword xmlns:pred="http://www.uns.ac.rs/Tim1/predicate/" rdf:datatype="http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral">dfsa</pred:keyword>
+  </rdf:Description>
+  <rdf:Description rdf:about="localhost:8081/api/scientificPublication/sp87">
+    <pred:keyword xmlns:pred="http://www.uns.ac.rs/Tim1/predicate/" rdf:datatype="http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral">fdsa</pred:keyword>
   </rdf:Description>
 </rdf:RDF>

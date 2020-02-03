@@ -2,7 +2,7 @@
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.uns.ac.rs/Tim1"
     xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning"
     targetNamespace="http://www.uns.ac.rs/Tim1" elementFormDefault="qualified" vc:minVersion="1.1"
-    xmlns:rdfa="http://www.w3.org/ns/rdfa">
+    >
 
     <xs:include schemaLocation="paragraph.xsd"/>
     <xs:include schemaLocation="person.xsd"/>
