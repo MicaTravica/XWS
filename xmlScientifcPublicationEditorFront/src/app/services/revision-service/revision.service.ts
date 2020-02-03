@@ -27,8 +27,8 @@ export class RevisionService {
       });
   }
 
-  addRevision(revisionXml: string, processId: string) {
-    const param = new HttpParams().append('processId', processId);
+  addRevision(revisionXml: string, processId: string, willComment: string) {
+    const param = new HttpParams().append('processId', processId).append('willComment', willComment);
     return this.http.post(this.revisionUrl, revisionXml, {
       headers: authHttpOptions(this.authService.getToken()),
       responseType: 'text',
@@ -36,7 +36,7 @@ export class RevisionService {
     });
   }
 
-  upload(data: File, processId: string) {
-    return this.uploadService.upload(data, this.revisionUrl + 'upload', processId);
+  upload(data: File, processId: string, willComment: string) {
+    return this.uploadService.uploadQuestionnaire(data, this.revisionUrl + 'upload', processId, willComment);
   }
 }

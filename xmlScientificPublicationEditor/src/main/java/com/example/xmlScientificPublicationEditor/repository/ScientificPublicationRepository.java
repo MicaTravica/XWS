@@ -260,7 +260,7 @@ public class ScientificPublicationRepository {
 	}
 
 
-	public void saveComments(Document doc, Element com) throws Exception {
+	public String saveComments(Document doc, Element com) throws Exception {
 		String id = "sp" + idGeneratorService.getId("scientificPublication");
 		String spId = doc.getDocumentElement().getAttributes().getNamedItem("id").getTextContent();
 
@@ -280,7 +280,6 @@ public class ScientificPublicationRepository {
 				if (!resultSet.getIterator().hasMoreResources()) {
 					throw new Exception("You must use for ref comment id that exist in file!");
 				}
-
 			}
 			commentEl.appendChild(doc.createTextNode(comments.item(i).getTextContent()));
 			commentEl.setAttribute("ref", ref);
@@ -288,9 +287,9 @@ public class ScientificPublicationRepository {
 		}
 		doc.getDocumentElement().appendChild(commentsElement);
 		doc.getDocumentElement().getAttributes().getNamedItem("id").setTextContent(id);
-
 		String toSave = DOMParser.parseDocument(doc, scientificPublicationSchemaPath);
 		StoreToDB.store(scientificPublicationCollectionId, id, toSave);
+		return id;
 	}
 
 	public void saveMetadata(StringWriter metadata, String id) throws Exception {

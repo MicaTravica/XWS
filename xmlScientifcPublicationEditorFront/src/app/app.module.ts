@@ -30,6 +30,7 @@ import { AddReviewersComponent } from './revisions/add-reviewers/add-reviewers.c
 import { SeeRevisionComponent } from './revisions/see-revision/see-revision.component';
 import { NewVersionComponent } from './publication/new-version/new-version.component';
 import { AddCommentsComponent } from './revisions/add-comments/add-comments.component';
+import { AddCommentsDialogComponent } from './core/dialogs/add-comments-dialog/add-comments-dialog.component';
 
 @NgModule({
   declarations: [
@@ -50,7 +51,8 @@ import { AddCommentsComponent } from './revisions/add-comments/add-comments.comp
     AddReviewersComponent,
     SeeRevisionComponent,
     NewVersionComponent,
-    AddCommentsComponent
+    AddCommentsComponent,
+    AddCommentsDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -65,6 +67,9 @@ import { AddCommentsComponent } from './revisions/add-comments/add-comments.comp
     AuthService,
     LoginGuard,
     RoleGuard
+  ],
+  entryComponents: [
+    AddCommentsDialogComponent
   ],
   bootstrap: [AppComponent]
 })

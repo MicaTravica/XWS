@@ -188,7 +188,8 @@ public class ScientificPublicationServiceImpl implements ScientificPublicationSe
 		Element lv = (Element) lastVersion;
 		Document doc = getSpFromProcessForReviewer(lv, email);
 		Element com = (Element) nodeComments.item(0);
-		scientificPublicationRepository.saveComments(doc, com);
+		String commentedSpId = scientificPublicationRepository.saveComments(doc, com);
+		processPSPService.saveCommentReview(processId, email, commentedSpId);
 	}
 
 	private Document getSpFromProcessForReviewer(Element lastVersion, String email) throws Exception {

@@ -50,6 +50,7 @@
                 <xs:restriction base="xs:string">
                     <xs:enumeration value="inProgress"/>
                     <xs:enumeration value="Done"/>
+                    <xs:enumeration value="waitingComments"/>
                 </xs:restriction>
             </xs:simpleType>
         </xs:attribute>

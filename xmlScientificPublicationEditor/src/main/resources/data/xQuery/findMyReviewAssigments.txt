@@ -9,7 +9,7 @@ where $version/@version = $lastVersion
 let $lastVersionData := $version
 for $reviewAssigment in $lastVersionData/reviewAssignments//reviewAssigment
 let $review := $reviewAssigment/review
-where $review/idReviewer = $REVIWER_ID and $reviewAssigment/@state != "rejected" and $review/@state="inProgress"
+where $review/idReviewer = $REVIWER_ID and $reviewAssigment/@state != "rejected" and $review/@state !="Done"
 
 return
     <processPSP>
