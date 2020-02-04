@@ -75,11 +75,12 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
 	}
 
 	@Override
-	public String save(String questionnaire, String processId, String reviewerEmail) throws Exception {
+	public String save(String questionnaire, String processId,
+					   String reviewerEmail, Boolean willComment) throws Exception {
 		String[] emails = new String[1];
 		emails[0] =  reviewerEmail;
 		String qId = questionnaireRepository.save(questionnaire);
-		String scName = processPSPService.saveQuestionnaireToProcessPSP(processId, reviewerEmail, qId);
+		String scName = processPSPService.saveQuestionnaireToProcessPSP(processId, reviewerEmail, qId, willComment);
 //		questionnaireRepository.saveMetadata(this.extractMetadata(questionnaire), qId);
 		if(scName != null) {
 			this.notificationService.letterOfThanks(emails, scName);

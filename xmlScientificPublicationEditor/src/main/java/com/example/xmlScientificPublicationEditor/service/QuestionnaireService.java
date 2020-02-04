@@ -10,7 +10,8 @@ public interface QuestionnaireService {
 
     String findOne(String id) throws Exception;
 
-	String save(String questionnaire, String processId, String reviewerEmail) throws Exception;
+	String save(String questionnaire, String processId,
+				String reviewerEmail, Boolean willComment) throws Exception;
 
 	String update(String questionnaire) throws Exception;
 

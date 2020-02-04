@@ -50,19 +50,24 @@ public class QuestionnaireController extends BaseController {
 			consumes = MediaType.APPLICATION_XML_VALUE,
 			produces = MediaType.APPLICATION_XML_VALUE)
 	public ResponseEntity<String> addQuestionnaire(
+			@RequestParam(("willComment")) Boolean willComment,
 			@RequestParam(("processId")) String processId,
 			@RequestBody String q,
 			Principal reviewer) throws Exception {
-		String id = questionnaireService.save(q, processId, reviewer.getName());
+		String id = questionnaireService.save(q, processId, reviewer.getName(), willComment);
 		return new ResponseEntity<>(String.format("You succesfully add Questionnaire with id %s", id), HttpStatus.OK);
 	}
 
 	@PostMapping(value="/questionnaire/upload", 
 			consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
 			produces = MediaType.APPLICATION_XML_VALUE)
-	public ResponseEntity<String> uploadQuestionnaire(@RequestParam(("processId")) String processId, @RequestParam(("file")) MultipartFile q, Principal reviewer) throws Exception {
+	public ResponseEntity<String> uploadQuestionnaire(
+			@RequestParam(("willComment")) Boolean willComment,
+			@RequestParam(("processId")) String processId,
+			@RequestParam(("file")) MultipartFile q,
+			Principal reviewer) throws Exception {
 		String file = MyFile.readFile(q);
-		String id = questionnaireService.save(file, processId, reviewer.getName());
+		String id = questionnaireService.save(file, processId, reviewer.getName(), willComment);
 		return new ResponseEntity<>(String.format("You succesfully add Questionnaire with id %s",id), HttpStatus.OK);
 	}
 

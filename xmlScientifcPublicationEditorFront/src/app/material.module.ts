@@ -44,7 +44,8 @@ import {
     MatCheckboxModule,
     MatTabsModule,
     MatDialogModule,
-    MatRadioModule
+    MatRadioModule,
+    MatDialogModule
   ],
   exports: [
     MatButtonModule,
@@ -66,7 +67,8 @@ import {
     MatCheckboxModule,
     MatTabsModule,
     MatDialogModule,
-    MatRadioModule
+    MatRadioModule,
+    MatDialogModule
   ]
 })
 export class MaterialModule {}

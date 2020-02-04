@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ProcessPSPService } from 'src/app/services/processPSP/process-psp.service';
 import { Router } from '@angular/router';
-
 declare var require: any;
 const convert = require('xml-js');
+
 
 @Component({
   selector: 'app-for-revision',
@@ -110,6 +110,10 @@ export class ForRevisionComponent implements OnInit {
 
   addReview(sp: any) {
     this.router.navigate(['add_revision', sp.processId]);
+  }
+
+  addComments(sp: any) {
+    this.router.navigate(['add_comments', sp.processId]);
   }
 
 

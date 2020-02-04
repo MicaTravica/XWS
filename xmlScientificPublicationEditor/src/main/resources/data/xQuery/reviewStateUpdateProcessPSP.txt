@@ -11,4 +11,4 @@ where $reviewAssigment/review/idReviewer = $REVIEWER_EMAIL
 let $review := $reviewAssigment/review
 where $review/@state != "Done"
 return
-     update replace $reviewAssigment/review/@state with 'Done'
+     update replace $reviewAssigment/review/@state with $PROCESS_STATE
