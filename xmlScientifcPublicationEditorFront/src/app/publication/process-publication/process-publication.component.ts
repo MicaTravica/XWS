@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ProcessPSPService } from 'src/app/services/processPSP/process-psp.service';
+import { PublicationService } from 'src/app/services/publication-service/publication.service';
+import { OpenServiceService } from 'src/app/services/open-service/open-service.service';
+import { RevisionService } from 'src/app/services/revision-service/revision.service';
 
 
 declare var require: any;
@@ -18,7 +21,10 @@ export class ProcessPublicationComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private processService: ProcessPSPService
+    private processService: ProcessPSPService,
+    private publicationService: PublicationService,
+    private openService: OpenServiceService,
+    private revisionService: RevisionService
   ) { }
 
   ngOnInit() {
@@ -74,5 +80,51 @@ export class ProcessPublicationComponent implements OnInit {
     let obj = { process: xmlJson };
     const retVal = convert.js2xml(obj, { compact: true, spaces: 4 });
     return retVal;
+  }
+
+  xmlCom(id: string) {
+    this.publicationService.xmlVersion(id).subscribe(
+      (data: any) => {
+        this.openService.xml(data);
+      }
+    );
+  }
+
+
+  htmlCom(id: string) {
+    this.publicationService.htmlVersion(id).subscribe(
+      (data: any) => {
+        this.openService.html(data);
+      });
+  }
+
+  pdfCom(id: string) {
+    this.publicationService.pdfVersion(id).subscribe(
+      (data: any) => {
+        this.openService.pdf(data);
+      });
+  }
+
+  xmlQue(id: string) {
+    this.revisionService.xml(id).subscribe(
+      (data: any) => {
+        this.openService.xml(data);
+      }
+    );
+  }
+
+
+  htmlQue(id: string) {
+    this.revisionService.html(id).subscribe(
+      (data: any) => {
+        this.openService.html(data);
+      });
+  }
+
+  pdfQue(id: string) {
+    this.revisionService.pdf(id).subscribe(
+      (data: any) => {
+        this.openService.pdf(data);
+      });
   }
 }

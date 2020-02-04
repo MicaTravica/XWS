@@ -38,4 +38,22 @@ public interface ScientificPublicationService {
 
 	void saveComments(String file, String name, String processId) throws Exception;
 
+	String findOneByProcessId(String id, Object object) throws Exception;
+
+	String findOneByProcessIdHTML(String id, Object object) throws Exception;
+
+	ByteArrayOutputStream findOneByProcessIdPDF(String id, Object object) throws Exception;
+
+	String findOnePub(String id) throws Exception;
+
+	String findOneByVersion(String id, String name) throws Exception;
+
+	String findOneByVersionHTML(String id, String name) throws Exception;
+
+	ByteArrayOutputStream findOneByVersionPDF(String id, String name) throws Exception;
+
+	String getSPReviewHTML(String processId, String name) throws Exception;
+
+	ByteArrayOutputStream getSPReviewPDF(String processId, String name) throws Exception;
+
 }

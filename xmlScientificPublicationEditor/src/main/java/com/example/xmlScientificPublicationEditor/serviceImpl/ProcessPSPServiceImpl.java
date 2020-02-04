@@ -229,9 +229,8 @@ public class ProcessPSPServiceImpl implements ProcessPSPService {
     }
 
     @Override
-    public String getLastVersionNumber(String processId) throws Exception {
-        // TODO Auto-generated method stub
-        return null;
+    public String getLastVersionNumber(Document process) throws Exception {
+        return processPSPRepo.getLastVersionNumber(process);
     }
 
     @Override
@@ -242,10 +241,11 @@ public class ProcessPSPServiceImpl implements ProcessPSPService {
     return process;
     }
 
-    @Override
-    public String getProcessPSPCSAuthor(Document process) {
-        return null;
-    }
+	@Override
+	public String getProcessPSPCSAuthor(Document process) {
+		return process.getDocumentElement().getAttributes().getNamedItem(ProcessPSPRepository.PROCESS_AUTHOR_SP)
+				.getTextContent();
+	}
 
     @Override
     public String findForPublishing() throws Exception{

@@ -4,13 +4,13 @@ return
 	<search>
 		{
 			for $p in $process/processPSP
-				where $p/@state = 'published' or $p/@authorEmail = $AUTH
+				where $p/@state = 'published' or ($p/@authorEmail = $AUTH and not($p/@state = 'deleted'))
 				for $v in $p/versions/version
 					where $v/@version = $p/@lastVersion
 						for $sp in $sps/scientificPublication
 							where $v/scientificPublication = $sp/@id and $sp//*[contains(text(), $PARAM)]
 							return <sp>
-										<id>{data($sp/@id)}</id>
+										<id>{data($p/@id)}</id>
 										<name>{data($sp/caption/value)}</name>
 									</sp>
 		}

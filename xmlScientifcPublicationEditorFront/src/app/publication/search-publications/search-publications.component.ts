@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { PublicationService } from 'src/app/services/publication-service/publication.service';
+import { DomSanitizer } from '@angular/platform-browser';
+import { OpenServiceService } from 'src/app/services/open-service/open-service.service';
 
 declare var require: any;
 const convert = require('xml-js');
@@ -14,12 +16,14 @@ export class SearchPublicationsComponent implements OnInit {
 
   searchForm: FormGroup;
   publications = [];
+  res: any;
 
   constructor(
     private fb: FormBuilder,
-    private publicationService: PublicationService
+    private publicationService: PublicationService,
+    private openService: OpenServiceService
   ) {
-    this.searchForm = fb.group({
+    this.searchForm = this.fb.group({
       searchType: 'regular',
       search: ''
     });
@@ -59,5 +63,29 @@ export class SearchPublicationsComponent implements OnInit {
   doAdvancedSearch() {
     console.log(this.searchForm.value.search);
   }
+
+  xml(id: string) {
+    this.publicationService.xml(id).subscribe(
+      (data: any) => {
+        this.openService.xml(data);
+      }
+    );
+  }
+
+
+  html(id: string) {
+    this.publicationService.html(id).subscribe(
+      (data: any) => {
+        this.openService.html(data);
+      });
+  }
+
+  pdf(id: string) {
+    this.publicationService.pdf(id).subscribe(
+      (data: any) => {
+        this.openService.pdf(data);
+      });
+  }
+
 }
 

@@ -1,0 +1,10 @@
+let $process := collection("/db/sample/processPSP")
+let $sps := collection("/db/sample/scientificPublication")
+for $p in $process/processPSP
+where $p/@id = $ID
+where $p/@state = 'published' or ($p/@authorEmail = $AUTH and not($p/@state = 'deleted')) or $p/idRedactor = $REDACTOR
+	for $v in $p/versions/version
+		where $v/@version = $p/@lastVersion
+			for $sp in $sps/scientificPublication
+				where $v/scientificPublication = $sp/@id 
+					return $sp 

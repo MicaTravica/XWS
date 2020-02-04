@@ -45,7 +45,7 @@ export class ProcessPSPService {
   }
 
   getProcess(id: string) {
-    return this.http.get(this.url + '/' + id,
+    return this.http.get(this.url + '/ev/' + id,
       {
         headers: authHttpOptions(this.authService.getToken()),
         responseType: 'text'
@@ -86,7 +86,7 @@ export class ProcessPSPService {
   }
 
   acceptRejectAssigmentReview(acceptRejectData: string) {
-    return this.http.post(this.url + '/acceptRejectAssigmentReview', acceptRejectData, 
+    return this.http.post(this.url + '/acceptRejectAssigmentReview', acceptRejectData,
       {
         headers: authHttpOptions(this.authService.getToken()),
         responseType: 'text'
@@ -95,7 +95,7 @@ export class ProcessPSPService {
 
   retractScientificPublication(processId: string) {
     const param = new HttpParams().append('processId', processId);
-    return this.http.put(this.url+ '/retract', null, {
+    return this.http.put(this.url + '/retract', null, {
       headers: authHttpOptions(this.authService.getToken()),
       responseType: 'text',
       params: param
@@ -104,7 +104,7 @@ export class ProcessPSPService {
 
   deleteScientificPublication(processId: string) {
     const param = new HttpParams().append('processId', processId);
-    return this.http.put(this.url+ '/delete', null, {
+    return this.http.put(this.url + '/delete', null, {
       headers: authHttpOptions(this.authService.getToken()),
       responseType: 'text',
       params: param

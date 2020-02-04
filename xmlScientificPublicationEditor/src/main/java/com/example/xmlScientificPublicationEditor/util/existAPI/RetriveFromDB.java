@@ -1,21 +1,19 @@
 package com.example.xmlScientificPublicationEditor.util.existAPI;
 
-import org.xmldb.api.DatabaseManager;
-import org.xmldb.api.base.Collection;
-import org.xmldb.api.base.CompiledExpression;
-import org.xmldb.api.base.Database;
-import org.xmldb.api.base.ResourceSet;
-import org.xmldb.api.base.XMLDBException;
-import org.xmldb.api.modules.CollectionManagementService;
-import org.xmldb.api.modules.XPathQueryService;
-import org.xmldb.api.modules.XQueryService;
-
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashMap;
+
+import org.xmldb.api.DatabaseManager;
+import org.xmldb.api.base.Collection;
+import org.xmldb.api.base.Database;
+import org.xmldb.api.base.ResourceSet;
+import org.xmldb.api.base.XMLDBException;
+import org.xmldb.api.modules.XPathQueryService;
+import org.xmldb.api.modules.XQueryService;
 
 import com.example.xmlScientificPublicationEditor.util.AuthenticationUtilities;
 import com.example.xmlScientificPublicationEditor.util.AuthenticationUtilities.ConnectionProperties;
@@ -100,7 +98,7 @@ public class RetriveFromDB {
             xqueryService.setNamespace("", TARGET_NAMESPACE);
 
             xqueryExpression = readFile(xQueryExpPath, StandardCharsets.UTF_8);
-            System.out.println(xqueryExpression);
+            
             // compile and execute the expression
 
             // za svaki query su drugaciji parametri koje saljemo.
@@ -108,8 +106,7 @@ public class RetriveFromDB {
             {
                 xqueryService.declareVariable(param, parameterMap.get(param));
             }
-            CompiledExpression compiledXquery = xqueryService.compile(xqueryExpression);
-//            result = xqueryService.execute(compiledXquery);
+            
             result = xqueryService.query(xqueryExpression);
         } finally {
         	

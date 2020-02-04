@@ -62,21 +62,20 @@ public class ScientificPublicationServiceImpl implements ScientificPublicationSe
 	}
 	
 	@Override
+	public String findOnePub(String id) throws Exception {
+		return scientificPublicationRepository.findOnePub(id);
+	}
+	
+	@Override
 	public String findOneHTML(String id) throws Exception {
-		String sp = scientificPublicationRepository.findOne(id);
-		if (sp == null) {
-			throw new ResourceNotFoundException(String.format("Scientific publication with id %s", id));
-		}
+		String sp = findOnePub(id);
 		String spHTML = xslFoTransformer.generateHTML(sp, ScientificPublicationRepository.ScientificPublicationXSLPath);
 		return spHTML;
 	}
 
 	@Override
 	public ByteArrayOutputStream findOnePDF(String id) throws Exception {
-		String sp = scientificPublicationRepository.findOne(id);
-		if (sp == null) {
-			throw new ResourceNotFoundException(String.format("Scientific publication with id %s", id));
-		}
+		String sp = findOnePub(id);
 		ByteArrayOutputStream spPDF = xslFoTransformer.generatePDF(sp,
 				ScientificPublicationRepository.ScientificPublicationXSL_FO_PATH);
 		return spPDF;
@@ -162,20 +161,6 @@ public class ScientificPublicationServiceImpl implements ScientificPublicationSe
 		return scientificPublicationRepository.search(param, email);
 	}
 
-
-	@Override
-	public String getSPReview(String processId, String email) throws Exception {
-		Document document = processPSPService.findOneById(processId);
-		Node lastVersion = processPSPService.getLastVersion(document);
-		Element lv = (Element) lastVersion;
-		Document dom = getSpFromProcessForReviewer(lv, email);
-		Element authors = (Element) dom.getDocumentElement().getElementsByTagName(IdGeneratorServiceImpl.AUTHORS)
-				.item(0);
-		dom.getDocumentElement().removeChild(authors);
-		return DOMParser.parseDocumentWithoutSchema(dom);
-	}
-
-
 	@Override
 	public void saveComments(String file, String email, String processId) throws Exception {
 		Document comments = DOMParser.buildDocumentWithOutSchema(file);
@@ -210,5 +195,74 @@ public class ScientificPublicationServiceImpl implements ScientificPublicationSe
 				lastVersion.getElementsByTagName(ProcessPSPRepository.ScientificPublicationFiled).item(0).getTextContent());
 		return DOMParser.buildDocument(sp, ScientificPublicationRepository.scientificPublicationSchemaPath);
 	}
+
+
+	@Override
+	public String findOneByProcessId(String id, Object user) throws Exception {
+		return scientificPublicationRepository.findOneByProcessId(id, user);
+	}
+
+
+	@Override
+	public String findOneByProcessIdHTML(String id, Object user) throws Exception {
+		String sp = findOneByProcessId(id, user);
+		return xslFoTransformer.generateHTML(sp, ScientificPublicationRepository.ScientificPublicationXSLPath);	
+	}
+
+
+	@Override
+	public ByteArrayOutputStream findOneByProcessIdPDF(String id, Object user) throws Exception {
+		String sp = findOneByProcessId(id, user);
+		return xslFoTransformer.generatePDF(sp,
+				ScientificPublicationRepository.ScientificPublicationXSL_FO_PATH);
+	}
+
+
+	@Override
+	public String findOneByVersion(String id, String name) throws Exception {
+		return scientificPublicationRepository.findOneByVersion(id, name);
+	}
+
+
+	@Override
+	public String findOneByVersionHTML(String id, String name) throws Exception {
+		String sp = findOneByVersion(id, name);
+		return xslFoTransformer.generateHTML(sp, ScientificPublicationRepository.ScientificPublicationXSLPath);	
+	}
+
+
+	@Override
+	public ByteArrayOutputStream findOneByVersionPDF(String id, String name) throws Exception {
+		String sp = findOneByVersion(id, name);
+		return xslFoTransformer.generatePDF(sp,
+				ScientificPublicationRepository.ScientificPublicationXSL_FO_PATH);
+	}
+
+	@Override
+	public String getSPReview(String processId, String email) throws Exception {
+		Document document = processPSPService.findOneById(processId);
+		Node lastVersion = processPSPService.getLastVersion(document);
+		Element lv = (Element) lastVersion;
+		Document dom = getSpFromProcessForReviewer(lv, email);
+		Element authors = (Element) dom.getDocumentElement().getElementsByTagName(IdGeneratorServiceImpl.AUTHORS)
+				.item(0);
+		dom.getDocumentElement().removeChild(authors);
+		return DOMParser.parseDocumentWithoutSchema(dom);
+	}
+	
+	@Override
+	public String getSPReviewHTML(String processId, String name) throws Exception {
+		String sp = getSPReview(processId, name);
+		return xslFoTransformer.generateHTML(sp, ScientificPublicationRepository.ScientificPublicationXSLPath);	
+	}
+
+
+	@Override
+	public ByteArrayOutputStream getSPReviewPDF(String processId, String name) throws Exception {
+		String sp = getSPReview(processId, name);
+		return xslFoTransformer.generatePDF(sp,
+				ScientificPublicationRepository.ScientificPublicationXSL_FO_PATH);
+	}
+
 
 }

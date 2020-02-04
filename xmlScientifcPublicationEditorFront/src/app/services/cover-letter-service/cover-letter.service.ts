@@ -41,4 +41,28 @@ export class CoverLetterService {
   upload(file: File, processId: string) {
     return this.uploadService.upload(file, this.url + '/upload', processId);
   }
+
+  xml(id: string) {
+    return this.http.get(this.url + '/' + id,
+      {
+        headers: authHttpOptions(this.authService.getToken()),
+        responseType: 'text'
+      });
+  }
+
+  html(id: string) {
+    return this.http.get(this.url + '/html/' + id,
+      {
+        headers: authHttpOptions(this.authService.getToken()),
+        responseType: 'text'
+      });
+  }
+
+  pdf(id: string) {
+    return this.http.get(this.url + '/pdf/' + id,
+      {
+        headers: authHttpOptions(this.authService.getToken()),
+        responseType: 'blob'
+      });
+  }
 }

@@ -17,9 +17,9 @@
             <mat-card-title>{{sp.name}}</mat-card-title>
         </mat-card-header>
         <mat-card-actions>
-            <a mat-raised-button routerLink=".">XML</a>
-            <a mat-raised-button routerLink=".">HTML</a>
-            <a mat-raised-button routerLink=".">PDF</a>
+            <a mat-raised-button (click)="xml(sp.id)">XML</a>
+            <a mat-raised-button (click)="html(sp.id)">HTML</a>
+            <a mat-raised-button (click)="pdf(sp.id)">PDF</a>
         </mat-card-actions>
     </mat-card>
 </div>

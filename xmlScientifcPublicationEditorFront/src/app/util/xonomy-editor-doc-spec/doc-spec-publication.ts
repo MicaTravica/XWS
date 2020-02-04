@@ -766,7 +766,7 @@ export const docSpec = {
                 {
                     caption: 'Add @height="100"',
                     action: Xonomy.newAttribute,
-                    actionParameter: { name: 'nheight', value: '100' },
+                    actionParameter: { name: 'height', value: '100' },
                     hideIf: function (jsElement) {
                         return jsElement.hasAttribute('height');
                     }

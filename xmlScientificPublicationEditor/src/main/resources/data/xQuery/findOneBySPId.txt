@@ -1,0 +1,9 @@
+let $process := collection("/db/sample/processPSP")
+let $sps := collection("/db/sample/scientificPublication")
+for $p in $process/processPSP
+where $p/@state = 'published'
+	for $v in $p/versions/version
+		where $v/scientificPublication = $ID and $v/@version = $p/@lastVersion
+			for $sp in $sps/scientificPublication
+				where $sp/@id = $ID 
+					return $sp 

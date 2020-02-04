@@ -39,4 +39,52 @@ export class RevisionService {
   upload(data: File, processId: string) {
     return this.uploadService.upload(data, this.revisionUrl + 'upload', processId);
   }
+
+  xml(id: string) {
+    return this.http.get(this.revisionUrl + '/' + id,
+      {
+        headers: authHttpOptions(this.authService.getToken()),
+        responseType: 'text'
+      });
+  }
+
+  html(id: string) {
+    return this.http.get(this.revisionUrl + '/html/' + id,
+      {
+        headers: authHttpOptions(this.authService.getToken()),
+        responseType: 'text'
+      });
+  }
+
+  pdf(id: string) {
+    return this.http.get(this.revisionUrl + '/pdf/' + id,
+      {
+        headers: authHttpOptions(this.authService.getToken()),
+        responseType: 'blob'
+      });
+  }
+
+  xmlM(id: string, version: string) {
+    return this.http.get(this.revisionUrl + '/m/' + id + '/' + version,
+      {
+        headers: authHttpOptions(this.authService.getToken()),
+        responseType: 'text'
+      });
+  }
+
+  htmlM(id: string, version: string) {
+    return this.http.get(this.revisionUrl + '/m/html/' + id + '/' + version,
+      {
+        headers: authHttpOptions(this.authService.getToken()),
+        responseType: 'text'
+      });
+  }
+
+  pdfM(id: string, version: string) {
+    return this.http.get(this.revisionUrl + '/m/pdf/' + id + '/' + version,
+      {
+        headers: authHttpOptions(this.authService.getToken()),
+        responseType: 'blob'
+      });
+  }
 }

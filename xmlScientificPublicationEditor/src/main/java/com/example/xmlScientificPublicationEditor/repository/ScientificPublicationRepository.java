@@ -11,6 +11,7 @@ import java.util.Set;
 
 import org.exist.xmldb.EXistResource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Repository;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -24,7 +25,9 @@ import org.xmldb.api.modules.XMLResource;
 import com.example.xmlScientificPublicationEditor.exception.ResourceNotDeleted;
 import com.example.xmlScientificPublicationEditor.exception.ResourceNotFoundException;
 import com.example.xmlScientificPublicationEditor.service.IdGeneratorService;
+import com.example.xmlScientificPublicationEditor.service.PersonService;
 import com.example.xmlScientificPublicationEditor.serviceImpl.IdGeneratorServiceImpl;
+import com.example.xmlScientificPublicationEditor.util.MyFile;
 import com.example.xmlScientificPublicationEditor.util.DOMParser.DOMParser;
 import com.example.xmlScientificPublicationEditor.util.RDF.MetadataExtractor;
 import com.example.xmlScientificPublicationEditor.util.RDF.StoreToRDF;
@@ -45,6 +48,9 @@ public class ScientificPublicationRepository {
 	
 	@Autowired
 	private MetadataExtractor metadataExtractor;
+	
+	@Autowired
+	private PersonService personService;
 
 	public static String scientificPublicationCollectionId = "/db/sample/scientificPublication";
 	public static String scientificPublicationSchemaPath = "src/main/resources/data/schemas/scientificPublication.xsd";
@@ -227,7 +233,6 @@ public class ScientificPublicationRepository {
 	}
 
 	public String search(String param, String email) throws Exception {
-		String retVal = "";
 		String xQueryPath = "src/main/resources/data/xQuery/search.txt";
 
 		HashMap<String, String> params = new HashMap<>();
@@ -236,27 +241,7 @@ public class ScientificPublicationRepository {
 
 		ResourceSet resultSet = RetriveFromDB.executeXQuery(
 			scientificPublicationCollectionId, xQueryPath, params, TARGET_NAMESPACE);
-		if (resultSet == null || (resultSet.getSize() == 0 )) {
-			return retVal;
-		}
-		ResourceIterator i = resultSet.getIterator();
-		XMLResource res = null;
-		while (i.hasMoreResources()) {
-			try {
-				res = (XMLResource) i.nextResource();
-				retVal += res.getContent().toString();
-			} finally {
-				// don't forget to cleanup resources
-				try {
-					if(res != null) {
-						((EXistResource) res).freeResources();
-					}
-				} catch (XMLDBException xe) {
-					xe.printStackTrace();
-				}
-			}
-		}
-		return retVal;
+		return MyFile.resourceSetToString(resultSet);
 	}
 
 
@@ -306,4 +291,52 @@ public class ScientificPublicationRepository {
 		deleteMetadata(id);
 		StoreToRDF.store(metadata, url);
 	}
+
+	public String findOneByProcessId(String id, Object user) throws Exception {
+		String xQueryPath = "src/main/resources/data/xQuery/findOneSPByProcessId.txt";
+		
+		String email = "";
+		String redactor = "";
+		if(user.getClass().equals(User.class)) {
+			email = ((User) user).getUsername();
+			redactor = personService.findOneAuth(email).getId();
+		}
+		
+		HashMap<String, String> params = new HashMap<>();
+		params.put("ID", id);
+		params.put("AUTH", email); 
+		params.put("REDACTOR", redactor);
+
+		ResourceSet resultSet = RetriveFromDB.executeXQuery(
+			scientificPublicationCollectionId, xQueryPath, params, TARGET_NAMESPACE);
+		
+		return MyFile.resourceSetToString(resultSet);
+	}
+
+	public String findOnePub(String id) throws Exception {
+		String xQueryPath = "src/main/resources/data/xQuery/findOneBySPId.txt";
+		
+		HashMap<String, String> params = new HashMap<>();
+		params.put("ID", id);
+
+		ResourceSet resultSet = RetriveFromDB.executeXQuery(
+			scientificPublicationCollectionId, xQueryPath, params, TARGET_NAMESPACE);
+		
+		return MyFile.resourceSetToString(resultSet);
+	}
+
+	public String findOneByVersion(String id, String name) throws Exception {
+		String xQueryPath = "src/main/resources/data/xQuery/findOneByVersion.txt";
+		
+		HashMap<String, String> params = new HashMap<>();
+		params.put("ID", id);
+		params.put("AUTH", name);
+		params.put("REDACTOR", personService.findOneAuth(name).getId());
+
+		ResourceSet resultSet = RetriveFromDB.executeXQuery(
+			scientificPublicationCollectionId, xQueryPath, params, TARGET_NAMESPACE);
+		
+		return MyFile.resourceSetToString(resultSet);
+	}
+
 }

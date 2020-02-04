@@ -31,21 +31,50 @@ public class QuestionnaireController extends BaseController {
 	private QuestionnaireService questionnaireService;
 	
 	@GetMapping(value="/questionnaire/{id}", produces = MediaType.APPLICATION_XML_VALUE)
-	public ResponseEntity<String> getQuestionnaireById(@PathVariable("id") String id) throws Exception{
-		String questionnaire = questionnaireService.findOne(id);
+	@PreAuthorize("hasRole('ROLE_REDACTOR')")
+	public ResponseEntity<String> getQuestionnaireById(@PathVariable("id") String id, Principal user) throws Exception{
+		String questionnaire = questionnaireService.findOne(id, user.getName());
 		return new ResponseEntity<>(questionnaire, HttpStatus.OK);
 	}
-	@GetMapping(value="/questionnaire/html/{id}", produces = MediaType.TEXT_HTML_VALUE)
-	public ResponseEntity<String> getQuestionnaireByIdHTML(@PathVariable("id") String id) throws Exception{
-		String questionnaire = questionnaireService.findOneHTML(id);
+	
+	@GetMapping(value="/questionnaire/html/{id}", produces = MediaType.APPLICATION_XML_VALUE)
+	@PreAuthorize("hasRole('ROLE_REDACTOR')")
+	public ResponseEntity<String> getQuestionnaireByIdHTML(@PathVariable("id") String id, Principal user) throws Exception{
+		String questionnaire = questionnaireService.findOneHTML(id, user.getName());
 		return new ResponseEntity<>(questionnaire, HttpStatus.OK);
 	}
 
-	@GetMapping(value="/questionnaire/pdf/{id}", produces = MediaType.APPLICATION_PDF_VALUE)
-	public ResponseEntity<byte[]> getQuestionnaireByIdPDF(@PathVariable("id") String id) throws Exception{
-		ByteArrayOutputStream questionnaire = questionnaireService.findOnePDF(id);
+	@GetMapping(value="/questionnaire/pdf/{id}", produces = MediaType.APPLICATION_XML_VALUE)
+	@PreAuthorize("hasRole('ROLE_REDACTOR')")
+	public ResponseEntity<byte[]> getQuestionnaireByIdPDF(@PathVariable("id") String id, Principal user) throws Exception{
+		ByteArrayOutputStream questionnaire = questionnaireService.findOnePDF(id, user.getName());
 		return new ResponseEntity<>(questionnaire.toByteArray(), HttpStatus.OK);
 	}
+	
+	@GetMapping(value = "/questionnaire/m/{id}/{v}", produces = MediaType.APPLICATION_XML_VALUE)
+	@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_REVIEWER') or hasRole('ROLE_REDACTOR')")
+	public ResponseEntity<String> getQuestionnaireMByProcessId(@PathVariable("id") String id,
+			@PathVariable("v") String version, Principal user) throws Exception {
+		String questionnaire = questionnaireService.findMerged(id, version, user.getName());
+		return new ResponseEntity<>(questionnaire, HttpStatus.OK);
+	}
+
+	@GetMapping(value = "/questionnaire/m/html/{id}/{v}", produces = MediaType.APPLICATION_XML_VALUE)
+	@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_REVIEWER') or hasRole('ROLE_REDACTOR')")
+	public ResponseEntity<String> getQuestionnaireMByProcessIdHTML(@PathVariable("id") String id,
+			@PathVariable("v") String version, Principal user) throws Exception {
+		String questionnaire = questionnaireService.findMergedHTML(id, version, user.getName());
+		return new ResponseEntity<>(questionnaire, HttpStatus.OK);
+	}
+
+	@GetMapping(value = "/questionnaire/m/pdf/{id}/{v}", produces = MediaType.APPLICATION_XML_VALUE)
+	@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_REVIEWER') or hasRole('ROLE_REDACTOR')")
+	public ResponseEntity<byte[]> getQuestionnaireMByProcessIdPDF(@PathVariable("id") String id,
+			@PathVariable("v") String version, Principal user) throws Exception {
+		ByteArrayOutputStream questionnaire = questionnaireService.findMergedPDF(id, version, user.getName());
+		return new ResponseEntity<>(questionnaire.toByteArray(), HttpStatus.OK);
+	}
+	
 	@PostMapping(value="/questionnaire", 
 			consumes = MediaType.APPLICATION_XML_VALUE,
 			produces = MediaType.APPLICATION_XML_VALUE)

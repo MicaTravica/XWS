@@ -12,9 +12,9 @@
             <span *ngIf="sp.reviewAssigmentState == 'accepted' && sp.reviewState =='inProgress'">
                 <button mat-raised-button color="accent" (click)="addReview(sp)">Add Review</button>
             </span>
-            <a mat-raised-button routerLink=".">XML</a>
-            <a mat-raised-button routerLink=".">HTML</a>
-            <a mat-raised-button routerLink=".">PDF</a>
+            <a mat-raised-button (click)="xml(sp.processId)">XML</a>
+            <a mat-raised-button (click)="html(sp.processId)">HTML</a>
+            <a mat-raised-button (click)="pdf(sp.processId)">PDF</a>
         </mat-card-actions>
     </mat-card>
 </div>

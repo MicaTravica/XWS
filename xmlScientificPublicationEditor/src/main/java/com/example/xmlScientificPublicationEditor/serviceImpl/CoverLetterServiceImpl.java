@@ -33,8 +33,8 @@ public class CoverLetterServiceImpl implements CoverLetterService {
 	private ProcessPSPService processPSPService;
 
 	@Override
-	public String findOne(String id) throws Exception {
-		String cl = coverLetterRepository.findOne(id);
+	public String findOne(String id, String email) throws Exception {
+		String cl = coverLetterRepository.findOneByProcess(id, email);
 		if (cl == null) {
 			throw new ResourceNotFoundException(String.format("Cover letter with id %s", id));
 		}
@@ -42,21 +42,15 @@ public class CoverLetterServiceImpl implements CoverLetterService {
 	}
 
 	@Override
-	public String findOneHTML(String id) throws Exception {
-		String cl = coverLetterRepository.findOne(id);
-		if (cl == null) {
-			throw new ResourceNotFoundException(String.format("Cover letter with id %s", id));
-		}
+	public String findOneHTML(String id, String email) throws Exception {
+		String cl = findOne(id, email);
 		String clHTML = xslFoTransformer.generateHTML(cl, CoverLetterRepository.CoverLetterXSLPath);
 		return clHTML;
 	}
 
 	@Override
-	public ByteArrayOutputStream findOnePDF(String id) throws Exception {
-		String cl = coverLetterRepository.findOne(id);
-		if (cl == null) {
-			throw new ResourceNotFoundException(String.format("Cover letter with id %s", id));
-		}
+	public ByteArrayOutputStream findOnePDF(String id, String email) throws Exception {
+		String cl = findOne(id, email);
 		ByteArrayOutputStream clPDF = xslFoTransformer.generatePDF(cl, CoverLetterRepository.CoverLetterXSL_FO_PATH);
 		return clPDF;
 	}

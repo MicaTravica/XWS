@@ -29,8 +29,6 @@ public interface ProcessPSPService {
     String setReview(String questionnaireId) throws Exception;
 
     Document setLastVersionNumber(Document process, String version) throws Exception;
-
-    String getLastVersionNumber(String processId) throws Exception;
     
     Document setProcessPSPState(Document process, ProcessState processState) throws Exception;
 
@@ -67,4 +65,6 @@ public interface ProcessPSPService {
 
     void retractPSP(String processId) throws Exception;
     void deletePSP(String processId) throws Exception;
+
+	String getLastVersionNumber(Document process) throws Exception;
 }

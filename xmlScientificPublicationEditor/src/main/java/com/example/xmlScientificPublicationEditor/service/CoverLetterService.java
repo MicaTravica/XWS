@@ -4,11 +4,11 @@ import java.io.ByteArrayOutputStream;
 
 public interface CoverLetterService {
 
-	String findOne(String id) throws Exception;
+	String findOne(String id, String email) throws Exception;
 
-	String findOneHTML(String id) throws Exception;
+	String findOneHTML(String id, String email) throws Exception;
 
-	ByteArrayOutputStream findOnePDF(String id) throws Exception;
+	ByteArrayOutputStream findOnePDF(String id, String email) throws Exception;
 	
 	String save(String cl, String processId) throws Exception;
 

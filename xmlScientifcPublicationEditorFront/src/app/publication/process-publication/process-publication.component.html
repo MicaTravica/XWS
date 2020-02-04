@@ -2,20 +2,20 @@
      <mat-card *ngFor="let r of reviewAssignments">
         <mat-card-header>
             <mat-card-title>Review</mat-card-title>
-            <mat-card-title>{{r.idQue}}Questionaire</mat-card-title>
+            <mat-card-title>Questionaire</mat-card-title>
         </mat-card-header>
         <mat-card-actions>
-            <a mat-raised-button routerLink=".">XML</a>
-            <a mat-raised-button routerLink=".">HTML</a>
-            <a mat-raised-button routerLink=".">PDF</a>
+            <a mat-raised-button (click)="xmlQue(r.idQue)">XML</a>
+            <a mat-raised-button (click)="htmlQue(r.idQue)">HTML</a>
+            <a mat-raised-button (click)="pdfQue(r.idQue)">PDF</a>
         </mat-card-actions>
         <mat-card-header *ngIf="r.idSPC">
-            <mat-card-title>SP comments{{r.idSPC}}</mat-card-title>
+            <mat-card-title>SP comments</mat-card-title>
         </mat-card-header>
         <mat-card-actions *ngIf="r.idSPC">
-            <a mat-raised-button routerLink=".">XML</a>
-            <a mat-raised-button routerLink=".">HTML</a>
-            <a mat-raised-button routerLink=".">PDF</a>
+            <a mat-raised-button (click)="xmlCom(r.idSPC)">XML</a>
+            <a mat-raised-button (click)="htmlCom(r.idSPC)">HTML</a>
+            <a mat-raised-button (click)="pdfCom(r.idSPC)">PDF</a>
         </mat-card-actions>
     </mat-card>
     <button mat-raised-button color="accent" (click)="accept()">Accept</button>

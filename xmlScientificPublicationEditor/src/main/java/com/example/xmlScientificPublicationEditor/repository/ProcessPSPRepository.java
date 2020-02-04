@@ -5,7 +5,6 @@ import static com.example.xmlScientificPublicationEditor.util.template.XUpdateTe
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import org.apache.jena.base.Sys;
 import org.exist.xmldb.EXistResource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
