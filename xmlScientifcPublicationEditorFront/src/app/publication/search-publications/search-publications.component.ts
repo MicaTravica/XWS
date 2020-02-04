@@ -70,5 +70,17 @@ export class SearchPublicationsComponent implements OnInit {
       console.log(err.message);
     });
   }
+
+  getMetadataXML(scId: string) {
+    this.publicationService.getMetadataXML(scId).subscribe( res => {
+      console.log(res);
+    });
+  }
+
+  getMetadataJSON(scId: string) {
+    this.publicationService.getMetadataJSON(scId).subscribe( res => {
+      console.log(res);
+    });
+  }
 }
 
