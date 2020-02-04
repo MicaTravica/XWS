@@ -152,8 +152,9 @@ public class ProcessPSPServiceImpl implements ProcessPSPService {
     }
 
     @Override
-    public String saveQuestionnaireToProcessPSP(String processId, String reviewerEmail, String qId) throws Exception {
-        return this.processPSPRepo.saveQuestionnaireToProcessPSP(processId, reviewerEmail, qId);
+    public String saveQuestionnaireToProcessPSP(String processId, String reviewerEmail,
+                                                String qId, Boolean willComment) throws Exception {
+        return this.processPSPRepo.saveQuestionnaireToProcessPSP(processId, reviewerEmail, qId, willComment);
     }
 
     @Override
@@ -182,6 +183,11 @@ public class ProcessPSPServiceImpl implements ProcessPSPService {
         }
         process = this.setProcessPSPState(process, ProcessState.DELETED);
         this.processPSPRepo.update(process);
+    }
+
+    @Override
+    public void saveCommentReview(String processId, String reviewerEmail, String commentedSpId) throws Exception {
+        this.processPSPRepo.saveCommentsToProcessPSP(processId, reviewerEmail, commentedSpId);
     }
 
     @Override

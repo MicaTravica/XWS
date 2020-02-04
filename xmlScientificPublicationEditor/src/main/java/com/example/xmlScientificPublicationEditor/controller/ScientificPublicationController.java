@@ -35,6 +35,21 @@ public class ScientificPublicationController extends BaseController {
 		String sp = scientificPublicationService.findOneByProcessId(id, SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 		return new ResponseEntity<>(sp, HttpStatus.OK);
 	}
+
+	@GetMapping(value = "/scientificPublication/getMetadataXml/{id}", produces = MediaType.APPLICATION_XML_VALUE)
+	@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_REVIEWER') or hasRole('ROLE_REDACTOR')")
+	public ResponseEntity<String> getMetadataSP(@PathVariable("id") String id) throws Exception {
+		String metadata = scientificPublicationService.getMetadataSPXML(id);
+		return new ResponseEntity<>(metadata, HttpStatus.OK);
+	}
+
+	@GetMapping(value = "/scientificPublication/getMetadataJSON/{id}", produces = MediaType.APPLICATION_XML_VALUE)
+	@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_REVIEWER') or hasRole('ROLE_REDACTOR')")
+	public ResponseEntity<String> getMetadataSPJSON(@PathVariable("id") String id) throws Exception {
+		String metadata = scientificPublicationService.getMetadataSPJSON(id);
+		return new ResponseEntity<>(metadata, HttpStatus.OK);
+	}
+
 	
 	@GetMapping(value = "/scientificPublication/process/html/{id}", produces = MediaType.APPLICATION_XML_VALUE)
 	public ResponseEntity<String> getScientificPublicationByProcessIdHTML(@PathVariable("id") String id) throws Exception {
@@ -193,6 +208,20 @@ public class ScientificPublicationController extends BaseController {
 	@GetMapping(value = "/scientificPublication/search", produces = MediaType.APPLICATION_XML_VALUE)
 	public ResponseEntity<String> search(@RequestParam(("param")) String param,Principal user) throws Exception {
 		String result = scientificPublicationService.search(param, user);
+        return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+
+    @GetMapping(value = "/scientificPublication/searchMetadata", produces = MediaType.APPLICATION_XML_VALUE)
+    public ResponseEntity<String> searchMetadata(@RequestParam(("param")) String param, Principal user) throws Exception {
+        String result = scientificPublicationService.metadataSearch(param, user);
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+	
+	@GetMapping(value = "/scientificPublication/review/{id}", produces = MediaType.APPLICATION_XML_VALUE)
+	@PreAuthorize("hasRole('ROLE_REVIEWER') or hasRole('ROLE_REDACTOR')")
+	public ResponseEntity<String> reviewSP(@PathVariable("id")String processId,Principal user) throws Exception {
+		String result = scientificPublicationService.getSPReview(processId, user.getName());
         return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 

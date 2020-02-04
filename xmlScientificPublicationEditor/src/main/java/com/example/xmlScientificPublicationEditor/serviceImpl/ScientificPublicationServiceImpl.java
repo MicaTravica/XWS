@@ -3,6 +3,7 @@ package com.example.xmlScientificPublicationEditor.serviceImpl;
 import java.io.ByteArrayOutputStream;
 import java.io.StringWriter;
 import java.security.Principal;
+import java.util.ArrayList;
 
 import javax.xml.namespace.QName;
 import javax.xml.transform.stream.StreamResult;
@@ -161,6 +162,29 @@ public class ScientificPublicationServiceImpl implements ScientificPublicationSe
 		return scientificPublicationRepository.search(param, email);
 	}
 
+    @Override
+    public String metadataSearch(String param, Principal user) throws Exception {
+		String email = "";
+		if(user != null) {
+			email = user.getName();
+		}
+        return this.scientificPublicationRepository.metadataSearch(param, email);
+    }
+
+
+    @Override
+	public String getSPReview(String processId, String email) throws Exception {
+		Document document = processPSPService.findOneById(processId);
+		Node lastVersion = processPSPService.getLastVersion(document);
+		Element lv = (Element) lastVersion;
+		Document dom = getSpFromProcessForReviewer(lv, email);
+		Element authors = (Element) dom.getDocumentElement().getElementsByTagName(IdGeneratorServiceImpl.AUTHORS)
+				.item(0);
+		dom.getDocumentElement().removeChild(authors);
+		return DOMParser.parseDocumentWithoutSchema(dom);
+	}
+
+
 	@Override
 	public void saveComments(String file, String email, String processId) throws Exception {
 		Document comments = DOMParser.buildDocumentWithOutSchema(file);
@@ -173,7 +197,18 @@ public class ScientificPublicationServiceImpl implements ScientificPublicationSe
 		Element lv = (Element) lastVersion;
 		Document doc = getSpFromProcessForReviewer(lv, email);
 		Element com = (Element) nodeComments.item(0);
-		scientificPublicationRepository.saveComments(doc, com);
+		String commentedSpId = scientificPublicationRepository.saveComments(doc, com);
+		processPSPService.saveCommentReview(processId, email, commentedSpId);
+	}
+
+	@Override
+	public String getMetadataSPXML(String spId) throws Exception {
+		return this.scientificPublicationRepository.getDateMetadataXML(spId);
+	}
+
+	@Override
+	public String getMetadataSPJSON(String spId) throws Exception {
+		return this.scientificPublicationRepository.getDateMetadataJSON(spId);
 	}
 
 	private Document getSpFromProcessForReviewer(Element lastVersion, String email) throws Exception {

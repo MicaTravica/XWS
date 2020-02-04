@@ -9,6 +9,6 @@ where $version/@version = $lastVersion
 for $reviewAssigment in $version/reviewAssignments//reviewAssigment
 where $reviewAssigment/review/idReviewer = $REVIEWER_EMAIL
 let $review := $reviewAssigment/review
-where $review/@state = "inProgress"
+where $review/@state != "Done"
 return
-     update insert <ns:idQuestionnaire> {data($Q_ID)} </ns:idQuestionnaire> into $review
+     update insert <ns:idScientificPublication> {data($SP_ID)} </ns:idScientificPublication> into $review

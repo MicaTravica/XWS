@@ -7,7 +7,7 @@ import { uploadAuthHttpOptions } from 'src/app/util/http-util';
   providedIn: 'root'
 })
 export class UploadDocumentsService {
-
+  
   constructor(private http: HttpClient,
               private authService: AuthService) { }
 
@@ -16,6 +16,20 @@ export class UploadDocumentsService {
     const fd = new FormData();
     fd.append('file', data);
     fd.append('processId', id);
+    return this.http.post(url, fd,
+        {
+          headers: uploadAuthHttpOptions(this.authService.getToken()),
+          responseType: 'text',
+          // params: paramas
+        }
+      );
+  }
+
+  uploadQuestionnaire(data: File, url: string, processId: string, willComment: string) {
+    const fd = new FormData();
+    fd.append('file', data);
+    fd.append('processId', processId);
+    fd.append('willComment', willComment);
     return this.http.post(url, fd,
         {
           headers: uploadAuthHttpOptions(this.authService.getToken()),

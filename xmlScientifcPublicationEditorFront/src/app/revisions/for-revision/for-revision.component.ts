@@ -7,6 +7,7 @@ import { OpenServiceService } from 'src/app/services/open-service/open-service.s
 declare var require: any;
 const convert = require('xml-js');
 
+
 @Component({
   selector: 'app-for-revision',
   templateUrl: './for-revision.component.html',
@@ -116,6 +117,10 @@ export class ForRevisionComponent implements OnInit {
     this.router.navigate(['add_revision', sp.processId]);
   }
 
+  addComments(sp: any) {
+    this.router.navigate(['add_comments', sp.processId]);
+  }
+
   xml(id: string) {
     this.publicationService.getPublicationReviewerProcess(id).subscribe(
       (data: any) => {
@@ -123,8 +128,6 @@ export class ForRevisionComponent implements OnInit {
       }
     );
   }
-
-
   html(id: string) {
     this.publicationService.getPublicationReviewerProcessHTML(id).subscribe(
       (data: any) => {

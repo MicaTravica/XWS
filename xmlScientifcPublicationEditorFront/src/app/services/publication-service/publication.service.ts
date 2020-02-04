@@ -70,6 +70,16 @@ export class PublicationService {
       });
   }
 
+  metadataSearch(value: string) {
+    const param = new HttpParams().append('param', value);
+    return this.http.get(this.url + '/searchMetadata',
+      {
+        headers: authHttpOptions(this.authService.getToken()),
+        responseType: 'text',
+        params: param
+      });
+  }
+
   getPublicationReviewerProcess(processId: string) {
     return this.http.get(this.url + '/review/' + processId,
       {
@@ -108,6 +118,13 @@ export class PublicationService {
 
   xml(id: string) {
     return this.http.get(this.url + '/process/' + id,
+         {
+        headers: authHttpOptions(this.authService.getToken()),
+        responseType: 'text'
+      });
+  }
+  getMetadataJSON(spId: string) {
+    return this.http.get(this.url + '/getMetadataJSON/' + spId,
       {
         headers: authHttpOptions(this.authService.getToken()),
         responseType: 'text'
@@ -116,6 +133,13 @@ export class PublicationService {
 
   html(id: string) {
     return this.http.get(this.url + '/process/html/' + id,
+      {
+        headers: authHttpOptions(this.authService.getToken()),
+        responseType: 'text'
+      });
+  }
+  getMetadataXML(spId: string) {
+    return this.http.get(this.url + '/getMetadataXml/' + spId,
       {
         headers: authHttpOptions(this.authService.getToken()),
         responseType: 'text'

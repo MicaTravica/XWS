@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ProcessPSPService } from 'src/app/services/processPSP/process-psp.service';
+import { PublicationService } from 'src/app/services/publication-service/publication.service';
 import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http/http';
 import { ToastrService } from 'ngx-toastr';
-import { PublicationService } from 'src/app/services/publication-service/publication.service';
 import { OpenServiceService } from 'src/app/services/open-service/open-service.service';
 import { CoverLetterService } from 'src/app/services/cover-letter-service/cover-letter.service';
 
@@ -32,7 +32,7 @@ export class MyPublicationsComponent implements OnInit {
   ngOnInit() {
     this.processPSPService.getMyPublications()
       .subscribe(res => {
-          this.populateList(res)     
+          this.populateList(res);
     });
   }
 
@@ -89,20 +89,33 @@ export class MyPublicationsComponent implements OnInit {
     this.processPSPService.deleteScientificPublication(processId).
       subscribe( res => {
         this.toastr.success(res);
-    }, 
-      (err: HttpErrorResponse)=>{
-        this.toastr.error(err.error)
+    },
+      (err: HttpErrorResponse) => {
+        this.toastr.error(err.error);
       },
-      ()=>this.processPSPService.getMyPublications()
+      () => this.processPSPService.getMyPublications()
         .subscribe(res => {
-            this.populateList(res)     
+            this.populateList(res);
       })
-    )
+    );
   }
 
   seeHistory(processId: string) {
     this.router.navigate(['see_revision', processId]);
   }
+
+  getMetadataXML(scId: string) {
+    this.publicationService.getMetadataXML(scId).subscribe( res => {
+      console.log(res);
+    });
+  }
+
+  getMetadataJSON(scId: string) {
+    this.publicationService.getMetadataJSON(scId).subscribe( res => {
+      console.log(res);
+    });
+  }
+
 
   addNewVersion(processId: string) {
     this.router.navigate(['new_version', processId]);

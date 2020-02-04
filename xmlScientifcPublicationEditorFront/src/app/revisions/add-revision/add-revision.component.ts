@@ -5,7 +5,14 @@ import { ToastrService } from 'ngx-toastr';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { AddCommentsDialogComponent } from 'src/app/core/dialogs/add-comments-dialog/add-comments-dialog.component';
 declare const Xonomy: any;
+
+export interface DialogData {
+  decison: boolean;
+}
+
 
 @Component({
   selector: 'app-add-revision',
@@ -22,7 +29,8 @@ export class AddRevisionComponent implements OnInit {
     private revisionService: RevisionService,
     private toastr: ToastrService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    public dialog: MatDialog
   ) { }
 
   ngOnInit() {
@@ -39,13 +47,19 @@ export class AddRevisionComponent implements OnInit {
   }
 
   addRevision() {
-    this.revisionXml = Xonomy.harvest() as string;
-    this.revisionService.addRevision(this.revisionXml, this.processId).subscribe(
-      (data: string) => {
-        this.toastr.success(data);
-        this.router.navigate(['for_revision']);
-      }, (error: HttpErrorResponse) => {
-        this.toastr.error(error.error);
+      const dialogRef = this.dialog.open(AddCommentsDialogComponent, {
+        width: '250px',
+        data: {decision: false}
+      });
+      dialogRef.afterClosed().subscribe(result => {
+        this.revisionXml = Xonomy.harvest() as string;
+        this.revisionService.addRevision(this.revisionXml, this.processId, result).subscribe(
+          (data: string) => {
+            this.toastr.success(data);
+            this.router.navigate(['for_revision']);
+          }, (error: HttpErrorResponse) => {
+            this.toastr.error(error.error);
+          });
       });
   }
 
@@ -54,12 +68,18 @@ export class AddRevisionComponent implements OnInit {
   }
 
   onUpload() {
-    this.revisionService.upload(this.file,  this.processId).subscribe(
-      (data: string) => {
-        this.toastr.success(data);
-        this.router.navigate(['for_revision']);
-      }, (error: HttpErrorResponse) => {
-        this.toastr.error(error.error);
+    const dialogRef = this.dialog.open(AddCommentsDialogComponent, {
+      width: '250px',
+      data: {decision: false}
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      this.revisionService.upload(this.file,  this.processId, result).subscribe(
+        (data: string) => {
+          this.toastr.success(data);
+          this.router.navigate(['for_revision']);
+        }, (error: HttpErrorResponse) => {
+          this.toastr.error(error.error);
+        });
       });
   }
 

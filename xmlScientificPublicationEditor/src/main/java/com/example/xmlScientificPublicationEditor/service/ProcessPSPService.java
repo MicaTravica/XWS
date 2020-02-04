@@ -61,10 +61,15 @@ public interface ProcessPSPService {
     boolean acceptRejectReviewAssigment(String acceptanceData, String name) throws  Exception;
     String generateReviewAssigmentXMLTemplate() throws  Exception;
 
-    String saveQuestionnaireToProcessPSP(String processId, String reviewerEmail, String qId) throws  Exception;
+    String saveQuestionnaireToProcessPSP(String processId, String reviewerEmail,
+                                         String qId, Boolean willComment) throws  Exception;
 
     void retractPSP(String processId) throws Exception;
+
     void deletePSP(String processId) throws Exception;
 
 	String getLastVersionNumber(Document process) throws Exception;
+
+    void saveCommentReview(String processId, String reviewerEmail, String commentedSpId) throws Exception;
+
 }

@@ -17,7 +17,7 @@ public class UpdateRDF {
     {
         ConnectionPropertiesFusekiJena conn = AuthenticationUtilities.loadPropertiesFusekiJena();
         String spargDelete = SparqlUtil.dropGraph(conn.dataEndpoint +  SPARQL_NAMED_GRAPH_URI);
-        
+
 		// UpdateRequest represents a unit of execution
 		UpdateRequest update = UpdateFactory.create(spargDelete);
 

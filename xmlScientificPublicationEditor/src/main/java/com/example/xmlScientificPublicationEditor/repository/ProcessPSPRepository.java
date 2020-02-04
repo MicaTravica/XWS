@@ -85,6 +85,8 @@ public class ProcessPSPRepository {
 	public static  String getSCName_forVersion_ProcessPSP =
 			"src/main/resources/data/xQuery/findSCNameFromLastVersionOfPSP.txt";
 
+	public static String Comments_Save_to_ProcessPSP = "src/main/resources/data/xQuery/reviewAddComments.txt";
+
 
 	public String findOneByScientificPublicationID(String id) throws Exception {
 		String retVal = null;
@@ -454,17 +456,23 @@ public class ProcessPSPRepository {
 		return  true;
 	}
 
-	public String saveQuestionnaireToProcessPSP(String processId, String reviewEmail, String qId) throws  Exception {
+	public String saveQuestionnaireToProcessPSP
+			(String processId, String reviewEmail, String qId, boolean willComment) throws  Exception {
 		HashMap<String, String> params = new HashMap<>();
 		params.put("PROCESS_ID", processId);
 		params.put("Q_ID", qId);
 		params.put("REVIEWER_EMAIL", reviewEmail);
+		if(willComment) {
+			params.put("PROCESS_STATE", "waitingComments");
+		} else {
+			params.put("PROCESS_STATE", "Done");
+		}
 		ResourceSet resultSet = RetriveFromDB.executeXQuery(
 				ProcessPSPCollectionId, Questionnaire_Save_to_ProcessPSP, params, TARGET_NAMESPACE);
 		if (resultSet == null) {
 			return null;
 		}
-		// change Review state to DONE
+		// change Review state to DONE or waitingForComments
 		resultSet = RetriveFromDB.executeXQuery(
 				ProcessPSPCollectionId, Questionnaire_Save_to_State_ProcessPSP, params, TARGET_NAMESPACE);
 		if (resultSet == null) {
@@ -486,6 +494,23 @@ public class ProcessPSPRepository {
 			return  i.nextResource().getContent().toString();
 		}
 		return null;
+	}
+
+	public void saveCommentsToProcessPSP(String processId, String reviewEmail, String spId) throws Exception{
+		HashMap<String, String> params = new HashMap<>();
+		params.put("PROCESS_ID", processId);
+		params.put("SP_ID", spId);
+		params.put("REVIEWER_EMAIL", reviewEmail);
+		params.put("PROCESS_STATE", "Done");
+
+		RetriveFromDB.executeXQuery(
+				ProcessPSPCollectionId, Comments_Save_to_ProcessPSP, params, TARGET_NAMESPACE);
+		// change Review state to DONE
+		RetriveFromDB.executeXQuery(
+				ProcessPSPCollectionId, Questionnaire_Save_to_State_ProcessPSP, params, TARGET_NAMESPACE);
+		// change processPSPState to SCORED if all accepted reviewAssigments are Done..
+		RetriveFromDB.executeXQuery(
+				ProcessPSPCollectionId, Change_toScored_State_ProcessPSP, params, TARGET_NAMESPACE);
 	}
 	
 	public String getScientificPublicationNameByNode(Element lastVersion) {

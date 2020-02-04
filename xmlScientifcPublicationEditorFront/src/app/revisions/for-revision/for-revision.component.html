@@ -10,7 +10,10 @@
                 <button mat-raised-button color="accent" (click)="reject(sp)">Reject</button>
             </span>
             <span *ngIf="sp.reviewAssigmentState == 'accepted' && sp.reviewState =='inProgress'">
-                <button mat-raised-button color="accent" (click)="addReview(sp)">Add Review</button>
+                <button mat-raised-button color="accent" (click)="addReview(sp)">Add Questionnaire</button>
+            </span>
+            <span *ngIf="sp.reviewAssigmentState == 'accepted' && sp.reviewState =='waitingComments'">
+                <button mat-raised-button color="accent" (click)="addComments(sp)">Add Comments</button>
             </span>
             <a mat-raised-button (click)="xml(sp.processId)">XML</a>
             <a mat-raised-button (click)="html(sp.processId)">HTML</a>
