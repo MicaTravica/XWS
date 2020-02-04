@@ -15,6 +15,7 @@ export class SearchPublicationsComponent implements OnInit {
 
   searchForm: FormGroup;
   publications = [];
+  searchExecuted = false;
 
   constructor(
     private fb: FormBuilder,
@@ -35,6 +36,7 @@ export class SearchPublicationsComponent implements OnInit {
     const result = obj.search as any;
     if (result.sp) {
       const sps = (result.sp.length) ? result.sp : [result.sp];
+      this.searchExecuted = false;
       for (const sp of sps) {
         this.publications.push(
           {
@@ -55,6 +57,7 @@ export class SearchPublicationsComponent implements OnInit {
     }
   }
   doRegularSearch() {
+    this.searchExecuted = true;
     this.publicationService.reguralSearch(this.searchForm.value.search).subscribe(
       (data: any) => {
         this.populateList(data);
@@ -63,6 +66,7 @@ export class SearchPublicationsComponent implements OnInit {
   }
 
   doAdvancedSearch() {
+    this.searchExecuted = true;
     this.publicationService.metadataSearch(this.searchForm.value.search).subscribe(res => {
       this.populateList(res);
     },

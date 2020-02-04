@@ -25,3 +25,9 @@
         </mat-card-actions>
     </mat-card>
 </div>
+
+<div *ngIf="publications.length < 1 && searchExecuted">
+    <h1>
+        No search results
+    </h1>
+</div>

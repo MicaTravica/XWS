@@ -54,7 +54,7 @@ public class ScientificPublicationRepository {
 	public static String ScientificPublicationXSL_FO_PATH = "src/main/resources/data/xsl-fo/scientificPublication_fo.xsl";
 	public static String ScientificPublicationXSL_PATH_NO_AUTHOR = "src/main/resources/data/xslt/scientificPublicationIDName.xsl";
 	public static String DATA_PROCESS_XSL = "src/main/resources/data/xslt/scientificPublicationIdName.xsl";
-	public static String SP_NAMED_GRAPH_URI_PREFIX = "/example/scientificPublication/";
+	public static String SP_NAMED_GRAPH_URI_PREFIX = "/example/scientificPublication";
 	public static String EL_ROOT = "ns:scientificPublication";
 	public static String DATE_METADATA = "ns:dateMetaData";
 	public static String CREATED_AT = "ns:created_at";
@@ -191,8 +191,8 @@ public class ScientificPublicationRepository {
 		this.delete(id);
 		StoreToDB.store(scientificPublicationCollectionId, id, scientificPublication);
 
-		String toSave = xslFoTransformer.generateHTML(scientificPublication, ScientificPublicationRDFPath);
-		updateMetadata(metadataExtractor.extractMetadataXML(toSave), id);
+//		String toSave = xslFoTransformer.generateHTML(scientificPublication, ScientificPublicationRDFPath);
+//		updateMetadata(metadataExtractor.extractMetadataXML(toSave), id);
 		return id;
 	}
 
@@ -294,15 +294,15 @@ public class ScientificPublicationRepository {
 	}
 
 	public void saveMetadata(StringWriter metadata, String id) throws Exception {
-		StoreToRDF.store(metadata, SP_NAMED_GRAPH_URI_PREFIX + id);
+		StoreToRDF.store(metadata, SP_NAMED_GRAPH_URI_PREFIX);
 	}
 
 	public void deleteMetadata(String id) throws Exception {
-		UpdateRDF.delete(SP_NAMED_GRAPH_URI_PREFIX + id);
+		UpdateRDF.delete(SP_NAMED_GRAPH_URI_PREFIX);
 	}
 	
 	public void updateMetadata(StringWriter metadata, String id) throws Exception {
-		String url = SP_NAMED_GRAPH_URI_PREFIX + id;
+		String url = SP_NAMED_GRAPH_URI_PREFIX;
 		deleteMetadata(id);
 		StoreToRDF.store(metadata, url);
 	}
@@ -326,13 +326,53 @@ public class ScientificPublicationRepository {
 	}
 
 	public String metadataSearch(String param, String email) throws Exception{
+
+
+		String parsParams = param.toLowerCase();
+		String[] queries = parsParams.split(" or ");
+		HashSet<String> resultsOR = new HashSet<>();
+		for(String qOR: queries) {
+			qOR = qOR.trim();
+			if(qOR.length() < 2) {
+				continue;
+			}
+			HashSet<String> resultsAND = new HashSet<>();
+			int i = 0;
+			for(String qAnd: qOR.split(" and ")) {
+				qAnd = qAnd.trim();
+				if(qAnd.length() < 2) {
+					continue;
+				}
+				HashSet<String> ids =  GetRDF.getSPbyMetadata(qAnd);
+				if(i == 0) {
+					ids.forEach(id->{
+						resultsAND.add(id);
+					});
+				} else {
+					HashSet<String> tempAND = new HashSet<>();
+					ids.forEach(id-> {
+						if(resultsAND.contains(id)) {
+							tempAND.add(id);
+						}
+					});
+					resultsAND.clear();
+					tempAND.forEach(id->{
+						resultsAND.add(id);
+					});
+				}
+				i++;
+			}
+			// sad sve iz and skupa dodas na or..
+			resultsAND.forEach(id->{
+				resultsOR.add(id);
+			});
+		}
 		StringBuilder retVal = new StringBuilder();
-		HashSet<String> ids =  GetRDF.getSPbyMetadata(param);
 		String xQueryPath = "src/main/resources/data/xQuery/searchMetadata.txt";
 		HashMap<String, String> params = new HashMap<>();
 		params.put("AUTH", email);
 		StringBuilder idsBuilder = new StringBuilder();
-		for(String id: ids) {
+		for(String id: resultsOR) {
 			idsBuilder.append(id);
 			idsBuilder.append(",");
 		}
