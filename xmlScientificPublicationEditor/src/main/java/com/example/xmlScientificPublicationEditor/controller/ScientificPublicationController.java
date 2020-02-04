@@ -34,6 +34,13 @@ public class ScientificPublicationController extends BaseController {
 		String sp = scientificPublicationService.findOne(id);
 		return new ResponseEntity<>(sp, HttpStatus.OK);
 	}
+
+	@GetMapping(value = "/scientificPublication/getMetadata/{id}", produces = MediaType.APPLICATION_XML_VALUE)
+	@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_REVIEWER') or hasRole('ROLE_REDACTOR')")
+	public ResponseEntity<String> getMetadataSP(@PathVariable("id") String id) throws Exception {
+		String metadata = scientificPublicationService.getMetadataSP(id);
+		return new ResponseEntity<>(metadata, HttpStatus.OK);
+	}
 	
 	@GetMapping(value = "/scientificPublication/notPub/{id}", produces = MediaType.APPLICATION_XML_VALUE)
 	@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_REVIEWER') or hasRole('ROLE_REDACTOR')")

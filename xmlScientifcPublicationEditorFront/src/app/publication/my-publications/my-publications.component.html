@@ -12,6 +12,7 @@
             <a mat-raised-button routerLink=".">XML</a>
             <a mat-raised-button routerLink=".">HTML</a>
             <a mat-raised-button routerLink=".">PDF</a>
+            <a mat-raised-button (click)="getMetadata(sp.id)">RDF</a>
             <button mat-raised-button color="accent"
                 *ngIf="sp.processState !='published' && sp.processState !='retracted' && sp.processState !='deleted'"
                 (click)="retract(sp.processId)">Retract</button>

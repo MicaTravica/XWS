@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.example.xmlScientificPublicationEditor.util.RDF.GetRDF;
 import org.exist.xmldb.EXistResource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -304,5 +305,9 @@ public class ScientificPublicationRepository {
 		String url = SP_NAMED_GRAPH_URI_PREFIX + id;
 		deleteMetadata(id);
 		StoreToRDF.store(metadata, url);
+	}
+
+	public String getDateMetadata(String spId) throws Exception {
+		return GetRDF.getRDF(spId);
 	}
 }

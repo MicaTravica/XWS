@@ -192,6 +192,11 @@ public class ScientificPublicationServiceImpl implements ScientificPublicationSe
 		processPSPService.saveCommentReview(processId, email, commentedSpId);
 	}
 
+	@Override
+	public String getMetadataSP(String spId) throws Exception {
+		return this.scientificPublicationRepository.getDateMetadata(spId);
+	}
+
 	private Document getSpFromProcessForReviewer(Element lastVersion, String email) throws Exception {
 		NodeList ras = lastVersion.getElementsByTagName(ProcessPSPRepository.ReviewAssigment);
 		boolean isReviewer = false;

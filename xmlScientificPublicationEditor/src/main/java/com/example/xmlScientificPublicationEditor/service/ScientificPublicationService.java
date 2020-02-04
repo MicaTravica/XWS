@@ -38,4 +38,6 @@ public interface ScientificPublicationService {
 
 	void saveComments(String file, String name, String processId) throws Exception;
 
+	String getMetadataSP(String spId) throws Exception;
+
 }

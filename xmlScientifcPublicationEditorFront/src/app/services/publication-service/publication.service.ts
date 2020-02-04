@@ -89,4 +89,13 @@ export class PublicationService {
   uploadCommentProcess(file: File, processId: string) {
     return this.uploadService.upload(file, this.url + '/upload/review', processId);
   }
+
+  getMetadata(spId: string) {
+    return this.http.get(this.url + '/getMetadata/' + spId,
+      {
+        headers: authHttpOptions(this.authService.getToken()),
+        responseType: 'text'
+      });
+  }
+
 }
