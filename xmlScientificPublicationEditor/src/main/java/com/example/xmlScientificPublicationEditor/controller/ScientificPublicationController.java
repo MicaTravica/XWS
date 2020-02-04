@@ -35,12 +35,20 @@ public class ScientificPublicationController extends BaseController {
 		return new ResponseEntity<>(sp, HttpStatus.OK);
 	}
 
-	@GetMapping(value = "/scientificPublication/getMetadata/{id}", produces = MediaType.APPLICATION_XML_VALUE)
+	@GetMapping(value = "/scientificPublication/getMetadataXml/{id}", produces = MediaType.APPLICATION_XML_VALUE)
 	@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_REVIEWER') or hasRole('ROLE_REDACTOR')")
 	public ResponseEntity<String> getMetadataSP(@PathVariable("id") String id) throws Exception {
-		String metadata = scientificPublicationService.getMetadataSP(id);
+		String metadata = scientificPublicationService.getMetadataSPXML(id);
 		return new ResponseEntity<>(metadata, HttpStatus.OK);
 	}
+
+	@GetMapping(value = "/scientificPublication/getMetadataJSON/{id}", produces = MediaType.APPLICATION_XML_VALUE)
+	@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_REVIEWER') or hasRole('ROLE_REDACTOR')")
+	public ResponseEntity<String> getMetadataSPJSON(@PathVariable("id") String id) throws Exception {
+		String metadata = scientificPublicationService.getMetadataSPJSON(id);
+		return new ResponseEntity<>(metadata, HttpStatus.OK);
+	}
+
 	
 	@GetMapping(value = "/scientificPublication/notPub/{id}", produces = MediaType.APPLICATION_XML_VALUE)
 	@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_REVIEWER') or hasRole('ROLE_REDACTOR')")
@@ -140,6 +148,13 @@ public class ScientificPublicationController extends BaseController {
 		String result = scientificPublicationService.search(param, user);
         return new ResponseEntity<>(result, HttpStatus.OK);
 	}
+
+    @GetMapping(value = "/scientificPublication/searchMetadata", produces = MediaType.APPLICATION_XML_VALUE)
+    public ResponseEntity<String> searchMetadata(@RequestParam(("param")) String param, Principal user) throws Exception {
+        String result = scientificPublicationService.metadataSearch(param, user);
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
 	
 	@GetMapping(value = "/scientificPublication/review/{id}", produces = MediaType.APPLICATION_XML_VALUE)
 	@PreAuthorize("hasRole('ROLE_REVIEWER') or hasRole('ROLE_REDACTOR')")

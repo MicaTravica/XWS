@@ -1,5 +1,5 @@
 <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:h="http://www.w3.org/1999/xhtml">
-  <rdf:Description rdf:about="localhost:8081/api/questionnaire/que64">
+  <rdf:Description   rdf:about="localhost:8081/api/questionnaire/que64">
     <sh:about xmlns:sh="https://schema.org/" rdf:resource="localhost:8081/api/questionnaire/"/>
   </rdf:Description>
   <rdf:Description rdf:about="localhost:8081/api/questionnaire/que64">

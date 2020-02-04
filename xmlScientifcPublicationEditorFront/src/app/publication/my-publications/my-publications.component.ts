@@ -98,11 +98,18 @@ export class MyPublicationsComponent implements OnInit {
     this.router.navigate(['see_revision', processId]);
   }
 
-  getMetadata(scId: string) {
-    this.publicationService.getMetadata(scId).subscribe( res => {
+  getMetadataXML(scId: string) {
+    this.publicationService.getMetadataXML(scId).subscribe( res => {
       console.log(res);
-    })
+    });
   }
+
+  getMetadataJSON(scId: string) {
+    this.publicationService.getMetadataJSON(scId).subscribe( res => {
+      console.log(res);
+    });
+  }
+
 
   addNewVersion(processId: string) {
     this.router.navigate(['new_version', processId]);

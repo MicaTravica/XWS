@@ -2,12 +2,12 @@ package com.example.xmlScientificPublicationEditor.repository;
 
 import static com.example.xmlScientificPublicationEditor.util.template.XUpdateTemplate.TARGET_NAMESPACE;
 
+import org.json.JSONObject;
+import org.json.XML;
+
 import java.io.StringWriter;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 import com.example.xmlScientificPublicationEditor.util.RDF.GetRDF;
 import org.exist.xmldb.EXistResource;
@@ -307,7 +307,58 @@ public class ScientificPublicationRepository {
 		StoreToRDF.store(metadata, url);
 	}
 
-	public String getDateMetadata(String spId) throws Exception {
-		return GetRDF.getRDF(spId);
+	public String getDateMetadataXML(String spId) throws Exception {
+		String retVal = "";
+		String sp = this.findOne(spId);
+		if(sp == null) {
+			throw new Exception("SP not found");
+		}
+		sp = xslFoTransformer.generateHTML(sp, ScientificPublicationRDFPath);
+		retVal = metadataExtractor.extractMetadataXML(sp).toString();
+		return  retVal;
+	}
+
+	public String getDateMetadataJSON(String spId) throws Exception {
+		String xmlMetadata = this.getDateMetadataXML(spId);
+		JSONObject xmlJSONObj = XML.toJSONObject(xmlMetadata);
+		String jsonPrettyPrintString = xmlJSONObj.toString(4);
+		return  jsonPrettyPrintString;
+	}
+
+	public String metadataSearch(String param, String email) throws Exception{
+		StringBuilder retVal = new StringBuilder();
+		HashSet<String> ids =  GetRDF.getSPbyMetadata(param);
+		String xQueryPath = "src/main/resources/data/xQuery/searchMetadata.txt";
+		HashMap<String, String> params = new HashMap<>();
+		params.put("AUTH", email);
+		StringBuilder idsBuilder = new StringBuilder();
+		for(String id: ids) {
+			idsBuilder.append(id);
+			idsBuilder.append(",");
+		}
+		params.put("IDS", idsBuilder.toString());
+		ResourceSet resultSet = RetriveFromDB.executeXQuery(
+				scientificPublicationCollectionId, xQueryPath, params, TARGET_NAMESPACE);
+		if (resultSet == null || (resultSet.getSize() == 0 )) {
+			return retVal.toString();
+		}
+		ResourceIterator i = resultSet.getIterator();
+		XMLResource res = null;
+		while (i.hasMoreResources()) {
+			try {
+				res = (XMLResource) i.nextResource();
+				retVal.append(res.getContent().toString());
+			} finally {
+				// don't forget to cleanup resources
+				try {
+					if(res != null) {
+						((EXistResource) res).freeResources();
+					}
+				} catch (XMLDBException xe) {
+					xe.printStackTrace();
+				}
+			}
+		}
+		return retVal.toString();
 	}
 }

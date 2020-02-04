@@ -1,15 +1,22 @@
 package com.example.xmlScientificPublicationEditor.util.RDF;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 
 import com.example.xmlScientificPublicationEditor.util.AuthenticationUtilities;
+import com.sun.javafx.binding.StringFormatter;
+import org.apache.jena.base.Sys;
 import org.apache.jena.query.QueryExecution;
 import org.apache.jena.query.QueryExecutionFactory;
 import org.apache.jena.query.QuerySolution;
 import org.apache.jena.query.ResultSet;
 import org.apache.jena.query.ResultSetFormatter;
 import org.apache.jena.rdf.model.RDFNode;
+
+import static com.example.xmlScientificPublicationEditor.util.MyFile.readFile;
 
 public class GetRDF {
 //import rs.ac.uns.ftn.examples.util.AuthenticationUtilities;
@@ -29,44 +36,36 @@ public class GetRDF {
      *
      */
     private static final String TEST_NAMED_GRAPH_URI = "/example/scientificPublication/";
+    private static final String QUERY_PATH = "src/main/resources/data/MetadataSearch/metadataSearch.rq";
 
-    public static String getRDF(String spId) throws  Exception{
+    public static HashSet<String> getSPbyMetadata(String param) throws  Exception{
+        HashSet<String> retVal = new HashSet<>();
         AuthenticationUtilities.ConnectionPropertiesFusekiJena conn = AuthenticationUtilities.loadPropertiesFusekiJena();
-
-        String graphName = TEST_NAMED_GRAPH_URI + spId;
-        // Querying the first named graph with a simple SPARQL query
-        System.out.println("[INFO] Selecting the triples from the named graph \"" + TEST_NAMED_GRAPH_URI + "\".");
-        String sparqlQuery = SparqlUtil.selectData(conn.dataEndpoint + graphName, "?s ?p ?o");
-        // Create a QueryExecution that will access a SPARQL service over HTTP
+        String sparqlQuery = String.format(readFile(QUERY_PATH), param);
+        System.out.println(sparqlQuery);
         QueryExecution query = QueryExecutionFactory.sparqlService(conn.queryEndpoint, sparqlQuery);
-        // Query the SPARQL endpoint, iterate over the result set...
         ResultSet results = query.execSelect();
         String varName;
         RDFNode varValue;
         StringBuilder sb = new StringBuilder();
         while(results.hasNext()) {
-
             // A single answer from a SELECT query
             QuerySolution querySolution = results.next() ;
-            String line = querySolution.toString();
-            String after = line.trim().replaceAll(" +", " ");
-            sb.append(after);
-            sb.append("\n");
-//            Iterator<String> variableBindings = querySolution.varNames();
-//
-//                // Retrieve variable bindings
-//            while (variableBindings.hasNext()) {
-//
-//                varName = variableBindings.next();
-//                varValue = querySolution.get(varName);
-//
-//                System.out.println(varName + ": " + varValue);
-//            }
-//            System.out.println();
+            Iterator<String> variableBindings = querySolution.varNames();
+                // Retrieve variable bindings
+            while (variableBindings.hasNext()) {
+                varName = variableBindings.next();
+                if(varName.equals("sp")) {
+                    varValue = querySolution.get(varName);
+                    String[] url = varValue.toString().split("/");
+                    System.out.println(url[url.length - 1]);
+                    retVal.add(url[url.length - 1]);
+                }
+            }
         }
         query.close();
         System.out.println("[INFO] End.");
-        return sb.toString();
+        return retVal;
     }
 
 }
