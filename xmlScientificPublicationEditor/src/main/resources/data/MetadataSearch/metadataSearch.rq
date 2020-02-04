@@ -1,0 +1,12 @@
+PREFIX schema: <https://schema.org/>
+prefix xsd: <http://www.w3.org/2001/XMLSchema#>
+SELECT * from <http://localhost:3030/PersonDataset/data/example/scientificPublication>
+WHERE {
+  ?sp  schema:keywords ?keywords .
+  ?sp  schema:headline ?caption .
+  ?sp  schema:author ?author .
+  FILTER(CONTAINS(UCASE(str(?keywords)), UCASE("%1$s"))
+    || CONTAINS(UCASE(str(?caption)), UCASE("%1$s"))
+    || CONTAINS(UCASE(str(?author)), UCASE("%1$s") )
+  ).
+}

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { PublicationService } from 'src/app/services/publication-service/publication.service';
+import { HttpErrorResponse } from '@angular/common/http/http';
 
 declare var require: any;
 const convert = require('xml-js');
@@ -14,6 +15,7 @@ export class SearchPublicationsComponent implements OnInit {
 
   searchForm: FormGroup;
   publications = [];
+  searchExecuted = false;
 
   constructor(
     private fb: FormBuilder,
@@ -28,6 +30,25 @@ export class SearchPublicationsComponent implements OnInit {
   ngOnInit() {
   }
 
+  populateList(data: any) {
+    this.publications = [];
+    const obj = JSON.parse(convert.xml2json(data, { compact: true, spaces: 4 }));
+    const result = obj.search as any;
+    if (result.sp) {
+      const sps = (result.sp.length) ? result.sp : [result.sp];
+      this.searchExecuted = false;
+      for (const sp of sps) {
+        this.publications.push(
+          {
+            id: sp.id._text,
+            name: sp.name._text
+          }
+        );
+      }
+    }
+  }
+
+
   onSubmit() {
     if (this.searchForm.value.searchType === 'regular') {
       this.doRegularSearch();
@@ -36,28 +57,34 @@ export class SearchPublicationsComponent implements OnInit {
     }
   }
   doRegularSearch() {
+    this.searchExecuted = true;
     this.publicationService.reguralSearch(this.searchForm.value.search).subscribe(
       (data: any) => {
-        this.publications = [];
-        const obj = JSON.parse(convert.xml2json(data, { compact: true, spaces: 4 }));
-        const result = obj.search as any;
-        if (result.sp) {
-          const sps = (result.sp.length) ? result.sp : [result.sp];
-          for (const sp of sps) {
-            this.publications.push(
-              {
-                id: sp.id._text,
-                name: sp.name._text
-              }
-            );
-          }
-        }
+        this.populateList(data);
       }
     );
   }
 
   doAdvancedSearch() {
-    console.log(this.searchForm.value.search);
+    this.searchExecuted = true;
+    this.publicationService.metadataSearch(this.searchForm.value.search).subscribe(res => {
+      this.populateList(res);
+    },
+    (err: HttpErrorResponse) => {
+      console.log(err.message);
+    });
+  }
+
+  getMetadataXML(scId: string) {
+    this.publicationService.getMetadataXML(scId).subscribe( res => {
+      console.log(res);
+    });
+  }
+
+  getMetadataJSON(scId: string) {
+    this.publicationService.getMetadataJSON(scId).subscribe( res => {
+      console.log(res);
+    });
   }
 }
 

@@ -20,6 +20,14 @@
             <a mat-raised-button routerLink=".">XML</a>
             <a mat-raised-button routerLink=".">HTML</a>
             <a mat-raised-button routerLink=".">PDF</a>
+            <a mat-raised-button (click)="getMetadataJSON(sp.id)">RDF_json</a>
+            <a mat-raised-button (click)="getMetadataXML(sp.id)">RDF_xml</a>
         </mat-card-actions>
     </mat-card>
+</div>
+
+<div *ngIf="publications.length < 1 && searchExecuted">
+    <h1>
+        No search results
+    </h1>
 </div>

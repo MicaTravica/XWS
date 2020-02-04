@@ -2,6 +2,7 @@ package com.example.xmlScientificPublicationEditor.service;
 
 import java.io.ByteArrayOutputStream;
 import java.security.Principal;
+import java.util.ArrayList;
 
 import org.w3c.dom.Document;
 
@@ -34,8 +35,14 @@ public interface ScientificPublicationService {
 
 	String search(String param, Principal user) throws Exception;
 
+	String metadataSearch(String param, Principal user) throws Exception;
+
 	String getSPReview(String processId, String email) throws Exception;
 
 	void saveComments(String file, String name, String processId) throws Exception;
+
+	String getMetadataSPXML(String spId) throws Exception;
+
+	String getMetadataSPJSON(String spId) throws Exception;
 
 }

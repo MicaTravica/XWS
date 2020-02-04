@@ -2,13 +2,14 @@ package com.example.xmlScientificPublicationEditor.repository;
 
 import static com.example.xmlScientificPublicationEditor.util.template.XUpdateTemplate.TARGET_NAMESPACE;
 
+import org.json.JSONObject;
+import org.json.XML;
+
 import java.io.StringWriter;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
+import com.example.xmlScientificPublicationEditor.util.RDF.GetRDF;
 import org.exist.xmldb.EXistResource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -53,7 +54,7 @@ public class ScientificPublicationRepository {
 	public static String ScientificPublicationXSL_FO_PATH = "src/main/resources/data/xsl-fo/scientificPublication_fo.xsl";
 	public static String ScientificPublicationXSL_PATH_NO_AUTHOR = "src/main/resources/data/xslt/scientificPublicationIDName.xsl";
 	public static String DATA_PROCESS_XSL = "src/main/resources/data/xslt/scientificPublicationIdName.xsl";
-	public static String SP_NAMED_GRAPH_URI_PREFIX = "/example/scientificPublication/";
+	public static String SP_NAMED_GRAPH_URI_PREFIX = "/example/scientificPublication";
 	public static String EL_ROOT = "ns:scientificPublication";
 	public static String DATE_METADATA = "ns:dateMetaData";
 	public static String CREATED_AT = "ns:created_at";
@@ -190,8 +191,8 @@ public class ScientificPublicationRepository {
 		this.delete(id);
 		StoreToDB.store(scientificPublicationCollectionId, id, scientificPublication);
 
-		String toSave = xslFoTransformer.generateHTML(scientificPublication, ScientificPublicationRDFPath);
-		updateMetadata(metadataExtractor.extractMetadataXML(toSave), id);
+//		String toSave = xslFoTransformer.generateHTML(scientificPublication, ScientificPublicationRDFPath);
+//		updateMetadata(metadataExtractor.extractMetadataXML(toSave), id);
 		return id;
 	}
 
@@ -293,16 +294,111 @@ public class ScientificPublicationRepository {
 	}
 
 	public void saveMetadata(StringWriter metadata, String id) throws Exception {
-		StoreToRDF.store(metadata, SP_NAMED_GRAPH_URI_PREFIX + id);
+		StoreToRDF.store(metadata, SP_NAMED_GRAPH_URI_PREFIX);
 	}
 
 	public void deleteMetadata(String id) throws Exception {
-		UpdateRDF.delete(SP_NAMED_GRAPH_URI_PREFIX + id);
+		UpdateRDF.delete(SP_NAMED_GRAPH_URI_PREFIX);
 	}
 	
 	public void updateMetadata(StringWriter metadata, String id) throws Exception {
-		String url = SP_NAMED_GRAPH_URI_PREFIX + id;
+		String url = SP_NAMED_GRAPH_URI_PREFIX;
 		deleteMetadata(id);
 		StoreToRDF.store(metadata, url);
+	}
+
+	public String getDateMetadataXML(String spId) throws Exception {
+		String retVal = "";
+		String sp = this.findOne(spId);
+		if(sp == null) {
+			throw new Exception("SP not found");
+		}
+		sp = xslFoTransformer.generateHTML(sp, ScientificPublicationRDFPath);
+		retVal = metadataExtractor.extractMetadataXML(sp).toString();
+		return  retVal;
+	}
+
+	public String getDateMetadataJSON(String spId) throws Exception {
+		String xmlMetadata = this.getDateMetadataXML(spId);
+		JSONObject xmlJSONObj = XML.toJSONObject(xmlMetadata);
+		String jsonPrettyPrintString = xmlJSONObj.toString(4);
+		return  jsonPrettyPrintString;
+	}
+
+	public String metadataSearch(String param, String email) throws Exception{
+
+
+		String parsParams = param.toLowerCase();
+		String[] queries = parsParams.split(" or ");
+		HashSet<String> resultsOR = new HashSet<>();
+		for(String qOR: queries) {
+			qOR = qOR.trim();
+			if(qOR.length() < 2) {
+				continue;
+			}
+			HashSet<String> resultsAND = new HashSet<>();
+			int i = 0;
+			for(String qAnd: qOR.split(" and ")) {
+				qAnd = qAnd.trim();
+				if(qAnd.length() < 2) {
+					continue;
+				}
+				HashSet<String> ids =  GetRDF.getSPbyMetadata(qAnd);
+				if(i == 0) {
+					ids.forEach(id->{
+						resultsAND.add(id);
+					});
+				} else {
+					HashSet<String> tempAND = new HashSet<>();
+					ids.forEach(id-> {
+						if(resultsAND.contains(id)) {
+							tempAND.add(id);
+						}
+					});
+					resultsAND.clear();
+					tempAND.forEach(id->{
+						resultsAND.add(id);
+					});
+				}
+				i++;
+			}
+			// sad sve iz and skupa dodas na or..
+			resultsAND.forEach(id->{
+				resultsOR.add(id);
+			});
+		}
+		StringBuilder retVal = new StringBuilder();
+		String xQueryPath = "src/main/resources/data/xQuery/searchMetadata.txt";
+		HashMap<String, String> params = new HashMap<>();
+		params.put("AUTH", email);
+		StringBuilder idsBuilder = new StringBuilder();
+		for(String id: resultsOR) {
+			idsBuilder.append(id);
+			idsBuilder.append(",");
+		}
+		params.put("IDS", idsBuilder.toString());
+		ResourceSet resultSet = RetriveFromDB.executeXQuery(
+				scientificPublicationCollectionId, xQueryPath, params, TARGET_NAMESPACE);
+		if (resultSet == null || (resultSet.getSize() == 0 )) {
+			return retVal.toString();
+		}
+		ResourceIterator i = resultSet.getIterator();
+		XMLResource res = null;
+		while (i.hasMoreResources()) {
+			try {
+				res = (XMLResource) i.nextResource();
+				retVal.append(res.getContent().toString());
+			} finally {
+				// don't forget to cleanup resources
+				try {
+					if(res != null) {
+						((EXistResource) res).freeResources();
+					}
+				} catch (XMLDBException xe) {
+					xe.printStackTrace();
+				}
+			}
+		}
+		return retVal.toString();
 	}
 }
