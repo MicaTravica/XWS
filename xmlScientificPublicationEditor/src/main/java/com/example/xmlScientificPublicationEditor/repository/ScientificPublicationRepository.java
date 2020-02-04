@@ -326,8 +326,6 @@ public class ScientificPublicationRepository {
 	}
 
 	public String metadataSearch(String param, String email) throws Exception{
-
-
 		String parsParams = param.toLowerCase();
 		String[] queries = parsParams.split(" or ");
 		HashSet<String> resultsOR = new HashSet<>();

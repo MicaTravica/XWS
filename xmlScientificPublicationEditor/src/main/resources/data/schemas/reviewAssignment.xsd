@@ -24,7 +24,7 @@
             <xs:element name="processId">
                 <xs:simpleType>
                     <xs:restriction base="xs:string">
-                        <xs:length value="1"/>
+                        <xs:minLength value="1"/>
                     </xs:restriction>
                 </xs:simpleType>
             </xs:element>
