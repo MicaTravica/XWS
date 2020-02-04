@@ -24,4 +24,10 @@ export class OpenServiceService {
     const url = URL.createObjectURL(blob);
     window.open(url);
   }
+
+  json(data: any) {
+    const blob = new Blob([data], { type: 'text/json' });
+    const url = URL.createObjectURL(blob);
+    window.open(url);
+  }
 }

@@ -2,7 +2,6 @@ package com.example.xmlScientificPublicationEditor.service;
 
 import java.io.ByteArrayOutputStream;
 import java.security.Principal;
-import java.util.ArrayList;
 
 import org.w3c.dom.Document;
 

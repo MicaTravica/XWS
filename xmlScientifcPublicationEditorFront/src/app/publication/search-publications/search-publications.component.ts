@@ -43,7 +43,8 @@ export class SearchPublicationsComponent implements OnInit {
         this.publications.push(
           {
             id: sp.id._text,
-            name: sp.name._text
+            name: sp.name._text,
+            process: sp.process._text
           }
         );
       }
@@ -78,14 +79,14 @@ export class SearchPublicationsComponent implements OnInit {
   }
 
   getMetadataXML(scId: string) {
-    this.publicationService.getMetadataXML(scId).subscribe( res => {
-      console.log(res);
+    this.publicationService.getMetadataXML(scId).subscribe(res => {
+      this.openService.xml(res);
     });
   }
 
   getMetadataJSON(scId: string) {
     this.publicationService.getMetadataJSON(scId).subscribe( res => {
-      console.log(res);
+      this.openService.json(res);
     });
   }
 

@@ -3,7 +3,6 @@ package com.example.xmlScientificPublicationEditor.serviceImpl;
 import java.io.ByteArrayOutputStream;
 import java.io.StringWriter;
 import java.security.Principal;
-import java.util.ArrayList;
 
 import javax.xml.namespace.QName;
 import javax.xml.transform.stream.StreamResult;
@@ -170,19 +169,6 @@ public class ScientificPublicationServiceImpl implements ScientificPublicationSe
 		}
         return this.scientificPublicationRepository.metadataSearch(param, email);
     }
-
-
-    @Override
-	public String getSPReview(String processId, String email) throws Exception {
-		Document document = processPSPService.findOneById(processId);
-		Node lastVersion = processPSPService.getLastVersion(document);
-		Element lv = (Element) lastVersion;
-		Document dom = getSpFromProcessForReviewer(lv, email);
-		Element authors = (Element) dom.getDocumentElement().getElementsByTagName(IdGeneratorServiceImpl.AUTHORS)
-				.item(0);
-		dom.getDocumentElement().removeChild(authors);
-		return DOMParser.parseDocumentWithoutSchema(dom);
-	}
 
 
 	@Override

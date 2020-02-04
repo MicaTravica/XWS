@@ -106,13 +106,13 @@ export class MyPublicationsComponent implements OnInit {
 
   getMetadataXML(scId: string) {
     this.publicationService.getMetadataXML(scId).subscribe( res => {
-      console.log(res);
+      this.openService.xml(res);
     });
   }
 
   getMetadataJSON(scId: string) {
     this.publicationService.getMetadataJSON(scId).subscribe( res => {
-      console.log(res);
+      this.openService.json(res);
     });
   }
 

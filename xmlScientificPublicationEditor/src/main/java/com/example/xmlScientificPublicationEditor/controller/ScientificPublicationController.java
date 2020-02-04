@@ -217,12 +217,4 @@ public class ScientificPublicationController extends BaseController {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
-	
-	@GetMapping(value = "/scientificPublication/review/{id}", produces = MediaType.APPLICATION_XML_VALUE)
-	@PreAuthorize("hasRole('ROLE_REVIEWER') or hasRole('ROLE_REDACTOR')")
-	public ResponseEntity<String> reviewSP(@PathVariable("id")String processId,Principal user) throws Exception {
-		String result = scientificPublicationService.getSPReview(processId, user.getName());
-        return new ResponseEntity<>(result, HttpStatus.OK);
-	}
-
 }

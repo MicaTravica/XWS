@@ -10,8 +10,9 @@ return
 						for $sp in $sps/scientificPublication
 							where $v/scientificPublication = $sp/@id and $sp//*[contains(text(), $PARAM)]
 							return <sp>
-										<id>{data($p/@id)}</id>
+										<id>{data($sp/@id)}</id>
 										<name>{data($sp/caption/value)}</name>
+										<process>{data($p/@id)}</process>
 									</sp>
 		}
 	</search>

@@ -4,7 +4,7 @@ return
 	<search>
 		{
 			for $p in $process/processPSP
-				where $p/@state = 'published' or $p/@authorEmail = $AUTH
+				where $p/@state = 'published' or ($p/@authorEmail = $AUTH and not($p/@state = 'deleted'))
 				for $v in $p/versions/version
 					where $v/@version = $p/@lastVersion
 						for $sp in $sps/scientificPublication
@@ -12,6 +12,7 @@ return
 							return <sp>
 										<id>{data($sp/@id)}</id>
 										<name>{data($sp/caption/value)}</name>
+										<process>{data($p/@id)}</process>
 									</sp>
 		}
 	</search>
