@@ -7,14 +7,14 @@ import java.io.StringWriter;
 import javax.xml.namespace.QName;
 import javax.xml.transform.stream.StreamResult;
 
-import com.example.xmlScientificPublicationEditor.service.NotificationService;
-import com.example.xmlScientificPublicationEditor.service.ProcessPSPService;
 import org.apache.xerces.xs.XSModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.xmlScientificPublicationEditor.exception.ResourceNotFoundException;
 import com.example.xmlScientificPublicationEditor.repository.QuestionnaireRepository;
+import com.example.xmlScientificPublicationEditor.service.NotificationService;
+import com.example.xmlScientificPublicationEditor.service.ProcessPSPService;
 import com.example.xmlScientificPublicationEditor.service.QuestionnaireService;
 import com.example.xmlScientificPublicationEditor.util.RDF.MetadataExtractor;
 import com.example.xmlScientificPublicationEditor.util.XSLFOTransformer.XSLFOTransformer;
@@ -45,7 +45,7 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
 	private NotificationService notificationService;
 
 	@Override
-	public String findOne(String id) throws Exception {
+	public String findOne(String id, String name) throws Exception {
 		String questionnaire = questionnaireRepository.findOne(id);
 		if (questionnaire == null) {
 			throw new ResourceNotFoundException(String.format("Questionnaire with id %s", id));
@@ -54,21 +54,15 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
 	}
 
 	@Override
-	public String findOneHTML(String id) throws Exception {
-		String cl = questionnaireRepository.findOne(id);
-		if (cl == null) {
-			throw new ResourceNotFoundException(String.format("Questionnaire with id %s", id));
-		}
+	public String findOneHTML(String id, String name) throws Exception {
+		String cl = findOne(id, name);
 		String clHTML = xslFoTransformer.generateHTML(cl, QuestionnaireRepository.QuestionnairerXSLPath);
 		return clHTML;
 	}
 
 	@Override
-	public ByteArrayOutputStream findOnePDF(String id) throws Exception {
-		String cl = questionnaireRepository.findOne(id);
-		if (cl == null) {
-			throw new ResourceNotFoundException(String.format("Questionnaire with id %s", id));
-		}
+	public ByteArrayOutputStream findOnePDF(String id, String name) throws Exception {
+		String cl = findOne(id, name);
 		ByteArrayOutputStream clPDF = xslFoTransformer.generatePDF(cl,
 				QuestionnaireRepository.QuestionnaireXSL_FO_PATH);
 		return clPDF;
@@ -123,6 +117,26 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
 		XMLDocument sampleXml = new XMLDocument(new StreamResult(sw), true, 4, null);
 		xsInstance.generate(xsModel, rootElement, sampleXml);
 		return sw.toString();
+	}
+
+	@Override
+	public String findMerged(String id, String version, String name) throws Exception {
+		return questionnaireRepository.findOneQue(id, version, name);
+	}
+
+	@Override
+	public String findMergedHTML(String id, String version, String name) throws Exception {
+		String que = findMerged(id, version, name);
+		String clHTML = xslFoTransformer.generateHTML(que, QuestionnaireRepository.QuestionnairerMergedXSLPath);
+		return clHTML;
+	}
+
+	@Override
+	public ByteArrayOutputStream findMergedPDF(String id, String version, String name) throws Exception {
+		String que = findMerged(id, version, name);
+		ByteArrayOutputStream pdf = xslFoTransformer.generatePDF(que,
+				QuestionnaireRepository.QuestionnaireMergedXSL_FO_PATH);
+		return pdf;
 	}
 
 }

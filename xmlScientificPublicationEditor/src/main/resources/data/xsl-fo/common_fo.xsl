@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:fo="http://www.w3.org/1999/XSL/Format"
-    xmlns:n="http://www.uns.ac.rs/Tim1" version="2.0">
+    xmlns:ns="http://www.uns.ac.rs/Tim1" version="2.0">
 
     <xsl:template name="TPerson">
         <xsl:param name = "person"/>
@@ -11,13 +11,13 @@
                 <fo:table-row>
                     <fo:table-cell>
                         <fo:block>
-                            <xsl:value-of select="$person/n:name"/>
+                            <xsl:value-of select="$person/ns:name"/>
                         </fo:block>
                         <fo:block>
-                            <xsl:value-of select="$person/n:surname"/>
+                            <xsl:value-of select="$person/ns:surname"/>
                         </fo:block>
                         <fo:block>
-                            <xsl:value-of select="$person/n:email"/>
+                            <xsl:value-of select="$person/ns:email"/>
                         </fo:block>
                     </fo:table-cell>
                 </fo:table-row>
@@ -33,20 +33,20 @@
                 <fo:table-row>
                     <fo:table-cell>
                         <fo:block>
-                            <xsl:value-of select="$author/n:name"/>
-                            <xsl:value-of select="$author/n:surname"/>
+                            <xsl:value-of select="$author/ns:name"/>
+                            <xsl:value-of select="$author/ns:surname"/>
                         </fo:block>
                         <fo:block>
-                            <xsl:value-of select="$author/n:institution/n:name"/>
+                            <xsl:value-of select="$author/ns:institution/ns:name"/>
                         </fo:block>
                         <fo:block>
-                            <xsl:value-of select="$author/n:institution/n:address/n:city"/>, <xsl:value-of select="$author/n:institution/n:address/n:country"/>
+                            <xsl:value-of select="$author/ns:institution/ns:address/ns:city"/>, <xsl:value-of select="$author/ns:institution/ns:address/ns:country"/>
                         </fo:block>
                         <fo:block>
-                            <xsl:value-of select="$author/n:phone"/>
+                            <xsl:value-of select="$author/ns:phone"/>
                         </fo:block>
                         <fo:block>
-                            <xsl:value-of select="$author/n:email"/>
+                            <xsl:value-of select="$author/ns:email"/>
                         </fo:block>
                     </fo:table-cell>
                 </fo:table-row>
@@ -54,7 +54,7 @@
         </fo:table>
     </xsl:template>
     
-    <xsl:template match="n:chapter" name="TChapter">
+    <xsl:template match="ns:chapter" name="TChapter">
         <xsl:param name = "chapter"/>
         <fo:block font-size="20" margin-left="10px" margin-top="10px" margin-bottom="5px">
             <xsl:attribute name="id">
@@ -69,7 +69,7 @@
         </xsl:for-each>
     </xsl:template>
     
-    <xsl:template match="n:subchapter" name="TSubchapter">
+    <xsl:template match="ns:subchapter" name="TSubchapter">
         <fo:block margin-left="10px" margin-top="5px" margin-bottom="2px">
             <fo:block margin-left="10px" font-size="15" margin-top="3px" margin-bottom="3px">
                 <xsl:attribute name="id">
@@ -85,32 +85,34 @@
         </fo:block>
     </xsl:template>
     
-    <xsl:template match="n:paragraph |n:answer" name="TParagraph">
+    <xsl:template match="ns:paragraph |ns:answer" name="TParagraph">
         <xsl:for-each select="./*">
-            <xsl:if test="name(.) = 'text'">   
+            <xsl:if test="name(.) = 'ns:text'">   
                 <fo:block margin-top="2" margin-bottom="2">
                     <xsl:apply-templates></xsl:apply-templates>
                 </fo:block>
             </xsl:if>
             <!--quote in notification-->
-            <xsl:if test="name(.) ='quote'">
+            <xsl:if test="name(.) ='ns:quote'">
                 <fo:block margin-top="2" margin-bottom="2" font-style="italic">
-                    <xsl:apply-templates></xsl:apply-templates>
+                    <fo:basic-link internal-destination="{./@ref}" font-size="12px">
+                        <xsl:apply-templates></xsl:apply-templates>
+                    </fo:basic-link>
                 </fo:block>
             </xsl:if>
-            <xsl:if test="name(.) ='formula'">
+            <xsl:if test="name(.) ='ns:formula'">
                 <fo:block margin="10px">
-                    <fo:block> Description:
-                        <xsl:apply-templates select="./n:description"></xsl:apply-templates>
+                    <fo:block> Descriptions:
+                        <xsl:apply-templates select="./ns:description"></xsl:apply-templates>
                     </fo:block>
                     <fo:block>
                         Formula:
-                        <xsl:apply-templates select="./n:content"></xsl:apply-templates>
+                        <xsl:apply-templates select="./ns:content"></xsl:apply-templates>
                     </fo:block>
                 </fo:block>
             </xsl:if>
             <!--make oredered and unordered list-->
-            <xsl:if test="name(.) ='list'">
+            <xsl:if test="name(.) ='ns:list'">
                 <xsl:choose>
                     <xsl:when test="@type='ordered'">
                         <fo:list-block>
@@ -148,11 +150,11 @@
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:if>
-            <xsl:if test="name(.) ='image'">
+            <xsl:if test="name(.) ='ns:image'">
                 <fo:block margin-top="10px" margin-bottom="10px">
                     <fo:external-graphic>
                         <xsl:attribute name="src">
-                            <xsl:value-of select="./n:source"/>
+                            <xsl:value-of select="./ns:source"/>
                         </xsl:attribute>
                         <xsl:attribute name="content-width">
                             <xsl:value-of select="./@width"/>
@@ -162,16 +164,16 @@
                         </xsl:attribute>
                     </fo:external-graphic>
                     <fo:block font-size="8">
-                        <xsl:value-of select="./n:description"/>
+                        <xsl:value-of select="./ns:description"/>
                     </fo:block>
                 </fo:block>
             </xsl:if>
-            <xsl:if test="name(.) ='table'">
+            <xsl:if test="name(.) ='ns:table'">
                 <fo:table border="1px" margin-top="10px" margin-bottom="10px">
                     <fo:table-body>
-                        <xsl:for-each select="./n:table_row">
+                        <xsl:for-each select="./ns:table_row">
                             <fo:table-row border="1px solid black">
-                                <xsl:for-each select="./n:table_cell">
+                                <xsl:for-each select="./ns:table_cell">
                                     <fo:table-cell border="1px solid black" padding="10px">
                                         <fo:block>
                                             <xsl:apply-templates></xsl:apply-templates>
@@ -186,7 +188,7 @@
         </xsl:for-each>
     </xsl:template>
     
-    <xsl:template match="n:listItem/n:text" name="TListItem">
+    <xsl:template match="ns:listitem" name="TListItem">
             <!-- if has cursive go trought it sequence -->
                 <xsl:for-each select="./*">
                     <fo:block>
@@ -196,14 +198,14 @@
     </xsl:template>
 
     <!-- TCursive and it's subnodes templates -->
-    <xsl:template match="n:cursive | n:description" name="TCursive">
+    <xsl:template match="ns:cursive | ns:description" name="TCursive">
             <!-- if has cursive go trought it sequence -->
                 <xsl:for-each select="./* | text()">    
                     <xsl:apply-templates select="."></xsl:apply-templates>
                 </xsl:for-each>
     </xsl:template>
 
-    <xsl:template match="n:bold">
+    <xsl:template match="ns:bold">
         <fo:inline  font-weight="bold">
             <xsl:for-each select="./* | text()">    
                 <xsl:apply-templates select="."></xsl:apply-templates>
@@ -211,7 +213,7 @@
         </fo:inline>
     </xsl:template>
 
-    <xsl:template match="n:italic">
+    <xsl:template match="ns:italic">
         <fo:inline font-style="italic">
             <xsl:for-each select="./* | text()">    
                 <xsl:apply-templates select="."></xsl:apply-templates>
@@ -219,7 +221,7 @@
         </fo:inline>
     </xsl:template>
 
-    <xsl:template match="n:underline">
+    <xsl:template match="ns:underline">
         <fo:inline border-after-width="1pt" border-after-style="solid">
             <xsl:for-each select="./* | text()">    
                     <xsl:apply-templates select="."></xsl:apply-templates>
@@ -228,25 +230,25 @@
     </xsl:template>
 
     <!-- override rule: copy any text node beneath bold -->
-    <xsl:template match="n:bold/text()">
+    <xsl:template match="ns:bold/text()">
         <xsl:copy-of select="." />
     </xsl:template>
     
     <!-- override rule: copy any text node beneath italic -->
-    <xsl:template match="n:italic/text()">
+    <xsl:template match="ns:italic/text()">
         <xsl:copy-of select="." />
     </xsl:template>
 
     <!-- override rule: copy any text node beneath underline -->
-    <xsl:template match="n:underline/text()">
+    <xsl:template match="ns:underline/text()">
         <xsl:copy-of select="." />
     </xsl:template>
 
-    <xsl:template match="n:description/text()">
+    <xsl:template match="ns:description/text()">
         <xsl:copy-of select="." />
     </xsl:template>
 
-    <xsl:template match="n:cursive/text()">
+    <xsl:template match="ns:cursive/text()">
         <xsl:copy-of select="." />
     </xsl:template>
     
@@ -258,13 +260,13 @@
                 <fo:table-row>
                     <fo:table-cell>
                         <fo:block>
-                            <xsl:value-of select="$address/n:city"/>, 
-                            <xsl:value-of select="$address/n:country"/>
+                            <xsl:value-of select="$address/ns:city"/>, 
+                            <xsl:value-of select="$address/ns:country"/>
                         </fo:block>
                         <fo:block>
-                            <xsl:value-of select="$address/n:street"/> 
-                            <xsl:value-of select="$address/n:streetNumber"/> 
-                            <xsl:value-of select="$address/n:floorNumber"/>
+                            <xsl:value-of select="$address/ns:street"/> 
+                            <xsl:value-of select="$address/ns:streetNumber"/> 
+                            <xsl:value-of select="$address/ns:floorNumber"/>
                         </fo:block>
                     </fo:table-cell>
                 </fo:table-row>
@@ -285,7 +287,7 @@
             <xsl:text> </xsl:text>
             <fo:page-number-citation ref-id="{$link}"/>
         </fo:block>
-        <xsl:for-each select="$chapter/n:subchapter">
+        <xsl:for-each select="$chapter/ns:subchapter">
             <xsl:call-template name="TSubchapterContent">
                 <xsl:with-param name="subchapter" select="."></xsl:with-param>
             </xsl:call-template>
@@ -306,7 +308,7 @@
                 <xsl:text> </xsl:text>
                 <fo:page-number-citation ref-id="{$link}"/>
             </fo:block>
-            <xsl:for-each select="./n:subchapter">
+            <xsl:for-each select="./ns:subchapter">
                 <xsl:call-template name="TSubchapterContent">
                     <xsl:with-param name="subchapter" select="."></xsl:with-param>
                 </xsl:call-template>
@@ -317,8 +319,25 @@
     <xsl:template name="TQusetion">
         <xsl:param name="qusetion"/>
         <fo:block>
-            - <xsl:value-of select="$qusetion/n:questionText"/>
+            - <xsl:value-of select="$qusetion/ns:questionText"/>
         </fo:block>
-        <xsl:apply-templates select="$qusetion/n:answer"></xsl:apply-templates>
+        <xsl:apply-templates select="$qusetion/ns:answer"></xsl:apply-templates>
+    </xsl:template>
+    
+    
+    <xsl:template name="TReference">
+        <xsl:param name="reference"/>
+        <xsl:if test="$reference/ns:book">
+            <fo:block text-align="justify" id="{$reference/@id}">
+                <xsl:value-of select="$reference/ns:book"/>
+            </fo:block>
+        </xsl:if>
+        <xsl:if test="$reference/ns:link">
+            <fo:block text-align="justify" id="{$reference/@id}">
+                <fo:basic-link external-destination="{$reference/ns:link}" font-size="12px">
+                    ref
+                </fo:basic-link>
+            </fo:block>
+        </xsl:if>
     </xsl:template>
 </xsl:stylesheet>

@@ -22,7 +22,7 @@ public class ProcessPSPController {
     @Autowired
     private ProcessPSPService processPSPService;
 
-    @GetMapping(value="/processPSP/{id}", produces = MediaType.APPLICATION_XML_VALUE)
+    @GetMapping(value="/processPSP/ev/{id}", produces = MediaType.APPLICATION_XML_VALUE)
     @PreAuthorize("hasRole('ROLE_REDACTOR')")
 	public ResponseEntity<String> getReviewAssignments(@PathVariable("id")String id) throws Exception{
 		String sp = processPSPService.findOne(id);

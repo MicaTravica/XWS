@@ -1,0 +1,14 @@
+let $docs := collection("/db/sample/processPSP")
+let $ques := collection("/db/sample/questionnaire")
+for $p in $docs/processPSP
+where $p/@id = $ID and $p/@authorEmail = $AUTH
+return
+    <ns:qs xmlns:ns="http://www.uns.ac.rs/Tim1">
+        	{for $v in $p/versions/version
+        		where $v/@version = $VERSION 
+        		for $r in $v/reviewAssignments/reviewAssigment
+        			for $q in $ques/questionnaire
+        				where $q/@id = data($r/review/idQuestionnaire)
+        					return $q }
+        	
+        </ns:qs>

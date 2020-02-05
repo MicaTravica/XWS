@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { PublicationService } from 'src/app/services/publication-service/publication.service';
+import { OpenServiceService } from 'src/app/services/open-service/open-service.service';
 import { HttpErrorResponse } from '@angular/common/http/http';
 
 declare var require: any;
@@ -19,9 +20,10 @@ export class SearchPublicationsComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private publicationService: PublicationService
+    private publicationService: PublicationService,
+    private openService: OpenServiceService
   ) {
-    this.searchForm = fb.group({
+    this.searchForm = this.fb.group({
       searchType: 'regular',
       search: ''
     });
@@ -41,7 +43,8 @@ export class SearchPublicationsComponent implements OnInit {
         this.publications.push(
           {
             id: sp.id._text,
-            name: sp.name._text
+            name: sp.name._text,
+            process: sp.process._text
           }
         );
       }
@@ -76,15 +79,39 @@ export class SearchPublicationsComponent implements OnInit {
   }
 
   getMetadataXML(scId: string) {
-    this.publicationService.getMetadataXML(scId).subscribe( res => {
-      console.log(res);
+    this.publicationService.getMetadataXML(scId).subscribe(res => {
+      this.openService.xml(res);
     });
   }
 
   getMetadataJSON(scId: string) {
     this.publicationService.getMetadataJSON(scId).subscribe( res => {
-      console.log(res);
+      this.openService.json(res);
     });
   }
+
+  xml(id: string) {
+    this.publicationService.xml(id).subscribe(
+      (data: any) => {
+        this.openService.xml(data);
+      }
+    );
+  }
+
+
+  html(id: string) {
+    this.publicationService.html(id).subscribe(
+      (data: any) => {
+        this.openService.html(data);
+      });
+  }
+
+  pdf(id: string) {
+    this.publicationService.pdf(id).subscribe(
+      (data: any) => {
+        this.openService.pdf(data);
+      });
+  }
+
 }
 

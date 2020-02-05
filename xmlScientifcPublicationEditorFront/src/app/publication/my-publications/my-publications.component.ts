@@ -4,6 +4,8 @@ import { PublicationService } from 'src/app/services/publication-service/publica
 import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http/http';
 import { ToastrService } from 'ngx-toastr';
+import { OpenServiceService } from 'src/app/services/open-service/open-service.service';
+import { CoverLetterService } from 'src/app/services/cover-letter-service/cover-letter.service';
 
 declare var require: any;
 const convert = require('xml-js');
@@ -18,10 +20,14 @@ export class MyPublicationsComponent implements OnInit {
 
   publications = [];
 
-  constructor(private processPSPService: ProcessPSPService,
-              private router: Router,
-              private toastr: ToastrService,
-              private publicationService: PublicationService ) { }
+  constructor(
+    private processPSPService: ProcessPSPService,
+    private router: Router,
+    private toastr: ToastrService,
+    private publicationService: PublicationService,
+    private openService: OpenServiceService,
+    private clService: CoverLetterService
+  ) { }
 
   ngOnInit() {
     this.processPSPService.getMyPublications()
@@ -57,7 +63,7 @@ export class MyPublicationsComponent implements OnInit {
           processId: p.processId._text
         });
       }
-}
+    }
   }
 
   addCoverLetter(processId: string) {
@@ -100,13 +106,13 @@ export class MyPublicationsComponent implements OnInit {
 
   getMetadataXML(scId: string) {
     this.publicationService.getMetadataXML(scId).subscribe( res => {
-      console.log(res);
+      this.openService.xml(res);
     });
   }
 
   getMetadataJSON(scId: string) {
     this.publicationService.getMetadataJSON(scId).subscribe( res => {
-      console.log(res);
+      this.openService.json(res);
     });
   }
 
@@ -115,4 +121,48 @@ export class MyPublicationsComponent implements OnInit {
     this.router.navigate(['new_version', processId]);
   }
 
+  xml(id: string) {
+    this.publicationService.xmlVersion(id).subscribe(
+      (data: any) => {
+        this.openService.xml(data);
+      }
+    );
+  }
+
+
+  html(id: string) {
+    this.publicationService.htmlVersion(id).subscribe(
+      (data: any) => {
+        this.openService.html(data);
+      });
+  }
+
+  pdf(id: string) {
+    this.publicationService.pdfVersion(id).subscribe(
+      (data: any) => {
+        this.openService.pdf(data);
+      });
+  }
+
+  xmlCL(id: string) {
+    this.clService.xml(id).subscribe(
+      (data: any) => {
+        this.openService.xml(data);
+      }
+    );
+  }
+
+  htmlCL(id: string) {
+    this.clService.html(id).subscribe(
+      (data: any) => {
+        this.openService.html(data);
+      });
+  }
+
+  pdfCL(id: string) {
+    this.clService.pdf(id).subscribe(
+      (data: any) => {
+        this.openService.pdf(data);
+      });
+  }
 }

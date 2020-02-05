@@ -1,17 +1,20 @@
 <div>
-    <h1 *ngIf="publications.length < 1">
-        You dont have publications
-    </h1>
     <mat-card *ngFor="let sp of publications">
         <mat-card-header>
             <mat-card-title>{{sp.name}}</mat-card-title>
             <mat-card-subtitle>{{sp.processState}}</mat-card-subtitle>
             <mat-card-subtitle *ngFor="let a of sp.authors">{{a.name._text}} {{a.surname._text}}</mat-card-subtitle>
         </mat-card-header>
+        <mat-card-actions *ngIf="sp.processState !='inProgress'">
+            Cover letter: 
+            <a mat-raised-button (click)="xmlCL(sp.processId)">XML</a>
+            <a mat-raised-button (click)="htmlCL(sp.processId)">HTML</a>
+            <a mat-raised-button (click)="pdfCL(sp.processId)">PDF</a>
+        </mat-card-actions>
         <mat-card-actions>
-            <a mat-raised-button routerLink=".">XML</a>
-            <a mat-raised-button routerLink=".">HTML</a>
-            <a mat-raised-button routerLink=".">PDF</a>
+            <a mat-raised-button (click)="xml(sp.id)">XML</a>
+            <a mat-raised-button (click)="html(sp.id)">HTML</a>
+            <a mat-raised-button (click)="pdf(sp.id)">PDF</a>
             <a mat-raised-button (click)="getMetadataJSON(sp.id)">RDF_json</a>
             <a mat-raised-button (click)="getMetadataXML(sp.id)">RDF_xml</a>
             <button mat-raised-button color="accent"
@@ -22,7 +25,7 @@
                 (click)="delete(sp.processId)">Delete</button>
             <button mat-raised-button color="accent" *ngIf="sp.processState =='inProgress'" (click)="addCoverLetter(sp.processId)">Add CoverLetter</button>
             <button mat-raised-button color="accent" (click)="seeHistory(sp.processId)">See history</button>
-            <button mat-raised-button color="accent" *ngIf="sp.processState =='revised'" (click)="addNewVersion(sp)">Add new version</button>
+            <button mat-raised-button color="accent" *ngIf="sp.processState =='revised'" (click)="addNewVersion(sp.processId)">Add new version</button>
         </mat-card-actions>
     </mat-card>
 </div>

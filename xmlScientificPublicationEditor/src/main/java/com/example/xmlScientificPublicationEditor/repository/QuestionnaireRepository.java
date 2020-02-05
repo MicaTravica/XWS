@@ -11,6 +11,7 @@ import org.exist.xmldb.EXistResource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xmldb.api.base.ResourceIterator;
@@ -22,6 +23,7 @@ import com.example.xmlScientificPublicationEditor.exception.ResourceNotDeleted;
 import com.example.xmlScientificPublicationEditor.exception.ResourceNotFoundException;
 import com.example.xmlScientificPublicationEditor.service.IdGeneratorService;
 import com.example.xmlScientificPublicationEditor.serviceImpl.IdGeneratorServiceImpl;
+import com.example.xmlScientificPublicationEditor.util.MyFile;
 import com.example.xmlScientificPublicationEditor.util.DOMParser.DOMParser;
 import com.example.xmlScientificPublicationEditor.util.RDF.StoreToRDF;
 import com.example.xmlScientificPublicationEditor.util.RDF.UpdateRDF;
@@ -45,13 +47,15 @@ public class QuestionnaireRepository {
 	public static String QuestionnaireSchemaPath = "src/main/resources/data/schemas/questionnaire.xsd";
 	public static String QUESTIONNAIRE_NAMED_GRAPH_URI_PREFIX = "/example/questionnaire/";
 	public static String QuestionnairerXSLPath = "src/main/resources/data/xslt/questionnaire.xsl";
+	public static String QuestionnairerMergedXSLPath = "src/main/resources/data/xslt/quem.xsl";
 	public static String QuestionnaireXSL_FO_PATH = "src/main/resources/data/xsl-fo/questionnaire_fo.xsl";
+	public static String QuestionnaireMergedXSL_FO_PATH = "src/main/resources/data/xsl-fo/quem_fo.xsl";
 	public static String QuestionnaireRDFPath = "src/main/resources/data/xmlToRDFa/questionnaireToRDFa.xsl";
 
 
 	public String findOne(String id) throws Exception {
 		String retVal = null;
-		String xpathExp = "//ns1:questionnaire[@id=\"" + id + "\"]";
+		String xpathExp = "//questionnaire[@id=\"" + id + "\"]";
 		ResourceSet resultSet = RetriveFromDB.executeXPathExpression(QuestionnaireCollectionId, xpathExp,
 				TARGET_NAMESPACE);
 		if (resultSet == null) {
@@ -153,5 +157,30 @@ public class QuestionnaireRepository {
 		StoreToRDF.store(metadata, url);
 	}
 
+	public String findOneQue(String id, String version, String name) throws Exception {
+		String xQueryPath = "src/main/resources/data/xQuery/findOneQueById.txt";
+		
+		HashMap<String, String> params = new HashMap<>();
+		params.put("ID", id);
+		params.put("VERSION", version);
+		params.put("AUTH", name);
+
+		ResourceSet resultSet = RetriveFromDB.executeXQuery(
+			QuestionnaireCollectionId, xQueryPath, params, TARGET_NAMESPACE);
+		
+		String result = MyFile.resourceSetToString(resultSet);
+		Document doc = DOMParser.buildDocumentWithOutSchema(result);
+		NodeList ques = doc.getDocumentElement().getElementsByTagName("ns:questionnaire");
+		for (int i = 0; i < ques.getLength(); i++) {
+			Element qu = (Element) ques.item(i);
+			NodeList revs = qu.getElementsByTagName("ns:reviewer");
+			for (int j = 0; j < revs.getLength(); j++) {
+				qu.removeChild(revs.item(j));
+			}
+		}
+
+		result = DOMParser.parseDocumentWithoutSchema(doc);
+		return result;
+	}
 
 }

@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,9 +30,9 @@ public class ScientificPublicationController extends BaseController {
 	@Autowired
 	private ScientificPublicationService scientificPublicationService;
 
-	@GetMapping(value = "/scientificPublication/{id}", produces = MediaType.APPLICATION_XML_VALUE)
-	public ResponseEntity<String> getScientificPublicationById(@PathVariable("id") String id) throws Exception {
-		String sp = scientificPublicationService.findOne(id);
+	@GetMapping(value = "/scientificPublication/process/{id}", produces = MediaType.APPLICATION_XML_VALUE)
+	public ResponseEntity<String> getScientificPublicationByProcessId(@PathVariable("id") String id) throws Exception {
+		String sp = scientificPublicationService.findOneByProcessId(id, SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 		return new ResponseEntity<>(sp, HttpStatus.OK);
 	}
 
@@ -50,13 +51,25 @@ public class ScientificPublicationController extends BaseController {
 	}
 
 	
-	@GetMapping(value = "/scientificPublication/notPub/{id}", produces = MediaType.APPLICATION_XML_VALUE)
-	@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_REVIEWER') or hasRole('ROLE_REDACTOR')")
-	public ResponseEntity<String> getScientificPublicationNotPubById(@PathVariable("id") String id, Principal user) throws Exception {
-		String sp = scientificPublicationService.findOneNotPub(id, user.getName());
+	@GetMapping(value = "/scientificPublication/process/html/{id}", produces = MediaType.APPLICATION_XML_VALUE)
+	public ResponseEntity<String> getScientificPublicationByProcessIdHTML(@PathVariable("id") String id) throws Exception {
+		String sp = scientificPublicationService.findOneByProcessIdHTML(id, SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 		return new ResponseEntity<>(sp, HttpStatus.OK);
 	}
+	
+	@GetMapping(value = "/scientificPublication/process/pdf/{id}", produces = MediaType.APPLICATION_XML_VALUE)
+	public ResponseEntity<byte[]> getScientificPublicationByProcessIdPDF(@PathVariable("id") String id) throws Exception {
+		ByteArrayOutputStream sp = scientificPublicationService.findOneByProcessIdPDF(id, SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+		return new ResponseEntity<>(sp.toByteArray(), HttpStatus.OK);
+	}
+	
 
+	@GetMapping(value = "/scientificPublication/{id}", produces = MediaType.APPLICATION_XML_VALUE)
+	public ResponseEntity<String> getScientificPublicationById(@PathVariable("id") String id) throws Exception {
+		String sp = scientificPublicationService.findOnePub(id);
+		return new ResponseEntity<>(sp, HttpStatus.OK);
+	}
+	
 	@GetMapping(value = "/scientificPublication/html/{id}", produces = MediaType.TEXT_HTML_VALUE)
 	public ResponseEntity<String> getScientificPublicationByIdHTML(@PathVariable("id") String id) throws Exception {
 		String sp = scientificPublicationService.findOneHTML(id);
@@ -68,7 +81,56 @@ public class ScientificPublicationController extends BaseController {
 		ByteArrayOutputStream sp = scientificPublicationService.findOnePDF(id);
 		return new ResponseEntity<>(sp.toByteArray(), HttpStatus.OK);
 	}
+	
+	@GetMapping(value = "/scientificPublication/version/{id}", produces = MediaType.APPLICATION_XML_VALUE)
+	@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_REVIEWER') or hasRole('ROLE_REDACTOR')")
+	public ResponseEntity<String> getScientificPublicationByVersion(@PathVariable("id") String id, Principal user) throws Exception {
+		String sp = scientificPublicationService.findOneByVersion(id, user.getName());
+		return new ResponseEntity<>(sp, HttpStatus.OK);
+	}
+	
+	@GetMapping(value = "/scientificPublication/version/html/{id}", produces = MediaType.APPLICATION_XML_VALUE)
+	@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_REVIEWER') or hasRole('ROLE_REDACTOR')")
+	public ResponseEntity<String> getScientificPublicationByVersionHTML(@PathVariable("id") String id, Principal user) throws Exception {
+		String sp = scientificPublicationService.findOneByVersionHTML(id, user.getName());
+		return new ResponseEntity<>(sp, HttpStatus.OK);
+	}
+	
+	@GetMapping(value = "/scientificPublication/version/pdf/{id}", produces = MediaType.APPLICATION_XML_VALUE)
+	@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_REVIEWER') or hasRole('ROLE_REDACTOR')")
+	public ResponseEntity<byte[]> getScientificPublicationByVersionPDF(@PathVariable("id") String id, Principal user) throws Exception {
+		ByteArrayOutputStream sp = scientificPublicationService.findOneByVersionPDF(id, user.getName());
+		return new ResponseEntity<>(sp.toByteArray(), HttpStatus.OK);
+	}
+	
+	@GetMapping(value = "/scientificPublication/notPub/{id}", produces = MediaType.APPLICATION_XML_VALUE)
+	@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_REVIEWER') or hasRole('ROLE_REDACTOR')")
+	public ResponseEntity<String> getScientificPublicationNotPubById(@PathVariable("id") String id, Principal user) throws Exception {
+		String sp = scientificPublicationService.findOneNotPub(id, user.getName());
+		return new ResponseEntity<>(sp, HttpStatus.OK);
+	}
 
+	@GetMapping(value = "/scientificPublication/review/{id}", produces = MediaType.APPLICATION_XML_VALUE)
+	@PreAuthorize("hasRole('ROLE_REVIEWER') or hasRole('ROLE_REDACTOR')")
+	public ResponseEntity<String> reviewSP(@PathVariable("id") String processId, Principal user) throws Exception {
+		String result = scientificPublicationService.getSPReview(processId, user.getName());
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+
+	@GetMapping(value = "/scientificPublication/review/html/{id}", produces = MediaType.APPLICATION_XML_VALUE)
+	@PreAuthorize("hasRole('ROLE_REVIEWER') or hasRole('ROLE_REDACTOR')")
+	public ResponseEntity<String> reviewSPHTML(@PathVariable("id") String processId, Principal user) throws Exception {
+		String result = scientificPublicationService.getSPReviewHTML(processId, user.getName());
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+
+	@GetMapping(value = "/scientificPublication/review/pdf/{id}", produces = MediaType.APPLICATION_XML_VALUE)
+	@PreAuthorize("hasRole('ROLE_REVIEWER') or hasRole('ROLE_REDACTOR')")
+	public ResponseEntity<byte[]> reviewSPPDF(@PathVariable("id") String processId, Principal user) throws Exception {
+		ByteArrayOutputStream sp = scientificPublicationService.getSPReviewPDF(processId, user.getName());
+		return new ResponseEntity<>(sp.toByteArray(), HttpStatus.OK);
+	}
+	
 	@PostMapping(value = "/scientificPublication", consumes = MediaType.APPLICATION_XML_VALUE, produces = MediaType.APPLICATION_XML_VALUE)
 	@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_REVIEWER') or hasRole('ROLE_REDACTOR')")
 	public ResponseEntity<String> addScientificPublication(@RequestBody String scientificPublication, Principal author)
@@ -154,13 +216,5 @@ public class ScientificPublicationController extends BaseController {
         String result = scientificPublicationService.metadataSearch(param, user);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
-
-	
-	@GetMapping(value = "/scientificPublication/review/{id}", produces = MediaType.APPLICATION_XML_VALUE)
-	@PreAuthorize("hasRole('ROLE_REVIEWER') or hasRole('ROLE_REDACTOR')")
-	public ResponseEntity<String> reviewSP(@PathVariable("id")String processId,Principal user) throws Exception {
-		String result = scientificPublicationService.getSPReview(processId, user.getName());
-        return new ResponseEntity<>(result, HttpStatus.OK);
-	}
 
 }

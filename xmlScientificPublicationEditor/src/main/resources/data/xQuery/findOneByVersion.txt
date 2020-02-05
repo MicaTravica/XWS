@@ -1,0 +1,17 @@
+let $process := collection("/db/sample/processPSP")
+let $sps := collection("/db/sample/scientificPublication")
+for $p in $process/processPSP
+where $p/@authorEmail = $AUTH or $p/idRedactor = $REDACTOR
+	for $v in $p/versions/version
+		return (if ($v/scientificPublication = $ID)
+		then 
+			for $sp in $sps/scientificPublication
+				where $sp/@id = $ID 
+					return $sp 
+		else (for $r in $v/reviewAssignments/reviewAssigment
+        		return (if($r/review/idScientificPublication = $ID)
+        			then for $sp in $sps/scientificPublication
+						where $sp/@id = $ID 
+							return $sp 
+        			else ())
+        			)) 

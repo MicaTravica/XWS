@@ -3,6 +3,7 @@ package com.example.xmlScientificPublicationEditor.repository;
 import static com.example.xmlScientificPublicationEditor.util.template.XUpdateTemplate.TARGET_NAMESPACE;
 
 import java.io.StringWriter;
+import java.util.HashMap;
 
 import org.exist.xmldb.EXistResource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,9 @@ import org.xmldb.api.modules.XMLResource;
 import com.example.xmlScientificPublicationEditor.exception.ResourceNotDeleted;
 import com.example.xmlScientificPublicationEditor.exception.ResourceNotFoundException;
 import com.example.xmlScientificPublicationEditor.service.IdGeneratorService;
+import com.example.xmlScientificPublicationEditor.service.PersonService;
 import com.example.xmlScientificPublicationEditor.serviceImpl.IdGeneratorServiceImpl;
+import com.example.xmlScientificPublicationEditor.util.MyFile;
 import com.example.xmlScientificPublicationEditor.util.DOMParser.DOMParser;
 import com.example.xmlScientificPublicationEditor.util.RDF.MetadataExtractor;
 import com.example.xmlScientificPublicationEditor.util.RDF.StoreToRDF;
@@ -39,6 +42,9 @@ public class CoverLetterRepository {
 	
 	@Autowired
 	private XSLFOTransformer xslFoTransformer;
+	
+	@Autowired
+	private PersonService personService;
 
     public static final String ScientificPublicationID = "href";
 
@@ -158,6 +164,20 @@ public class CoverLetterRepository {
 		String url = CV_NAMED_GRAPH_URI_PREFIX + cvId;
 		deleteMetadata(cvId);
 		StoreToRDF.store(metadata, url);
+	}
+
+	public String findOneByProcess(String id, String email) throws Exception {
+		String xQueryPath = "src/main/resources/data/xQuery/findOneCLByProcessId.txt";
+		
+		HashMap<String, String> params = new HashMap<>();
+		params.put("ID", id);
+		params.put("AUTH", email);
+		params.put("REDACTOR", personService.findOneAuth(email).getId());
+
+		ResourceSet resultSet = RetriveFromDB.executeXQuery(
+			coverLetterCollectionId, xQueryPath, params, TARGET_NAMESPACE);
+		
+		return MyFile.resourceSetToString(resultSet);
 	}
 
 }

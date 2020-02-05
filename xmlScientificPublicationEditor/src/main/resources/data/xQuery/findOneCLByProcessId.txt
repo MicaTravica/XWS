@@ -1,0 +1,8 @@
+let $process := collection("/db/sample/processPSP")
+let $cls := collection("/db/sample/coverLetter")
+for $p in $process/processPSP
+where $p/@id = $ID
+where $p/@authorEmail = $AUTH or $p/idRedactor = $REDACTOR
+	for $c in $cls/coverLetter
+		where $p/coverLetter = $c/@id 
+			return $c

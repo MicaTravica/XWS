@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ProcessPSPService } from 'src/app/services/processPSP/process-psp.service';
+import { PublicationService } from 'src/app/services/publication-service/publication.service';
+import { OpenServiceService } from 'src/app/services/open-service/open-service.service';
+import { CoverLetterService } from 'src/app/services/cover-letter-service/cover-letter.service';
 
 declare var require: any;
 const convert = require('xml-js');
@@ -15,8 +18,13 @@ export class ForPublicationComponent implements OnInit {
 
   publications = [];
 
-  constructor(private router: Router,
-              private processPSPService: ProcessPSPService) { }
+  constructor(
+    private router: Router,
+    private processPSPService: ProcessPSPService,
+    private publicationService: PublicationService,
+    private openService: OpenServiceService,
+    private clService: CoverLetterService
+  ) { }
 
   ngOnInit() {
     this.processPSPService.getPublicationsForPublishing()
@@ -48,14 +56,56 @@ export class ForPublicationComponent implements OnInit {
       });
   }
 
-  
-
-
-  reviewers(id: number) {
+  reviewers(id: string) {
     this.router.navigate(['/add_rev/' + id]);
   }
 
-  evaluate(id: number) {
+  evaluate(id: string) {
     this.router.navigate(['/process/' + id]);
+  }
+
+  xml(id: string) {
+    this.publicationService.xml(id).subscribe(
+      (data: any) => {
+        this.openService.xml(data);
+      }
+    );
+  }
+
+
+  html(id: string) {
+    this.publicationService.html(id).subscribe(
+      (data: any) => {
+        this.openService.html(data);
+      });
+  }
+
+  pdf(id: string) {
+    this.publicationService.pdf(id).subscribe(
+      (data: any) => {
+        this.openService.pdf(data);
+      });
+  }
+
+   xmlCL(id: string) {
+    this.clService.xml(id).subscribe(
+      (data: any) => {
+        this.openService.xml(data);
+      }
+    );
+  }
+
+  htmlCL(id: string) {
+    this.clService.html(id).subscribe(
+      (data: any) => {
+        this.openService.html(data);
+      });
+  }
+
+  pdfCL(id: string) {
+    this.clService.pdf(id).subscribe(
+      (data: any) => {
+        this.openService.pdf(data);
+      });
   }
 }

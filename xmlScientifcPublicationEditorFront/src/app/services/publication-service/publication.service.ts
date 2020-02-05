@@ -88,6 +88,22 @@ export class PublicationService {
       });
   }
 
+  getPublicationReviewerProcessHTML(processId: string) {
+    return this.http.get(this.url + '/review/html/' + processId,
+      {
+        headers: authHttpOptions(this.authService.getToken()),
+        responseType: 'text'
+      });
+  }
+
+  getPublicationReviewerProcessPDF(processId: string) {
+    return this.http.get(this.url + '/review/pdf/' + processId,
+      {
+        headers: authHttpOptions(this.authService.getToken()),
+        responseType: 'blob'
+      });
+  }
+
   addCommentsProcess(publicationXml: string, processId: string) {
     return this.http.post(this.url + '/review/' + processId, publicationXml,
       {
@@ -100,6 +116,13 @@ export class PublicationService {
     return this.uploadService.upload(file, this.url + '/upload/review', processId);
   }
 
+  xml(id: string) {
+    return this.http.get(this.url + '/process/' + id,
+         {
+        headers: authHttpOptions(this.authService.getToken()),
+        responseType: 'text'
+      });
+  }
   getMetadataJSON(spId: string) {
     return this.http.get(this.url + '/getMetadataJSON/' + spId,
       {
@@ -108,6 +131,13 @@ export class PublicationService {
       });
   }
 
+  html(id: string) {
+    return this.http.get(this.url + '/process/html/' + id,
+      {
+        headers: authHttpOptions(this.authService.getToken()),
+        responseType: 'text'
+      });
+  }
   getMetadataXML(spId: string) {
     return this.http.get(this.url + '/getMetadataXml/' + spId,
       {
@@ -116,4 +146,35 @@ export class PublicationService {
       });
   }
 
+  pdf(id: string) {
+    return this.http.get(this.url + '/process/pdf/' + id,
+      {
+        headers: authHttpOptions(this.authService.getToken()),
+        responseType: 'blob'
+      });
+  }
+
+  xmlVersion(id: string) {
+    return this.http.get(this.url + '/version/' + id,
+      {
+        headers: authHttpOptions(this.authService.getToken()),
+        responseType: 'text'
+      });
+  }
+
+  htmlVersion(id: string) {
+    return this.http.get(this.url + '/version/html/' + id,
+      {
+        headers: authHttpOptions(this.authService.getToken()),
+        responseType: 'text'
+      });
+  }
+
+  pdfVersion(id: string) {
+    return this.http.get(this.url + '/version/pdf/' + id,
+      {
+        headers: authHttpOptions(this.authService.getToken()),
+        responseType: 'blob'
+      });
+  }
 }

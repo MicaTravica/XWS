@@ -3,7 +3,6 @@ package com.example.xmlScientificPublicationEditor.repository.person;
 import static com.example.xmlScientificPublicationEditor.util.template.XUpdateTemplate.TARGET_NAMESPACE;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import org.exist.xmldb.EXistResource;
 import org.springframework.beans.factory.annotation.Autowired;

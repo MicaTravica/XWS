@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    xmlns:n="http://www.uns.ac.rs/Tim1" version="2.0">
+    xmlns:ns="http://www.uns.ac.rs/Tim1" version="2.0">
     <xsl:import href="common.xsl"/>
     <xsl:template match="/">
         <html>
             <head>
                 <style type="text/css">
 					html {
-						margin: auto 50px auto 50px;
+						margins: auto 50px auto 50px;
 						padding: 2px;
-						text-align: justify;
+						text-aligns: justify;
 					}
 					.column {
 						float: left;
@@ -21,13 +21,13 @@
 						clear: both;
 					}
 					.small {
-						margin: auto;
-						text-align: center;
-						width: 50%;
+						margins: auto;
+						text-aligns: center;
+						width: 100%;
 						font-size: 11px; 
 					}
 					.footer {
-						position: auto;
+						positions: auto;
 						bottom: 5px;
 						width: 100%;
 					}
@@ -36,36 +36,36 @@
             </head>
             <body>
 				<p align="right">
-                    <xsl:value-of select="n:coverLetter/n:date"/>
+                    <xsl:value-of select="ns:coverLetter/ns:date"/>
                 </p>
             	<h1 align="center">
-            		Cover letter for <xsl:value-of select="document(concat('http://', n:coverLetter/@href))/n:scientificPublication/n:caption"/>
+            		Cover letter
             	</h1>
 				<div align="left">
 					<xsl:call-template name="TAuthor">
-						<xsl:with-param name="author" select = "n:coverLetter/n:author" />
+						<xsl:with-param name="author" select = "ns:coverLetter/ns:author" />
 					</xsl:call-template>
 				</div>
-            	<xsl:for-each select="n:coverLetter/n:content">
+            	<xsl:for-each select="ns:coverLetter/ns:content">
             		<xsl:call-template name="TParagraph"/>
             	</xsl:for-each>
 				<p>
 					Signature:<br/>
-					<i><xsl:value-of select="n:coverLetter/n:authorSignature"/></i>
+					<i><xsl:value-of select="ns:coverLetter/ns:authorSignature"/></i>
                 </p>
             	<div class="footer">
             		<div class="row small">
             			<div class="column" align="center">
-            				Organization:<br/>
-            				<xsl:value-of select="n:coverLetter/n:contactInformation/n:organisationName"/>
+            				Organizations:<br/>
+            				<xsl:value-of select="ns:coverLetter/ns:contactPerson/ns:institution/ns:name"/>
             				<xsl:call-template name="TAddress">
-            					<xsl:with-param name="address" select = "n:coverLetter/n:contactInformation/n:organisationAddress" />
+            					<xsl:with-param name="address" select = "ns:coverLetter/ns:contactPerson/ns:institution/ns:address" />
             				</xsl:call-template>
             			</div>
             			<div class="column" align="center">
-            				Contact person:
+            				Contact persons:
             				<xsl:call-template name="TPerson">
-            					<xsl:with-param name="person" select = "n:coverLetter/n:contactInformation/n:contactPerson" />
+            					<xsl:with-param name="person" select = "ns:coverLetter/ns:contactPerson" />
             				</xsl:call-template>
             			</div>
             		</div>

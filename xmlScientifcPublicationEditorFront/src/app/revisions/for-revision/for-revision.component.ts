@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ProcessPSPService } from 'src/app/services/processPSP/process-psp.service';
 import { Router } from '@angular/router';
+import { PublicationService } from 'src/app/services/publication-service/publication.service';
+import { OpenServiceService } from 'src/app/services/open-service/open-service.service';
+
 declare var require: any;
 const convert = require('xml-js');
 
@@ -15,8 +18,11 @@ export class ForRevisionComponent implements OnInit {
   publications = [];
 
   constructor(
-      private processPSPService: ProcessPSPService,
-      private router: Router) { }
+    private processPSPService: ProcessPSPService,
+    private router: Router,
+    private publicationService: PublicationService,
+    private openService: OpenServiceService
+  ) { }
 
 
   getMyReviewAssigment( res: any) {
@@ -68,7 +74,7 @@ export class ForRevisionComponent implements OnInit {
         const payLoadXML: any = convert.js2xml(obj, { compact: true, spaces: 4 });
         this.processPSPService.acceptRejectAssigmentReview(payLoadXML).subscribe(res => {
         },
-        (err) => {console.log(err);},
+          (err) => { console.log(err); },
         () => {
           this.processPSPService.getMyReviewAssigments()
               .subscribe( res => {
@@ -107,7 +113,6 @@ export class ForRevisionComponent implements OnInit {
       });
   }
 
-
   addReview(sp: any) {
     this.router.navigate(['add_revision', sp.processId]);
   }
@@ -116,6 +121,25 @@ export class ForRevisionComponent implements OnInit {
     this.router.navigate(['add_comments', sp.processId]);
   }
 
+  xml(id: string) {
+    this.publicationService.getPublicationReviewerProcess(id).subscribe(
+      (data: any) => {
+        this.openService.xml(data);
+      }
+    );
+  }
+  html(id: string) {
+    this.publicationService.getPublicationReviewerProcessHTML(id).subscribe(
+      (data: any) => {
+        this.openService.html(data);
+      });
+  }
 
+  pdf(id: string) {
+    this.publicationService.getPublicationReviewerProcessPDF(id).subscribe(
+      (data: any) => {
+        this.openService.pdf(data);
+      });
+  }
 
 }

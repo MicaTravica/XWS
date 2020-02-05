@@ -1,14 +1,14 @@
 <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:h="http://www.w3.org/1999/xhtml">
-  <rdf:Description rdf:about="localhost:8081/api/coverLetter/cl16">
-    <sh:about xmlns:sh="https://schema.org/" rdf:resource="localhost:8081/api/scientificPublication/process/28"/>
+  <rdf:Description rdf:about="localhost:8081/api/coverLetter/cl3">
+    <sh:about xmlns:sh="https://schema.org/" rdf:resource="localhost:8081/api/scientificPublication/process/6"/>
   </rdf:Description>
-  <rdf:Description rdf:about="localhost:8081/api/coverLetter/cl16">
+  <rdf:Description rdf:about="localhost:8081/api/coverLetter/cl3">
     <sh:dateCreated xmlns:sh="https://schema.org/" rdf:datatype="https://schema.org/Date">2020-02-05</sh:dateCreated>
   </rdf:Description>
-  <rdf:Description rdf:about="localhost:8081/api/coverLetter/cl16">
+  <rdf:Description rdf:about="localhost:8081/api/coverLetter/cl3">
     <sh:author xmlns:sh="https://schema.org/" rdf:resource="localhost:8081/api/person/dusanbzr@gmail.com"/>
   </rdf:Description>
-  <rdf:Description rdf:about="localhost:8081/api/coverLetter/cl16">
-    <sh:director xmlns:sh="https://schema.org/" rdf:resource="localhost:8081/api/person/email2@gmail.com"/>
+  <rdf:Description rdf:about="localhost:8081/api/coverLetter/cl3">
+    <sh:director xmlns:sh="https://schema.org/" rdf:resource="localhost:8081/api/person/email2@fa.fa"/>
   </rdf:Description>
 </rdf:RDF>
