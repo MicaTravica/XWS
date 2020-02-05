@@ -33,7 +33,7 @@
                             <xsl:value-of select="ns:scientificPublication/ns:dateMetaData/ns:created_at"/>
                         </fo:block>
                     </xsl:if>
-                    <fo:block text-align-last="center" font-size="24">
+                    <fo:block text-align-last="center" font-size="24" id="{ns:scientificPublication/ns:caption/@id}">
                         <xsl:value-of select="ns:scientificPublication/ns:caption"/>
                     </fo:block>
                     <xsl:if test="ns:scientificPublication/ns:authors">
@@ -56,7 +56,7 @@
                     <fo:block break-before='page' text-align-last="center" font-size="24" margin="5px">
                         <xsl:value-of select="ns:scientificPublication/ns:caption"/>
                     </fo:block>
-                    <fo:block font-style="italic" font-weight="bold" id="abstract">
+                    <fo:block font-style="italic" font-weight="bold" id="{ns:scientificPublication/ns:abstract/@id}">
                         Abstract<br/>
                         <xsl:for-each select="ns:scientificPublication/ns:abstract/ns:paragraph">
                             <xsl:call-template name="TParagraph"/>
@@ -84,7 +84,7 @@
                     <fo:block break-before='page' width="100%">
                         <fo:block font-size="18px">Table of content:</fo:block>
                         <fo:block text-align="justify">
-                            <fo:basic-link internal-destination="abstract" font-size="15px">
+                            <fo:basic-link internal-destination="{ns:scientificPublication/ns:abstract/@id}" font-size="15px">
                                 <xsl:text>Abstract</xsl:text>
                             </fo:basic-link>
                             <xsl:text> </xsl:text>
@@ -111,6 +111,16 @@
                             </fo:block>
                         </xsl:if>
                     </fo:block>
+                    <xsl:if test="ns:scientificPublication/ns:comments">
+                        <fo:block  break-before='page' width="100%">
+                            Comments<br/>
+                            <xsl:for-each select="ns:scientificPublication/ns:comments/ns:comment">
+                                <xsl:call-template name="TComment">
+                                    <xsl:with-param name="comment" select = "." />
+                                </xsl:call-template>
+                            </xsl:for-each>
+                        </fo:block>
+                    </xsl:if>
                 </fo:flow>
             </fo:page-sequence>
         </fo:root>
