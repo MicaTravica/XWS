@@ -4,7 +4,7 @@ import { ProcessPSPService } from 'src/app/services/processPSP/process-psp.servi
 import { PublicationService } from 'src/app/services/publication-service/publication.service';
 import { OpenServiceService } from 'src/app/services/open-service/open-service.service';
 import { RevisionService } from 'src/app/services/revision-service/revision.service';
-
+import { ToastrService } from 'ngx-toastr';
 
 declare var require: any;
 const convert = require('xml-js');
@@ -24,7 +24,8 @@ export class ProcessPublicationComponent implements OnInit {
     private processService: ProcessPSPService,
     private publicationService: PublicationService,
     private openService: OpenServiceService,
-    private revisionService: RevisionService
+    private revisionService: RevisionService,
+    private toastr: ToastrService
   ) { }
 
   ngOnInit() {
@@ -69,7 +70,7 @@ export class ProcessPublicationComponent implements OnInit {
   cs(xml: string) {
     this.processService.changeState(xml).subscribe(
       (data: any) => {
-        console.log(data);
+        this.toastr.success(data);
       }
     );
   }
