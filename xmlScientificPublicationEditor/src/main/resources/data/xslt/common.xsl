@@ -13,7 +13,7 @@
     
     <xsl:template name="TAuthor">
         <xsl:param name="author"/>
-        <div>
+        <div id="{$author/@id}">
             <xsl:value-of select="$author/ns:name"/>&#160;<xsl:value-of select="$author/ns:surname"/><br/>
             <xsl:value-of select="$author/ns:institution/ns:name"/><br/>
             <xsl:value-of select="$author/ns:institution/ns:address/ns:city"/>, <xsl:value-of select="$author/ns:institution/ns:address/ns:country"/><br/>
@@ -50,21 +50,22 @@
     </xsl:template>
     
     <xsl:template match="ns:paragraph | ns:answer" name="TParagraph">
+        <div id="{./@id}">
         <xsl:for-each select="./*">
             <xsl:if test="name(.) = 'ns:text'">   
-                <p>
+                <p id="{./@id}">
                     <xsl:apply-templates></xsl:apply-templates>
                 </p>
             </xsl:if>
             <!--quote in notification-->
             <xsl:if test="name(.) ='ns:quote'">
                 <xsl:variable name="link" select="./@ref"/>
-                <q cite="#{$link}">
+                <q cite="#{$link}" id="{./@id}">
                     <xsl:apply-templates></xsl:apply-templates>
                 </q>
             </xsl:if>
             <xsl:if test="name(.) ='ns:formula'">
-                <div>
+                <div id="{./@id}">
                     <p> Descriptions:<br/>
                         <xsl:apply-templates select="./ns:description"></xsl:apply-templates><br/>
                         Formula:<br/>
@@ -76,14 +77,14 @@
             <xsl:if test="name(.) ='ns:list'">
                 <xsl:choose>
                     <xsl:when test="@type='ordered'">
-                        <ol>
+                        <ol id="{./@id}">
                             <xsl:for-each select="./*">
                                 <xsl:apply-templates select="."></xsl:apply-templates>
                             </xsl:for-each>
                         </ol>
                     </xsl:when>
                     <xsl:otherwise>
-                        <ul>
+                        <ul id="{./@id}">
                             <xsl:for-each select="./*">
                                 <xsl:apply-templates select="."></xsl:apply-templates>
                             </xsl:for-each>
@@ -92,7 +93,7 @@
                 </xsl:choose>
             </xsl:if>
             <xsl:if test="name(.) ='ns:image'">
-                <div>
+                <div id="{./@id}">
                    <img>
                         <xsl:attribute name="src">
                             <xsl:value-of select="./ns:source"/>
@@ -115,7 +116,7 @@
                 </div>
             </xsl:if>
             <xsl:if test="name(.) ='ns:table'">
-                <table border="1">
+                <table border="1" id="{./@id}">
                     <xsl:for-each select="./ns:table_row">
                         <tr>
                             <xsl:for-each select="./ns:table_cell">
@@ -128,6 +129,7 @@
                 </table>
             </xsl:if>
         </xsl:for-each>
+        </div>
     </xsl:template>
 
     <xsl:template match="ns:listitem" name="TListItem">
@@ -253,8 +255,24 @@
         </xsl:if>
         <xsl:if test="$reference/ns:link">
             <p id="{$reference/@id}">
-                <a href="{$reference/ns:link}">Ref</a>
+                <xsl:variable name="sp" select="document(concat('http://', $reference/ns:link))"/>
+                <a href="http://{$reference/ns:link}">
+                    <xsl:value-of select="$sp/ns:scientificPublication/ns:caption/ns:value"/>,
+                    <xsl:for-each select="$sp/ns:scientificPublication/ns:authors/ns:author">
+                        <xsl:value-of select="./ns:name"/>&#160;<xsl:value-of select="./ns:surname"/>;
+                    </xsl:for-each>
+                </a>
             </p>
         </xsl:if>
     </xsl:template>
+    
+    
+    <xsl:template name="TComment">
+        <xsl:param name="comment"/>
+        <xsl:variable name="link" select="$comment/@ref"/>
+        <a href="#{$link}" style="font-size:16px;">
+            <xsl:value-of select="$comment"/>
+        </a>
+    </xsl:template>
+    
 </xsl:stylesheet>

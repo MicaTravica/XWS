@@ -81,7 +81,7 @@ public class ProcessPSPController {
 	@PostMapping(value="/processPSP/acceptRejectAssigmentReview",
 			consumes = MediaType.APPLICATION_XML_VALUE,
 			produces = MediaType.APPLICATION_XML_VALUE)
-	@PreAuthorize("hasRole('ROLE_REDACTOR')")
+	@PreAuthorize("hasRole('ROLE_REVIEWER') or hasRole('ROLE_REDACTOR')")
 	public ResponseEntity<String> addReviewers(@RequestBody String acceptanceData, Principal reviewer) throws Exception {
 		processPSPService.acceptRejectReviewAssigment(acceptanceData, reviewer.getName());
 		return new ResponseEntity<>(String.format("You succesfully accepted/rejected review assigment!"), HttpStatus.OK);

@@ -18,18 +18,18 @@
                 <p align="right">
                     <xsl:if test="ns:scientificPublication/ns:dateMetaData/ns:accepted_at">
                         Accepted at:
-                        <xsl:value-of select="ns:scientificPublication/ns:dateMetaData/ns:accepted_at"/>
+                        <xsl:value-of select="ns:scientificPublication/ns:dateMetaData/ns:accepted_at"/><br/>
                     </xsl:if>
                     <xsl:if test="ns:scientificPublication/ns:dateMetaData/ns:recived_at">
                         Recived at:
-                        <xsl:value-of select="ns:scientificPublication/ns:dateMetaData/ns:recived_at"/>
+                        <xsl:value-of select="ns:scientificPublication/ns:dateMetaData/ns:recived_at"/><br/>
                     </xsl:if>
                     <xsl:if test="ns:scientificPublication/ns:dateMetaData/ns:created_at">
                         Created at:
-                        <xsl:value-of select="ns:scientificPublication/ns:dateMetaData/ns:created_at"/>
+                        <xsl:value-of select="ns:scientificPublication/ns:dateMetaData/ns:created_at"/><br/>
                     </xsl:if>
                 </p>
-            	<h1 align="center">
+                <h1 align="center" id="{ns:scientificPublication/ns:caption/@id}">
             		<xsl:value-of select="ns:scientificPublication/ns:caption"/>
             	</h1>
             	<table style="width:100%">
@@ -45,7 +45,7 @@
             			</xsl:for-each>
             		</tr>
             	</table>
-            	<p id="abstract">
+                <p id="{ns:scientificPublication/ns:abstract/@id}">
             		<b><i>
             			Abstract<br/>
             			<xsl:for-each select="ns:scientificPublication/ns:abstract/ns:paragraph">
@@ -74,7 +74,7 @@
                 </xsl:if>
             	<div>
             		<h2>Table of content:</h2>
-            		<a href="#abstract" style="font-size:20px;">Abstract</a><br/>
+            	    <a href="#{ns:scientificPublication/ns:abstract/@id}" style="font-size:20px;">Abstract</a><br/>
             		<xsl:for-each select="ns:scientificPublication/ns:chapter">
             			<xsl:call-template name="TChapterContent">
             				<xsl:with-param name="chapter" select = "." />
@@ -84,6 +84,16 @@
             	       <a href="#references" style="font-size:20px;">References</a><br/>
             	    </xsl:if>
             	</div>
+                <xsl:if test="ns:scientificPublication/ns:comments">
+                    <div>
+                        <h2>Comments:</h2>
+                        <xsl:for-each select="ns:scientificPublication/ns:comments/ns:comment">
+                            <xsl:call-template name="TComment">
+                                <xsl:with-param name="comment" select = "." />
+                            </xsl:call-template>
+                        </xsl:for-each>
+                    </div>
+                </xsl:if>
             </body>
         </html>
     </xsl:template>
