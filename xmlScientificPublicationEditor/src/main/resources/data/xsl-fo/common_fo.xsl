@@ -31,9 +31,9 @@
             <fo:table-column/>
             <fo:table-body>
                 <fo:table-row>
-                    <fo:table-cell>
+                    <fo:table-cell id="{$author/@id}">
                         <fo:block>
-                            <xsl:value-of select="$author/ns:name"/>
+                            <xsl:value-of select="$author/ns:name"/>&#160;
                             <xsl:value-of select="$author/ns:surname"/>
                         </fo:block>
                         <fo:block>
@@ -86,22 +86,23 @@
     </xsl:template>
     
     <xsl:template match="ns:paragraph |ns:answer" name="TParagraph">
+        <fo:block id="{./@id}">
         <xsl:for-each select="./*">
             <xsl:if test="name(.) = 'ns:text'">   
-                <fo:block margin-top="2" margin-bottom="2">
+                <fo:block margin-top="2" margin-bottom="2" id="{./@id}">
                     <xsl:apply-templates></xsl:apply-templates>
                 </fo:block>
             </xsl:if>
             <!--quote in notification-->
             <xsl:if test="name(.) ='ns:quote'">
-                <fo:block margin-top="2" margin-bottom="2" font-style="italic">
+                <fo:block margin-top="2" margin-bottom="2" font-style="italic" id="{./@id}">
                     <fo:basic-link internal-destination="{./@ref}" font-size="12px">
                         <xsl:apply-templates></xsl:apply-templates>
                     </fo:basic-link>
                 </fo:block>
             </xsl:if>
             <xsl:if test="name(.) ='ns:formula'">
-                <fo:block margin="10px">
+                <fo:block margin="10px" id="{./@id}">
                     <fo:block> Descriptions:
                         <xsl:apply-templates select="./ns:description"></xsl:apply-templates>
                     </fo:block>
@@ -115,7 +116,7 @@
             <xsl:if test="name(.) ='ns:list'">
                 <xsl:choose>
                     <xsl:when test="@type='ordered'">
-                        <fo:list-block>
+                        <fo:list-block id="{./@id}">
                             <xsl:for-each select="./*">
                                 <fo:list-item space-after="0.5em">
                                     <fo:list-item-label start-indent="1em">
@@ -133,7 +134,7 @@
                         </fo:list-block>
                     </xsl:when>
                     <xsl:otherwise>
-                        <fo:list-block>
+                        <fo:list-block id="{./@id}">
                             <xsl:for-each select="./*">
                                 <fo:list-item space-after="0.5em">
                                     <fo:list-item-label start-indent="1em">
@@ -151,7 +152,7 @@
                 </xsl:choose>
             </xsl:if>
             <xsl:if test="name(.) ='ns:image'">
-                <fo:block margin-top="10px" margin-bottom="10px">
+                <fo:block margin-top="10px" margin-bottom="10px" id="{./@id}">
                     <fo:external-graphic>
                         <xsl:attribute name="src">
                             <xsl:value-of select="./ns:source"/>
@@ -169,7 +170,7 @@
                 </fo:block>
             </xsl:if>
             <xsl:if test="name(.) ='ns:table'">
-                <fo:table border="1px" margin-top="10px" margin-bottom="10px">
+                <fo:table border="1px" margin-top="10px" margin-bottom="10px" id="{./@id}">
                     <fo:table-body>
                         <xsl:for-each select="./ns:table_row">
                             <fo:table-row border="1px solid black">
@@ -186,6 +187,7 @@
                 </fo:table>
             </xsl:if>
         </xsl:for-each>
+        </fo:block>
     </xsl:template>
     
     <xsl:template match="ns:listitem" name="TListItem">
@@ -334,10 +336,23 @@
         </xsl:if>
         <xsl:if test="$reference/ns:link">
             <fo:block text-align="justify" id="{$reference/@id}">
-                <fo:basic-link external-destination="{$reference/ns:link}" font-size="12px">
-                    ref
+                <xsl:variable name="sp" select="document(concat('http://', $reference/ns:link))"/>
+                <fo:basic-link external-destination="http://{$reference/ns:link}" font-size="12px">
+                    <xsl:value-of select="$sp/ns:scientificPublication/ns:caption/ns:value"/>,
+                    <xsl:for-each select="$sp/ns:scientificPublication/ns:authors/ns:author">
+                        <xsl:value-of select="./ns:name"/>&#160;<xsl:value-of select="./ns:surname"/>;
+                    </xsl:for-each>
                 </fo:basic-link>
             </fo:block>
         </xsl:if>
+    </xsl:template>
+    
+    <xsl:template name="TComment">
+        <xsl:param name="comment"/>
+        <fo:block text-align="justify" id="{$comment/@id}">
+            <fo:basic-link internal-destination="{$comment/@ref}" font-size="12px">
+                <xsl:value-of select="$comment"/>
+            </fo:basic-link>
+        </fo:block>
     </xsl:template>
 </xsl:stylesheet>
