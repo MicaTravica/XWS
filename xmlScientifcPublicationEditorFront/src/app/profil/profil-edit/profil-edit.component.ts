@@ -34,7 +34,7 @@ export class ProfilEditComponent implements OnInit {
       floorNumber: [''],
       street: ['', Validators.required],
       country: ['', Validators.required],
-
+      expertise: ['']
     });
   }
 
@@ -59,7 +59,7 @@ export class ProfilEditComponent implements OnInit {
           floorNumber: [(person['ns:institution']['ns:address']['ns:floorNumber']) ? person['ns:institution']['ns:address']['ns:floorNumber']['_text'] : 0],
           street: [person['ns:institution']['ns:address']['ns:street']['_text'], Validators.required],
           country: [person['ns:institution']['ns:address']['ns:country']['_text'], Validators.required],
-
+          expertise: [person['ns:expertise'] ? person['ns:expertise']['_text']: '']
         });
       }
     );
@@ -93,6 +93,9 @@ export class ProfilEditComponent implements OnInit {
         person['ns:institution']['ns:address']['ns:street'] = this.profilForm.value.street;
         person['ns:institution']['ns:address']['ns:country'] = this.profilForm.value.country;
         person._attributes.id = this.id;
+
+        person['ns:expertise']["_text"] = this.profilForm.value.expertise;
+
         obj['ns:person'] = person;
         const retVal = convert.js2xml(obj, { compact: true, spaces: 4 });
         this.userService.savePerson(retVal).subscribe(

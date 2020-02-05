@@ -3,6 +3,7 @@ package com.example.xmlScientificPublicationEditor.serviceImpl;
 import java.io.ByteArrayOutputStream;
 import java.io.StringWriter;
 import java.security.Principal;
+import java.util.ArrayList;
 
 import javax.xml.namespace.QName;
 import javax.xml.transform.stream.StreamResult;
@@ -285,5 +286,9 @@ public class ScientificPublicationServiceImpl implements ScientificPublicationSe
 				ScientificPublicationRepository.ScientificPublicationXSL_FO_PATH);
 	}
 
+	@Override
+	public ArrayList<String> findKeyworsByProcessPSPId(String processPSPId) throws Exception {
+		return  this.scientificPublicationRepository.findKeyworsByProcessPSPId(processPSPId);
+	}
 
 }

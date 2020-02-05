@@ -33,6 +33,8 @@ public interface PersonService {
 
 	TPersons findReviewers() throws Exception;
 
+	TPersons findRecommendedReviewers(String processId) throws Exception;
+
 	TAuthPerson findOneAuthByPersonId(String id) throws Exception;
 
 	// void changeUserPassword(PasswordChangeDTO pcDto, String username) throws Exception;

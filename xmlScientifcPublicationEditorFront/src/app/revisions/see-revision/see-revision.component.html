@@ -21,7 +21,7 @@
             <mat-card-title>Comments</mat-card-title>
         </mat-card-header>
         <mat-card-actions *ngFor="let spc of v.spc; let i = index" [attr.data-index]="i">
-            {{i + 1}}: {{spc.spcId}}
+            {{i + 1}}:
             <a mat-raised-button (click)="xml(spc.spcId)">XML</a>
             <a mat-raised-button (click)="html(spc.spcId)">HTML</a>
             <a mat-raised-button (click)="pdf(spc.spcId)">PDF</a>

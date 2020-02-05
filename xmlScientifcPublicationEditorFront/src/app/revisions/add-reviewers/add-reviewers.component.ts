@@ -39,6 +39,17 @@ export class AddReviewersComponent implements OnInit {
         (data: any) => {
           this.xml = JSON.parse(convert.xml2json(data, {compact: true, spaces: 4}));
           this.reviewers = this.xml['ns:persons']['ns:persons'] as Person[];
+          this.userService.getRecommendedReviewers(this.id).subscribe( (recom: any) => {
+            const xmlRecommended = JSON.parse(convert.xml2json(recom, {compact: true, spaces: 4}));
+
+            if ( xmlRecommended['ns:persons']['ns:persons']) {
+              if ( xmlRecommended['ns:persons']['ns:persons'].length) {
+                this.recommendedReviewers = xmlRecommended['ns:persons']['ns:persons'] as Person[];
+              } else {
+                this.recommendedReviewers = [xmlRecommended['ns:persons']['ns:persons']];
+              }
+            }
+          });
         }
       );
     }
