@@ -52,6 +52,7 @@ export class RegisterComponent implements OnInit {
         const retVal = convert.js2xml(obj, { compact: true, spaces: 4 });
         this.userService.save(retVal)
           .subscribe(() => {
+            this.toastr.success('Successfully registered');
             this.router.navigate(['/login']);
           }, () => {
             this.toastr.error('Something went wrong, check your data!');
