@@ -69,6 +69,7 @@ export class SeeRevisionComponent implements OnInit {
   html(id: string) {
     this.publicationService.htmlVersion(id).subscribe(
       (data: any) => {
+		  console.log(data)
         this.openService.html(data);
       });
   }

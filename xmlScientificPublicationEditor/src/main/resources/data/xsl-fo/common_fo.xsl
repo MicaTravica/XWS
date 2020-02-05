@@ -33,7 +33,7 @@
                 <fo:table-row>
                     <fo:table-cell>
                         <fo:block>
-                            <xsl:value-of select="$author/ns:name"/>
+                            <xsl:value-of select="$author/ns:name"/>&#160;
                             <xsl:value-of select="$author/ns:surname"/>
                         </fo:block>
                         <fo:block>
