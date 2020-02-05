@@ -18,15 +18,15 @@
                 <p align="right">
                     <xsl:if test="ns:scientificPublication/ns:dateMetaData/ns:accepted_at">
                         Accepted at:
-                        <xsl:value-of select="ns:scientificPublication/ns:dateMetaData/ns:accepted_at"/>
+                        <xsl:value-of select="ns:scientificPublication/ns:dateMetaData/ns:accepted_at"/><br/>
                     </xsl:if>
                     <xsl:if test="ns:scientificPublication/ns:dateMetaData/ns:recived_at">
                         Recived at:
-                        <xsl:value-of select="ns:scientificPublication/ns:dateMetaData/ns:recived_at"/>
+                        <xsl:value-of select="ns:scientificPublication/ns:dateMetaData/ns:recived_at"/><br/>
                     </xsl:if>
                     <xsl:if test="ns:scientificPublication/ns:dateMetaData/ns:created_at">
                         Created at:
-                        <xsl:value-of select="ns:scientificPublication/ns:dateMetaData/ns:created_at"/>
+                        <xsl:value-of select="ns:scientificPublication/ns:dateMetaData/ns:created_at"/><br/>
                     </xsl:if>
                 </p>
                 <h1 align="center" id="{ns:scientificPublication/ns:caption/@id}">

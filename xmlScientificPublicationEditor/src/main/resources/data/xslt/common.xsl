@@ -255,7 +255,13 @@
         </xsl:if>
         <xsl:if test="$reference/ns:link">
             <p id="{$reference/@id}">
-                <a href="{$reference/ns:link}">Ref</a>
+                <xsl:variable name="sp" select="document(concat('http://', $reference/ns:link))"/>
+                <a href="http://{$reference/ns:link}">
+                    <xsl:value-of select="$sp/ns:scientificPublication/ns:caption/ns:value"/>,
+                    <xsl:for-each select="$sp/ns:scientificPublication/ns:authors/ns:author">
+                        <xsl:value-of select="./ns:name"/>&#160;<xsl:value-of select="./ns:surname"/>;
+                    </xsl:for-each>
+                </a>
             </p>
         </xsl:if>
     </xsl:template>

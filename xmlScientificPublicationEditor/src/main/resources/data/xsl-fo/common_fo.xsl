@@ -336,8 +336,12 @@
         </xsl:if>
         <xsl:if test="$reference/ns:link">
             <fo:block text-align="justify" id="{$reference/@id}">
-                <fo:basic-link external-destination="{$reference/ns:link}" font-size="12px">
-                    ref
+                <xsl:variable name="sp" select="document(concat('http://', $reference/ns:link))"/>
+                <fo:basic-link external-destination="http://{$reference/ns:link}" font-size="12px">
+                    <xsl:value-of select="$sp/ns:scientificPublication/ns:caption/ns:value"/>,
+                    <xsl:for-each select="$sp/ns:scientificPublication/ns:authors/ns:author">
+                        <xsl:value-of select="./ns:name"/>&#160;<xsl:value-of select="./ns:surname"/>;
+                    </xsl:for-each>
                 </fo:basic-link>
             </fo:block>
         </xsl:if>
