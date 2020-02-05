@@ -431,4 +431,38 @@ public class ScientificPublicationRepository {
 		}
 		return retVal.toString();
 	}
+
+
+
+	public ArrayList<String> findKeyworsByProcessPSPId(String processId) throws Exception {
+		ArrayList<String> retVal = new ArrayList<>();
+		String xQueryPath = "src/main/resources/data/xQuery/findSPExpertise.txt";
+		HashMap<String, String> params = new HashMap<>();
+		params.put("ID", processId);
+
+		ResourceSet resultSet = RetriveFromDB.executeXQuery(
+				scientificPublicationCollectionId, xQueryPath, params, TARGET_NAMESPACE);
+		if (resultSet == null || (resultSet.getSize() == 0 )) {
+			return retVal;
+		}
+		ResourceIterator i = resultSet.getIterator();
+		XMLResource res = null;
+		while (i.hasMoreResources()) {
+			try {
+				res = (XMLResource) i.nextResource();
+				String a = res.getContent().toString();
+				retVal.add(a);
+			} finally {
+				// don't forget to cleanup resources
+				try {
+					if(res != null) {
+						((EXistResource) res).freeResources();
+					}
+				} catch (XMLDBException xe) {
+					xe.printStackTrace();
+				}
+			}
+		}
+		return retVal;
+	}
 }

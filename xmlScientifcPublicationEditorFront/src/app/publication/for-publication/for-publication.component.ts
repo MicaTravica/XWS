@@ -31,7 +31,7 @@ export class ForPublicationComponent implements OnInit {
       .subscribe(res => {
         const obj = JSON.parse(convert.xml2json(res, { compact: true, spaces: 4 }));
         const processPSPList = obj.processes.processPSP as any[];
-        if (processPSPList.length) {
+        if (processPSPList && processPSPList.length) {
           processPSPList.forEach(p => {
             this.publications.push({
               id: p.sp.scientificPublicationId._text,

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Router } from '@angular/router';
 import {httpOptions, authHttpOptions} from '../../util/http-util';
 import { environment } from 'src/environments/environment';
@@ -60,6 +60,17 @@ export class UserService {
       {
         headers: authHttpOptions(token),
         responseType: 'text'
+      });
+  }
+
+  public getRecommendedReviewers(processId: string) {
+    const param = new HttpParams().append('processId', processId);
+    const token = this.authService.getToken();
+    return this.http.get(this.usersUrl + '/recommendedReviewer',
+      {
+        headers: authHttpOptions(token),
+        responseType: 'text',
+        params: param
       });
   }
 

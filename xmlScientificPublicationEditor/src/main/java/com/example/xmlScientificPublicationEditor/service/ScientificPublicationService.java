@@ -2,6 +2,7 @@ package com.example.xmlScientificPublicationEditor.service;
 
 import java.io.ByteArrayOutputStream;
 import java.security.Principal;
+import java.util.ArrayList;
 
 import org.w3c.dom.Document;
 
@@ -61,5 +62,7 @@ public interface ScientificPublicationService {
 	String getMetadataSPXML(String spId) throws Exception;
 
 	String getMetadataSPJSON(String spId) throws Exception;
+
+	ArrayList<String> findKeyworsByProcessPSPId(String processPSPId) throws  Exception;
 
 }

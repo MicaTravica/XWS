@@ -1,0 +1,11 @@
+let $process := collection("/db/sample/processPSP")
+let $sps := collection("/db/sample/scientificPublication")
+for $p in $process/processPSP
+    where $p/@id = $ID
+	for $v in $p/versions/version
+		where $v/@version = $p/@lastVersion
+			let $processLastSPID := $v/scientificPublication
+			for $sp in $sps/scientificPublication
+				where $sp/@id = data($processLastSPID)
+					    for $keyword in $sp/abstract/keywords//keyword
+					        return data($keyword)

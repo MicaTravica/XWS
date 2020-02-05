@@ -8,6 +8,8 @@ import java.util.Collection;
 import javax.xml.namespace.QName;
 import javax.xml.transform.stream.StreamResult;
 
+import com.example.xmlScientificPublicationEditor.service.ProcessPSPService;
+import com.example.xmlScientificPublicationEditor.service.ScientificPublicationService;
 import org.apache.xerces.xs.XSModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -33,6 +35,10 @@ public class PersonServiceImpl implements PersonService {
 
     @Autowired
     PersonRepository personRepository;
+
+    @Autowired
+    ScientificPublicationService scientificPublicationService;
+
 
     @Override
     public TAuthPerson registration(TAuthPerson person) throws Exception {
@@ -176,5 +182,22 @@ public class PersonServiceImpl implements PersonService {
 		}
 		return result;
 	}
+
+	@Override
+    public TPersons findRecommendedReviewers(String processId) throws Exception {
+        TPersons allReviewers =  this.findReviewers();
+        ArrayList<String> keywords = this.scientificPublicationService.findKeyworsByProcessPSPId(processId);
+        TPersons result = new TPersons();
+        for (TPerson p : allReviewers.getPersons()) {
+            for(String personExpertise : p.getExpertise()) {
+                for(String keyword: keywords) {
+                    if(personExpertise.toLowerCase().contains(keyword.toLowerCase()) && !result.getPersons().contains(p)) {
+                        result.getPersons().add(p);
+                    }
+                }
+            }
+        }
+        return  result;
+    }
   
 }
