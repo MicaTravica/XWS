@@ -22,3 +22,4 @@ Uputstvo za pokretanje:
         - pokrenuti ApacheTomEE server na portu 8080
         - startovati aplikaciju na portu 8081
         
+  - Demo: https://drive.google.com/open?id=15HYkSAuIvPgv4aBtN3ZBaJBW4na8fVq_
